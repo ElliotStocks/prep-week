@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "prep-week",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/elliotstocks/Desktop/meal-prep-app",
+      "port": 5173
+    }
+  ]
+}
