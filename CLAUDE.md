@@ -45,6 +45,9 @@ recipe browser → breakfasts → full weekly stock list. All data in localStora
 
 ## Roadmap
 
-1. **v2 — Ocado:** match stock-list lines to real M&S products with prices; basket assistant.
+1. **v2 — Ocado (matching shipped July 2026):** stock-list lines match real M&S products
+   with prices via Ocado's public product-search API (`npm run ocado` refreshes the snapshot
+   in `src/ocado-products.js`; match rules in `src/ocado.js`). Remaining: basket assistant
+   (browser automation), allergy checks at product-label level.
 2. **v2 — AI recipes:** wire the type-anything box and "more ideas" to Claude; recipe photos.
 3. **v3:** per-person meal variants, lunches, extras list.

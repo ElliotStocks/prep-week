@@ -113,3 +113,8 @@ li.owned { color: var(--muted); text-decoration: line-through; }
 .stock-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 14px; }
 .stock-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
 .ocado-note { background: var(--accent-soft); border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-top: 1rem; }
+
+.ocado-match, .ocado-link { display: block; font-size: 12px; margin: 0 0 6px; color: var(--accent); text-decoration: none; }
+.ocado-link { color: var(--muted); }
+.ocado-match:hover, .ocado-link:hover { text-decoration: underline; }
+.ocado-total { font-size: 16px; font-weight: 600; margin-bottom: 4px; }

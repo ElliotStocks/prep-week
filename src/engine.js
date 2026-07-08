@@ -164,6 +164,7 @@ export function buildStock(profile, pickedIds, breakfastIds, pantryOwned) {
 
   const freshList = [...fresh.entries()].map(([name, grams]) => ({
     name,
+    grams,
     qty: grams === 0 ? '' : grams >= 1000 ? `${Math.round(grams / 100) / 10} kg` : `${Math.round(grams / 10) * 10} g`,
   })).sort((a, b) => a.name.localeCompare(b.name));
 
