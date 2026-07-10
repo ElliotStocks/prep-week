@@ -1,6 +1,7 @@
 import { BREAKFASTS, APPETITE_LEVELS } from './data.js';
 import { DISHES, NUTRITION } from './dishes.js';
 import { OCADO_PRODUCTS } from './ocado-products.js';
+import { packsFor } from './ocado.js';
 
 // ---- Dishes ----------------------------------------------------------------
 
@@ -192,4 +193,15 @@ export function buildStock(profile, picked, breakfastIds, pantryOwned) {
   })).sort((a, b) => a.name.localeCompare(b.name));
 
   return { freshList, pantryList, plan };
+}
+
+// The checkout estimate (whole packs, cupboard included) — the same number the
+// shopping list shows, so the running total while picking never disagrees with it.
+export function estimatedTotal(profile, picked, breakfastIds, pantryOwned) {
+  const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
+  const lines = [...freshList, ...pantryList.filter(p => !p.owned)];
+  return lines.reduce((sum, i) => {
+    const p = OCADO_PRODUCTS[i.name];
+    return p ? sum + p.price * packsFor(i.grams, p) : sum;
+  }, 0);
 }

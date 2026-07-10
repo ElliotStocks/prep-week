@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { generateRecipes, recipeFromId, recipeFromText, methodSteps } from './engine.js';
+import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal } from './engine.js';
 import { DAILY_REF } from './data.js';
 
 const ICONS = { meat: '🍗', fish: '🐟', egg: '🥚', plant: '🌱' };
@@ -41,7 +41,7 @@ function NutritionPanel({ recipe }) {
 
 const PAGE = 24;
 
-export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, onShowList }) {
+export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned, onShowList }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [openId, setOpenId] = useState(null);
@@ -84,6 +84,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   const browseable = shown.filter(r => !qtyOf(r.id) && !customIds.has(r.id));
 
   const totalNights = picked.reduce((s, p) => s + p.qty, 0);
+  const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || []) : 0;
 
   const card = (r, custom) => {
     const qty = qtyOf(r.id);
@@ -122,6 +123,14 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       <h2>Meal ideas for your week</h2>
       <p className="sub">Pick your dinners for {profile.people} {profile.people > 1 ? 'people' : 'person'}. Want a meal
         two nights running? Press + and cook it once. Or describe anything you fancy.</p>
+      <div className="picks-bar">
+        <span>{totalNights
+          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} dinner{totalNights > 1 ? 's' : ''} · est. £{estimate.toFixed(2)} shop</>
+          : 'No recipes picked yet — tap Pick on any meal'}</span>
+        {totalNights > 0 && (
+          <button className="primary" onClick={onShowList}>Shopping list →</button>
+        )}
+      </div>
       <div className="idea-row">
         <input type="text" className="text-input" value={idea}
           placeholder="Type anything… e.g. slow-cooked beef with sweet potato"
@@ -136,14 +145,6 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       </div>
       <div className="center">
         <button className="primary" onClick={() => refresh()}>Refresh — {PAGE} fresh ideas</button>
-      </div>
-      <div className="footer-bar">
-        <span>{totalNights
-          ? `${picked.length} recipe${picked.length > 1 ? 's' : ''} picked · ${totalNights} dinner${totalNights > 1 ? 's' : ''} covered`
-          : 'No recipes picked yet'}</span>
-        {totalNights > 0 && (
-          <button className="primary" onClick={onShowList}>Get my shopping list →</button>
-        )}
       </div>
     </div>
   );
