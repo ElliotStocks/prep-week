@@ -41,7 +41,7 @@ function NutritionPanel({ recipe }) {
 
 const PAGE = 24;
 
-export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks }) {
+export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, onShowList }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [openId, setOpenId] = useState(null);
@@ -141,6 +141,9 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
         <span>{totalNights
           ? `${picked.length} recipe${picked.length > 1 ? 's' : ''} picked · ${totalNights} dinner${totalNights > 1 ? 's' : ''} covered`
           : 'No recipes picked yet'}</span>
+        {totalNights > 0 && (
+          <button className="primary" onClick={onShowList}>Get my shopping list →</button>
+        )}
       </div>
     </div>
   );

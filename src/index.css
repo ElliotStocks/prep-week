@@ -126,3 +126,4 @@ li.owned { color: var(--muted); text-decoration: line-through; }
 .qty-stepper span { font-size: 13px; font-weight: 600; color: var(--accent); }
 .checkout-split { margin: 4px 0 10px; }
 .checkout-split li { font-size: 13px; padding: 1px 0; }
+.footer-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }

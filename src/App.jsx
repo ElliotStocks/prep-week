@@ -49,6 +49,7 @@ export default function App() {
           setPicked={picked => patch({ picked })}
           customPicks={state.customPicks}
           setCustomPicks={customPicks => patch({ customPicks })}
+          onShowList={() => setTab('stock')}
         />
       )}
       {tab === 'breakfasts' && (

@@ -67,6 +67,18 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
         {bfNames.length ? `, breakfasts every morning` : ''}, spices and staples included.
         Tick anything you already have; the app remembers for future weeks.</p>
 
+      <div className="ocado-note">
+        <div className="ocado-total">Estimated checkout total: £{total.toFixed(2)}</div>
+        <ul className="plain checkout-split">
+          <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
+          {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
+          {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (tick what you own and it disappears)</li>}
+        </ul>
+        {matched} of {shopLines.length} lines matched to real M&amp;S products
+        {OCADO_FETCHED_AT ? `, prices checked ${niceDate(OCADO_FETCHED_AT)}` : ''}. Every link opens
+        Ocado in a new tab — the app never orders anything; you always fill and confirm the basket yourself.
+      </div>
+
       <div className="stock-section">
         <h3>This week’s plan</h3>
         <ul className="plain">
@@ -115,17 +127,6 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
         </div>
       </div>
 
-      <div className="ocado-note">
-        <div className="ocado-total">Estimated checkout total: £{total.toFixed(2)}</div>
-        <ul className="plain checkout-split">
-          <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
-          {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
-          {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (tick what you own and it disappears)</li>}
-        </ul>
-        {matched} of {shopLines.length} lines matched to real M&amp;S products
-        {OCADO_FETCHED_AT ? `, prices checked ${niceDate(OCADO_FETCHED_AT)}` : ''}. Every link opens
-        Ocado in a new tab — the app never orders anything; you always fill and confirm the basket yourself.
-      </div>
     </div>
   );
 }
