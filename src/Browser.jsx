@@ -49,29 +49,21 @@ function NutritionPanel({ recipe, profile }) {
   );
 }
 
+const PAGE = 24;
+
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [openId, setOpenId] = useState(null);
   const cursorRef = useRef(0);
 
-  const refill = useCallback(() => {
-    cursorRef.current = 0;
-    const { recipes, cursor } = generateRecipes(profile, 0, 8);
+  const refresh = useCallback((reset = false) => {
+    const { recipes, cursor } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE);
     cursorRef.current = cursor;
     setShown(recipes);
   }, [profile]);
 
-  useEffect(() => { refill(); }, [refill]);
-
-  const more = () => {
-    const { recipes, cursor } = generateRecipes(profile, cursorRef.current, 8);
-    cursorRef.current = cursor;
-    setShown(prev => {
-      const have = new Set(prev.map(r => r.id));
-      return [...prev, ...recipes.filter(r => !have.has(r.id))];
-    });
-  };
+  useEffect(() => { refresh(true); }, [refresh]);
 
   const togglePick = id => {
     setPicked(picked.includes(id) ? picked.filter(x => x !== id) : [...picked, id]);
@@ -90,6 +82,11 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     .map(c => { const r = recipeFromId(c.id); return r ? { ...r, customLabel: c.label } : null; })
     .filter(Boolean);
 
+  // Picked recipes stay pinned at the top so refreshing never loses them.
+  const customIds = new Set(customPicks.map(c => c.id));
+  const pinnedPicked = picked.filter(id => !customIds.has(id)).map(recipeFromId).filter(Boolean);
+  const browseable = shown.filter(r => !picked.includes(r.id) && !customIds.has(r.id));
+
   const atCap = picked.length >= profile.ndin;
   const nightsFor = id => {
     const i = picked.indexOf(id);
@@ -102,11 +99,16 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     const on = picked.includes(r.id);
     return (
       <div key={(custom ? 'c-' : '') + r.id} className={'meal-card' + (on ? ' picked' : '')}>
-        <div className={`tile ${r.protein.icon}`}><span>{ICONS[r.protein.icon]}</span></div>
+        <div className={`tile ${r.icon}`}>
+          <span>{ICONS[r.icon]}</span>
+          <img src={`/photos/${r.id}.jpg`} alt="" loading="lazy"
+            onError={e => e.currentTarget.remove()} />
+        </div>
         <div className="meal-body">
           {custom && <p className="your-idea">Your idea: “{r.customLabel}”</p>}
           <p className="meal-name">{r.name}</p>
-          <p className="muted small">{r.method.name} · ~{r.mins} min · {Math.round(r.perServing.kcal)} kcal · {Math.round(r.perServing.prot)}g protein</p>
+          <p className="muted small">{r.blurb}</p>
+          <p className="muted small">~{r.mins} min · {Math.round(r.perServing.kcal)} kcal · {Math.round(r.perServing.prot)}g protein</p>
           {on && <p className="nights">Cook once, eat {nightsFor(r.id)} night{nightsFor(r.id) > 1 ? 's' : ''}</p>}
           <div className="card-actions">
             <button disabled={!on && atCap} onClick={() => togglePick(r.id)}>{on ? 'Picked ✓' : 'Pick'}</button>
@@ -137,10 +139,11 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       </div>
       <div className="meal-grid">
         {customRecipes.map(r => card(r, true))}
-        {shown.map(r => card(r, false))}
+        {pinnedPicked.map(r => card(r, false))}
+        {browseable.map(r => card(r, false))}
       </div>
       <div className="center">
-        <button onClick={more}>More ideas — it never runs out</button>
+        <button className="primary" onClick={() => refresh()}>Refresh — {PAGE} fresh ideas</button>
       </div>
       <div className="footer-bar">
         <span>{picked.length

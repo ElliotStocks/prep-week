@@ -32,8 +32,12 @@ recipe browser → breakfasts → full weekly stock list. All data in localStora
   eat N nights", quantities scaled per person from their calorie targets.
 - **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples.
   Pantry memory prevents re-buying spices/staples every week.
-- **Recipes must feel endless** — never a fixed shortlist — plus a "type anything" box.
-  v1 uses a combinatorial engine; v2 wires real AI generation + a photo per recipe.
+- **Recipes are real, named dishes** (July 2026, replacing v1's combinatorial engine after
+  Elliot found it "all very very similar"): ~47 dishes in `src/dishes.js` with photos in
+  `public/photos/` (regenerate missing ones with `node scripts/photos.mjs`). Browser shows
+  24 at a time with a refresh that pages through a stable shuffle; picks stay pinned.
+  The "type anything" box matches the closest dish; wiring it to real AI generation is
+  still the plan for v2.
 - **Nutrition from real data** (UK CoFID approximations in `src/data.js`), macros AND
   micros with % daily values — never AI-guessed numbers.
 
@@ -49,5 +53,7 @@ recipe browser → breakfasts → full weekly stock list. All data in localStora
    with prices via Ocado's public product-search API (`npm run ocado` refreshes the snapshot
    in `src/ocado-products.js`; match rules in `src/ocado.js`). Remaining: basket assistant
    (browser automation), allergy checks at product-label level.
-2. **v2 — AI recipes:** wire the type-anything box and "more ideas" to Claude; recipe photos.
+2. **v2 — AI recipes (library + photos shipped July 2026):** the dish library and photo
+   generation are done; remaining piece is wiring the type-anything box to live Claude
+   generation for dishes outside the library.
 3. **v3:** per-person meal variants, lunches, extras list.

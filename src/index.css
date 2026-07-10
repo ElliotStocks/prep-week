@@ -84,7 +84,8 @@ button.tab.on { color: var(--accent); font-weight: 600; }
 .meal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
 .meal-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
 .meal-card.picked { border: 2px solid var(--accent); }
-.tile { height: 72px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+.tile { position: relative; height: 140px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
+.tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .tile.meat { background: #faece7; }
 .tile.fish { background: #e1f5ee; }
 .tile.egg, .tile.plant { background: #eaf3de; }

@@ -1,4 +1,5 @@
-import { PROTEINS, CARBS, VEG, FLAVOURS, METHODS, OIL_N, BREAKFASTS, ACTIVITY_LEVELS } from './data.js';
+import { BREAKFASTS, ACTIVITY_LEVELS } from './data.js';
+import { DISHES, NUTRITION } from './dishes.js';
 
 export function personTargets(p) {
   const base = 10 * p.weight + 6.25 * p.height - 5 * p.age;
@@ -18,103 +19,105 @@ export function personScale(p) {
   return Math.min(Math.max(dinnerKcal / REF_DINNER_KCAL, 0.6), 1.5);
 }
 
-export function allowedComponents(profile) {
-  const { diet, allergies, likes, dislikes } = profile;
-  const hated = (dislikes || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-  const notHated = name => !hated.some(h => name.toLowerCase().includes(h));
-  let ps = PROTEINS.filter(x => !(x.allergen && allergies.includes(x.allergen)));
-  if (diet.includes('vegan')) ps = ps.filter(x => x.dietLevel === 3);
-  else if (diet.includes('veggie')) ps = ps.filter(x => x.dietLevel >= 2);
-  else if (diet.includes('pesc')) ps = ps.filter(x => x.dietLevel >= 1);
-  if (likes.length) {
-    const liked = ps.filter(x => likes.includes(x.tag));
-    if (liked.length) ps = liked;
-  }
-  ps = ps.filter(x => notHated(x.name));
-  let cs = CARBS.filter(x => !(x.allergen && (allergies.includes(x.allergen) || diet.includes('gf'))));
-  cs = cs.filter(x => notHated(x.name));
-  const vs = VEG.filter(x => notHated(x.name));
-  return { ps, cs, vs };
-}
+// ---- Dishes ----------------------------------------------------------------
 
-function buildRecipe(p, c, v, f, m) {
-  const oilGrams = 10;
-  const per = {};
-  for (const key of ['kcal', 'prot', 'carb', 'fat', 'fibre', 'iron', 'calcium', 'vitc', 'potassium']) {
-    per[key] = (p.n[key] * p.grams + c.n[key] * c.grams + v.n[key] * v.grams + OIL_N[key] * oilGrams) / 100;
+const N_KEYS = ['kcal', 'prot', 'carb', 'fat', 'fibre', 'iron', 'calcium', 'vitc', 'potassium'];
+
+// Per-serving nutrition and allergens are derived from the ingredient table, so a
+// dish is always consistent with what's actually in it.
+export function buildDish(d) {
+  const per = Object.fromEntries(N_KEYS.map(k => [k, 0]));
+  const allergens = new Set();
+  for (const [name, grams] of d.ingredients) {
+    const ing = NUTRITION[name];
+    if (!ing) continue;
+    for (const k of N_KEYS) per[k] += (ing.n[k] * grams) / 100;
+    if (ing.allergen) allergens.add(ing.allergen);
   }
   return {
-    id: [p.id, c.id, v.id, f.id, m.id].join('~'),
-    name: `${f.name} ${p.name} with ${c.name} & ${v.name}`,
-    method: m, protein: p, carb: c, veg: v, flavour: f,
-    mins: m.mins,
-    perServing: Object.fromEntries(Object.entries(per).map(([k, val]) => [k, Math.round(val * 10) / 10])),
+    ...d,
+    allergens: [...allergens],
+    perServing: Object.fromEntries(N_KEYS.map(k => [k, Math.round(per[k] * 10) / 10])),
   };
 }
 
+export function allowedDishes(profile) {
+  const { diet, allergies, dislikes } = profile;
+  const hated = (dislikes || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+  return DISHES.map(buildDish).filter(r => {
+    if (r.allergens.some(a => allergies.includes(a))) return false;
+    if (diet.includes('vegan') && r.dietLevel < 3) return false;
+    if (diet.includes('veggie') && r.dietLevel < 2) return false;
+    if (diet.includes('pesc') && r.dietLevel < 1) return false;
+    if (diet.includes('gf') && r.allergens.includes('gluten')) return false;
+    const text = (r.name + ' ' + r.ingredients.map(i => i[0]).join(' ')).toLowerCase();
+    return !hated.some(h => text.includes(h));
+  });
+}
+
+// Small deterministic random generator so the shuffled order is the same every
+// time for the same quiz answers, letting the cursor page through it.
+function mulberry32(seed) {
+  return function () {
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Pages through a stable shuffle of every allowed dish. Liked proteins float to
+// the front (a preference, not a filter — dislikes and allergies do the excluding).
 export function generateRecipes(profile, cursor, count) {
-  const { ps, cs, vs } = allowedComponents(profile);
-  const out = [];
-  let k = cursor;
-  if (!ps.length || !cs.length) return { recipes: out, cursor: k };
-  const seen = new Set();
-  const space = ps.length * cs.length * vs.length * FLAVOURS.length * METHODS.length;
-  while (out.length < count && k - cursor < space * 2) {
-    const p = ps[(k * 5 + 1) % ps.length];
-    const c = cs[(k * 3 + 2) % cs.length];
-    const v = vs[(k * 7) % vs.length];
-    const f = FLAVOURS[(k * 11 + 4) % FLAVOURS.length];
-    const m = METHODS[(k * 13 + 2) % METHODS.length];
-    k++;
-    const id = [p.id, c.id, v.id, f.id, m.id].join('~');
-    if (seen.has(id)) continue;
-    seen.add(id);
-    out.push(buildRecipe(p, c, v, f, m));
+  const pool = allowedDishes(profile);
+  if (!pool.length) return { recipes: [], cursor };
+  const order = pool.map((_, i) => i);
+  const rand = mulberry32(pool.length * 31 + 7);
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
   }
-  return { recipes: out, cursor: k };
+  const likes = profile.likes || [];
+  if (likes.length) {
+    const liked = i => (pool[i].tags.some(t => likes.includes(t)) ? 0 : 1);
+    order.sort((a, b) => liked(a) - liked(b));
+  }
+  const out = [];
+  for (let n = 0; n < Math.min(count, pool.length); n++) {
+    out.push(pool[order[(cursor + n) % pool.length]]);
+  }
+  return { recipes: out, cursor: (cursor + count) % pool.length };
 }
 
 export function recipeFromId(id) {
-  const [pid, cid, vid, fid, mid] = id.split('~');
-  const p = PROTEINS.find(x => x.id === pid), c = CARBS.find(x => x.id === cid),
-    v = VEG.find(x => x.id === vid), f = FLAVOURS.find(x => x.id === fid),
-    m = METHODS.find(x => x.id === mid);
-  if (!p || !c || !v || !f || !m) return null;
-  return buildRecipe(p, c, v, f, m);
+  const d = DISHES.find(x => x.id === id);
+  return d ? buildDish(d) : null;
 }
 
-// Turn a free-text idea into the closest recipe the engine can make.
+// Turn a free-text idea into the closest dish in the library.
+// (v2 next step: hand this to real AI generation.)
+const STOPWORDS = new Set(['the', 'and', 'with', 'something', 'some', 'for', 'plus',
+  'nice', 'good', 'dinner', 'meal', 'meals', 'easy', 'quick', 'healthy', 'tasty', 'want', 'like']);
+
 export function recipeFromText(text, profile) {
-  const { ps, cs, vs } = allowedComponents(profile);
-  const t = text.toLowerCase();
-  const match = (pool, fallback) => pool.find(x => t.includes(x.tag || '') && (x.tag || '').length > 0)
-    || pool.find(x => x.name.split(' ').some(w => w.length > 3 && t.includes(w)))
-    || fallback;
-  const p = match(ps, ps[0]);
-  const c = match(cs, cs[0]);
-  const v = match(vs, vs[0]);
-  const f = FLAVOURS.find(x => x.name.toLowerCase().split(/ & | /).some(w => w.length > 3 && t.includes(w))) || FLAVOURS[0];
-  const m = /slow/.test(t) ? METHODS[5] : /grill/.test(t) ? METHODS[2] : /bake|roast|tray/.test(t) ? METHODS[1] : METHODS[0];
-  if (!p || !c) return null;
-  const r = buildRecipe(p, c, v, f, m);
-  r.custom = text;
-  return r;
+  const pool = allowedDishes(profile);
+  const toks = text.toLowerCase().split(/[^a-z]+/)
+    .filter(w => w.length > 2 && !STOPWORDS.has(w));
+  let best = null, bestScore = 0;
+  for (const r of pool) {
+    const name = r.name.toLowerCase();
+    const ings = r.ingredients.map(i => i[0]).join(' ').toLowerCase();
+    const blurb = r.blurb.toLowerCase();
+    // dish-name hits count most, then ingredients, then the description
+    const score = toks.reduce((s, t) =>
+      s + (name.includes(t) ? 3 : ings.includes(t) ? 2 : blurb.includes(t) ? 1 : 0), 0);
+    if (score > bestScore) { best = r; bestScore = score; }
+  }
+  return best ? { ...best, custom: text } : null;
 }
 
 export function methodSteps(r) {
-  const p = r.protein.name, c = r.carb.name, v = r.veg.name, fl = r.flavour.name.toLowerCase();
-  const cook = { 'one-pan': `Heat a large pan with olive oil, add the ${p} and cook until browned.`,
-    'traybake': `Toss the ${p} and ${v} with olive oil and the ${fl} seasoning on a large tray. Roast at 200°C.`,
-    'grill': `Season the ${p} with the ${fl} mix and grill on high, turning once.`,
-    'pan-sear': `Sear the ${p} in a hot pan with olive oil, 3 to 4 minutes each side.`,
-    'bake': `Season the ${p} with the ${fl} mix and bake at 190°C until cooked through.`,
-    'slow-cook': `Add the ${p}, seasoning and a splash of water to a casserole. Cook low and slow until tender.` };
-  return [
-    r.carb.dry ? `Cook the ${c} according to pack instructions.` : `Chop the ${c} and roast or boil until tender.`,
-    cook[r.method.id],
-    r.method.id === 'traybake' ? `Halfway through, give the tray a shake.` : `Steam or pan-fry the ${v} until just tender.`,
-    `Portion into containers: ${p}, ${c}, ${v}. Cool before refrigerating.`,
-  ];
+  return r.steps;
 }
 
 // ---- Weekly stock ----------------------------------------------------------
@@ -132,19 +135,19 @@ export function weekPlan(profile, pickedIds) {
 export function buildStock(profile, pickedIds, breakfastIds, pantryOwned) {
   const totalScale = profile.persons.reduce((s, p) => s + personScale(p), 0);
   const plan = weekPlan(profile, pickedIds);
-  const fresh = new Map(); // name -> {grams, unit}
+  const fresh = new Map(); // name -> grams
   const pantry = new Map(); // name -> Set(recipe names)
   const add = (map, name, grams) => map.set(name, (map.get(name) || 0) + grams);
 
   for (const r of plan) {
     const servings = totalScale * r.nights;
-    add(fresh, r.protein.name, r.protein.grams * servings);
-    add(fresh, r.carb.name, r.carb.grams * servings);
-    add(fresh, r.veg.name, r.veg.grams * servings);
-    for (const item of r.flavour.fresh) add(fresh, item, 0);
-    for (const item of r.flavour.pantry) {
-      if (!pantry.has(item)) pantry.set(item, new Set());
-      pantry.get(item).add(r.name);
+    for (const [name, grams, kind] of r.ingredients) {
+      if (kind === 'pantry') {
+        if (!pantry.has(name)) pantry.set(name, new Set());
+        pantry.get(name).add(r.name);
+      } else {
+        add(fresh, name, grams * servings);
+      }
     }
   }
 

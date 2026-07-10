@@ -2,9 +2,11 @@
 
 A personal meal-prep planner. A detailed onboarding quiz (one question per page, every
 eater gets their own body-stats pages) computes per-person daily calorie and protein
-targets, then an endless recipe browser suggests whole-food meals to batch-cook across
-the week. Picked meals build a full weekly kitchen stock list: fresh food, breakfasts,
-spices and cupboard staples, with a pantry memory so staples aren't re-bought.
+targets, then a recipe browser serves real, named dishes — curries, traybakes, chillis,
+stir-fries, pies, bowls — each with a photo, batch-cooking method steps and nutrition
+computed from per-100g composition data. Picked meals build a full weekly kitchen stock
+list: fresh food, breakfasts, spices and cupboard staples, with a pantry memory so
+staples aren't re-bought.
 
 ## Run it
 
@@ -32,13 +34,22 @@ search API, one polite request per ingredient, ~1 minute).
 - v2: Ocado basket assistant — browser automation that adds the matched products to
   the basket for review (matching + prices shipped July 2026).
 - v2: AI-generated recipes for the "type anything" box (currently matched to the closest
-  recipe the built-in engine can make) and photo generation per recipe.
+  dish in the library).
 - v3: per-person meal variants, lunches, standing extras list.
+
+## Recipes & photos
+
+Dinner recipes live in `src/dishes.js`: ~47 real dishes with per-serving ingredient
+gram counts, method steps and derived allergens. Nutrition comes from the per-100g
+table in the same file (UK CoFID approximations) — never guessed per dish. Each dish
+has a photo in `public/photos/<dish-id>.jpg`, generated with `node scripts/photos.mjs`
+(Gemini image API; resumes where it left off, only creating missing photos).
 
 ## Structure
 
-- `src/data.js` — ingredient catalogue with per-100g nutrition (approximated from UK CoFID)
-- `src/engine.js` — targets (Mifflin-St Jeor), recipe generation, portion scaling, stock builder
+- `src/dishes.js` — the dish library + ingredient nutrition table
+- `src/data.js` — breakfasts, quiz options, daily reference intakes
+- `src/engine.js` — targets (Mifflin-St Jeor), dish filtering/paging, portion scaling, stock builder
 - `src/ocado.js` — Ocado shopping dictionary: search phrases, match rules, pack-size maths
 - `src/ocado-products.js` — generated snapshot of matched M&S products (via `npm run ocado`)
 - `scripts/ocado-fetch.mjs` — the product fetcher
