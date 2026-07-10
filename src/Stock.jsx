@@ -44,7 +44,16 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
 
   const shopLines = [...freshList, ...toBuy];
   const matched = shopLines.filter(i => OCADO_PRODUCTS[i.name]).length;
-  const total = linesCost(freshList) + linesCost(toBuy);
+  const freshPacks = linesCost(freshList);
+  const cupboard = linesCost(toBuy);
+  const total = freshPacks + cupboard;
+  // What this week's cooking actually uses, pro-rata by grams — the rest of each
+  // pack stays in the kitchen for future weeks.
+  const eatenThisWeek = freshList.reduce((sum, i) => {
+    const p = OCADO_PRODUCTS[i.name];
+    return p?.packGrams && i.grams ? sum + Math.min((i.grams / p.packGrams) * p.price, p.price * packsFor(i.grams, p)) : sum;
+  }, 0);
+  const carryOver = Math.max(freshPacks - eatenThisWeek, 0);
 
   const toggleOwned = name => {
     setPantryOwned(pantryOwned.includes(name) ? pantryOwned.filter(x => x !== name) : [...pantryOwned, name]);
@@ -107,11 +116,15 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
       </div>
 
       <div className="ocado-note">
-        <div className="ocado-total">Estimated Ocado total: £{total.toFixed(2)}</div>
+        <div className="ocado-total">Estimated checkout total: £{total.toFixed(2)}</div>
+        <ul className="plain checkout-split">
+          <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
+          {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
+          {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (tick what you own and it disappears)</li>}
+        </ul>
         {matched} of {shopLines.length} lines matched to real M&amp;S products
         {OCADO_FETCHED_AT ? `, prices checked ${niceDate(OCADO_FETCHED_AT)}` : ''}. Every link opens
         Ocado in a new tab — the app never orders anything; you always fill and confirm the basket yourself.
-        <span className="muted"> Next up: a basket assistant that adds the lines for you to review.</span>
       </div>
     </div>
   );
