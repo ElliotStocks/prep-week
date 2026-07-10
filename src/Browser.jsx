@@ -91,7 +91,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       <div key={(custom ? 'c-' : '') + r.id} className={'meal-card' + (qty ? ' picked' : '')}>
         <div className={`tile ${r.icon}`}>
           <span>{ICONS[r.icon]}</span>
-          <img src={`/photos/${r.id}.jpg`} alt="" loading="lazy"
+          <img src={`${import.meta.env.BASE_URL}photos/${r.id}.jpg`} alt="" loading="lazy"
             onError={e => e.currentTarget.remove()} />
         </div>
         <div className="meal-body">
