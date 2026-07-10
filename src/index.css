@@ -119,3 +119,8 @@ li.owned { color: var(--muted); text-decoration: line-through; }
 .ocado-link { color: var(--muted); }
 .ocado-match:hover, .ocado-link:hover { text-decoration: underline; }
 .ocado-total { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+
+.chip.soon { opacity: 0.45; cursor: default; }
+.qty-stepper { display: inline-flex; align-items: center; gap: 8px; }
+.qty-stepper button { padding: 4px 12px; font-size: 16px; line-height: 1; }
+.qty-stepper span { font-size: 13px; font-weight: 600; color: var(--accent); }

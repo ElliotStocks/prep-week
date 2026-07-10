@@ -1,34 +1,41 @@
-import { BREAKFASTS, ACTIVITY_LEVELS } from './data.js';
+import { BREAKFASTS, APPETITE_LEVELS } from './data.js';
 import { DISHES, NUTRITION } from './dishes.js';
-
-export function personTargets(p) {
-  const base = 10 * p.weight + 6.25 * p.height - 5 * p.age;
-  const bmr = p.gender === 'm' ? base + 5 : p.gender === 'f' ? base - 161 : base - 78;
-  let kcal = bmr * ACTIVITY_LEVELS[p.activity][1];
-  if (p.goal === 'lose') kcal *= 0.85;
-  if (p.goal === 'build') kcal *= 1.1;
-  const prot = p.weight * (p.goal === 'maintain' ? 1.5 : 1.8);
-  return { kcal: Math.max(Math.round(kcal / 50) * 50, 1000), prot: Math.round(prot / 5) * 5 };
-}
-
-const REF_DINNER_KCAL = 650;
-
-export function personScale(p) {
-  const t = personTargets(p);
-  const dinnerKcal = t.kcal * 0.35;
-  return Math.min(Math.max(dinnerKcal / REF_DINNER_KCAL, 0.6), 1.5);
-}
+import { OCADO_PRODUCTS } from './ocado-products.js';
 
 // ---- Dishes ----------------------------------------------------------------
 
 const N_KEYS = ['kcal', 'prot', 'carb', 'fat', 'fibre', 'iron', 'calcium', 'vitc', 'potassium'];
 
-// Per-serving nutrition and allergens are derived from the ingredient table, so a
-// dish is always consistent with what's actually in it.
-export function buildDish(d) {
+// With the high-protein option on, the dish's main protein source gets a third more.
+function boostedIngredients(d, profile) {
+  if (!profile?.proteinBoost) return d.ingredients;
+  let anchor = null, anchorProt = 0;
+  for (const [name, grams] of d.ingredients) {
+    const prot = (NUTRITION[name]?.n.prot || 0) * grams;
+    if (prot > anchorProt) { anchor = name; anchorProt = prot; }
+  }
+  return d.ingredients.map(([name, grams, kind]) =>
+    name === anchor ? [name, Math.round(grams * 1.33), kind] : [name, grams, kind]);
+}
+
+// What one reference portion of this dish costs, from real pack prices.
+// Items whose pack size we can't read (a garlic bulb, a lemon) are pennies and skipped.
+function costPerServing(ingredients) {
+  let cost = 0;
+  for (const [name, grams] of ingredients) {
+    const p = OCADO_PRODUCTS[name];
+    if (p?.packGrams && p.price) cost += (grams / p.packGrams) * p.price;
+  }
+  return Math.round(cost * 100) / 100;
+}
+
+// Per-serving nutrition, allergens and cost are all derived from the ingredient
+// list, so a dish is always consistent with what's actually in it.
+export function buildDish(d, profile) {
+  const ingredients = boostedIngredients(d, profile);
   const per = Object.fromEntries(N_KEYS.map(k => [k, 0]));
   const allergens = new Set();
-  for (const [name, grams] of d.ingredients) {
+  for (const [name, grams] of ingredients) {
     const ing = NUTRITION[name];
     if (!ing) continue;
     for (const k of N_KEYS) per[k] += (ing.n[k] * grams) / 100;
@@ -36,20 +43,26 @@ export function buildDish(d) {
   }
   return {
     ...d,
+    ingredients,
     allergens: [...allergens],
     perServing: Object.fromEntries(N_KEYS.map(k => [k, Math.round(per[k] * 10) / 10])),
+    costPerServing: costPerServing(ingredients),
   };
 }
+
+// keto counts net carbs: total minus fibre
+const KETO_MAX_NET_CARB = 15;
 
 export function allowedDishes(profile) {
   const { diet, allergies, dislikes } = profile;
   const hated = (dislikes || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-  return DISHES.map(buildDish).filter(r => {
+  return DISHES.map(d => buildDish(d, profile)).filter(r => {
     if (r.allergens.some(a => allergies.includes(a))) return false;
     if (diet.includes('vegan') && r.dietLevel < 3) return false;
     if (diet.includes('veggie') && r.dietLevel < 2) return false;
     if (diet.includes('pesc') && r.dietLevel < 1) return false;
     if (diet.includes('gf') && r.allergens.includes('gluten')) return false;
+    if (diet.includes('keto') && r.perServing.carb - r.perServing.fibre > KETO_MAX_NET_CARB) return false;
     const text = (r.name + ' ' + r.ingredients.map(i => i[0]).join(' ')).toLowerCase();
     return !hated.some(h => text.includes(h));
   });
@@ -89,9 +102,9 @@ export function generateRecipes(profile, cursor, count) {
   return { recipes: out, cursor: (cursor + count) % pool.length };
 }
 
-export function recipeFromId(id) {
+export function recipeFromId(id, profile) {
   const d = DISHES.find(x => x.id === id);
-  return d ? buildDish(d) : null;
+  return d ? buildDish(d, profile) : null;
 }
 
 // Turn a free-text idea into the closest dish in the library.
@@ -122,25 +135,27 @@ export function methodSteps(r) {
 
 // ---- Weekly stock ----------------------------------------------------------
 
-function nightsFor(index, totalDinners, recipeCount) {
-  const base = Math.floor(totalDinners / recipeCount);
-  return base + (index < totalDinners % recipeCount ? 1 : 0);
+export const appetiteFactor = profile => APPETITE_LEVELS[profile.appetite ?? 1][1];
+
+// picked: [{id, qty}] — qty is how many nights that meal covers.
+export function weekPlan(profile, picked) {
+  return picked
+    .map(({ id, qty }) => {
+      const r = recipeFromId(id, profile);
+      return r ? { ...r, nights: qty } : null;
+    })
+    .filter(Boolean);
 }
 
-export function weekPlan(profile, pickedIds) {
-  const recipes = pickedIds.map(recipeFromId).filter(Boolean);
-  return recipes.map((r, i) => ({ ...r, nights: nightsFor(i, profile.ndin, recipes.length) }));
-}
-
-export function buildStock(profile, pickedIds, breakfastIds, pantryOwned) {
-  const totalScale = profile.persons.reduce((s, p) => s + personScale(p), 0);
-  const plan = weekPlan(profile, pickedIds);
+export function buildStock(profile, picked, breakfastIds, pantryOwned) {
+  const factor = appetiteFactor(profile);
+  const plan = weekPlan(profile, picked);
   const fresh = new Map(); // name -> grams
   const pantry = new Map(); // name -> Set(recipe names)
   const add = (map, name, grams) => map.set(name, (map.get(name) || 0) + grams);
 
   for (const r of plan) {
-    const servings = totalScale * r.nights;
+    const servings = profile.people * r.nights * factor;
     for (const [name, grams, kind] of r.ingredients) {
       if (kind === 'pantry') {
         if (!pantry.has(name)) pantry.set(name, new Set());
@@ -155,7 +170,8 @@ export function buildStock(profile, pickedIds, breakfastIds, pantryOwned) {
   if (bfs.length) {
     const mornings = 7;
     bfs.forEach((b, i) => {
-      const n = nightsFor(i, mornings, bfs.length) * profile.persons.length;
+      const base = Math.floor(mornings / bfs.length);
+      const n = (base + (i < mornings % bfs.length ? 1 : 0)) * profile.people;
       for (const [name, grams, kind] of b.items) {
         if (kind === 'pantry') {
           if (!pantry.has(name)) pantry.set(name, new Set());

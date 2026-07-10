@@ -1,8 +1,8 @@
 # Prep Week — project instructions
 
-Personal meal-prep and recipe web app for Elliot. This is a personal project, completely
-separate from his Plexus Partners recruitment work — never touch `~/Desktop/Plexus-tools`
-from sessions in this project.
+Personal meal-prep and recipe web app for Elliot, now aimed at becoming a consumer
+product. This is a personal project, completely separate from his Plexus Partners
+recruitment work — never touch `~/Desktop/Plexus-tools` from sessions in this project.
 
 Elliot is not a developer: explain things in plain English, avoid jargon, and run the
 app for him rather than giving him commands where possible (`npm run dev`, opens at
@@ -10,50 +10,61 @@ http://localhost:5173).
 
 ## What the app is
 
-A quiz-driven weekly meal planner that will eventually fill an Ocado basket (M&S range).
-Version 1 (committed July 2026) works end to end: quiz → per-person targets → endless
-recipe browser → breakfasts → full weekly stock list. All data in localStorage.
+A quiz-driven weekly meal planner: short food-only quiz → real-dish recipe browser
+with photos and price-per-portion → breakfasts → full weekly shopping list matched to
+real supermarket products with prices. All data in localStorage, no accounts.
 
-## Locked design decisions (agreed in mockups, July 2026)
+## Locked design decisions
 
-- **Supermarket:** M&S range via Ocado. No public API exists, so basket-filling will be
-  browser automation, with a linked shopping list as fallback. The app NEVER places the
-  order; Elliot always confirms checkout himself.
-- **Quiz:** one question per page. Question 1 is ALWAYS "how many people are the meals
-  for?" — then EVERY eater gets their own age / gender / weight+height / activity / goal
-  pages. Then shared pages: allergies (for the whole table), dietary requirements, whole
-  foods enjoyed, free-text dislikes, dinners to cover. "Recipes to cook" is NOT a quiz
-  question — chosen at the browsing stage, dinners spread across however many are picked.
-- **Allergies are hard rules**, checked at recipe level now and at Ocado product-label
-  level in v2. Open question: per-allergy "strict (block may-contain traces)" toggle.
-- **No cuisine genres** (Italian/Thai etc. rejected) — whole-foods focus; preferences are
-  proteins/foods, not cuisines.
-- **Batch cooking is the core mechanic:** e.g. 5 dinners from 3 recipes, "cook once,
-  eat N nights", quantities scaled per person from their calorie targets.
+(Re-agreed July 2026 when Elliot pivoted from personal tool to shippable product.)
+
+- **Product direction:** a simple app anyone can use, no logins. Ship as a hosted
+  installable web app first; app stores later. Ordering/basket-filling comes AFTER the
+  core product is good — parked, not dropped. Long-term data/ordering path: prove with
+  scraped snapshots per supermarket, then supermarket affiliate/API partnerships.
+- **Supermarket choice is a quiz question.** Ocado (M&S range) is live; Tesco and
+  Sainsbury's shown as "coming soon". Each supermarket = a matching dictionary + product
+  snapshot refreshed by script (Ocado: `npm run ocado`, rules in `src/ocado.js`).
+  The app NEVER places an order; users always check out themselves.
+- **Quiz (simplified July 2026 — replaced the per-person body-stats version):** one
+  question per page, food questions only: supermarket → people count → allergies →
+  dietary requirements (incl. keto, filtered on net carbs ≤15g) → foods enjoyed →
+  free-text dislikes → appetite (portion size) + optional high-protein boost (+33% on
+  each dish's main protein). No calorie/body-stat questions, no "how many dinners".
+- **Meal quantity lives on the card, not in the quiz:** picking a meal covers 1 night;
+  a +/- stepper adds nights ("cook once, eat N nights"). Portions = people × appetite.
+- **Price per portion on everything** — computed from real pack prices pro-rata by
+  grams used. The planned differentiator: "this week's dinners: £X at supermarket Y".
+- **Allergies are hard rules**, checked at recipe level now and at product-label
+  level eventually. Open question: per-allergy "strict (block may-contain traces)".
+- **No cuisine genres as preferences** — whole-foods focus; preferences are proteins/foods.
 - **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples.
   Pantry memory prevents re-buying spices/staples every week.
-- **Recipes are real, named dishes** (July 2026, replacing v1's combinatorial engine after
-  Elliot found it "all very very similar"): ~47 dishes in `src/dishes.js` with photos in
-  `public/photos/` (regenerate missing ones with `node scripts/photos.mjs`). Browser shows
-  24 at a time with a refresh that pages through a stable shuffle; picks stay pinned.
-  The "type anything" box matches the closest dish; wiring it to real AI generation is
-  still the plan for v2.
-- **Nutrition from real data** (UK CoFID approximations in `src/data.js`), macros AND
-  micros with % daily values — never AI-guessed numbers.
+- **Recipes are real, named dishes** (never template permutations — Elliot rejected the
+  v1 combinatorial engine as "all very very similar"): ~58 dishes in `src/dishes.js`
+  (incl. 10 keto) with photos in `public/photos/` (`node scripts/photos.mjs` regenerates
+  missing ones via Gemini). Browser shows 24 at a time, refresh pages through a stable
+  shuffle, picks stay pinned. "Type anything" matches the closest dish; live AI
+  generation is still planned.
+- **Nutrition from real data** (UK CoFID per-100g approximations in `src/dishes.js`),
+  macros AND micros with % daily values — never AI-guessed numbers. Old saves migrate
+  automatically in `src/store.js` (body-stats profiles → simple profiles).
 
 ## Open questions (Elliot hasn't decided yet)
 
 - Lunches: leftovers from batch dinners, own picks, or out of scope?
 - Standing extras list (milk, coffee, fruit, snacks) beyond recipe ingredients?
 - "May contain traces" blocking: strict vs standard, per allergy?
+- Hosting/domain for the public web app; second supermarket to add first.
 
 ## Roadmap
 
-1. **v2 — Ocado (matching shipped July 2026):** stock-list lines match real M&S products
-   with prices via Ocado's public product-search API (`npm run ocado` refreshes the snapshot
-   in `src/ocado-products.js`; match rules in `src/ocado.js`). Remaining: basket assistant
-   (browser automation), allergy checks at product-label level.
-2. **v2 — AI recipes (library + photos shipped July 2026):** the dish library and photo
-   generation are done; remaining piece is wiring the type-anything box to live Claude
-   generation for dishes outside the library.
-3. **v3:** per-person meal variants, lunches, extras list.
+1. **Ship it:** host the app online as an installable web app (no logins, localStorage).
+2. **Second supermarket** (Tesco or Sainsbury's) to prove the switcher + per-week price
+   comparison between supermarkets.
+3. **Ordering:** basket assistant in the user's own browser (extension model — the
+   Honey pattern), then supermarket affiliate/API partnerships. A first manual run with
+   Elliot's Ocado account stalled on Chrome extension site permissions — pick up there.
+4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
+   outside the library.
+5. **Later:** per-person meal variants, lunches, extras list, product-label allergy checks.

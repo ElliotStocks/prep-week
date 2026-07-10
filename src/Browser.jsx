@@ -1,10 +1,10 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { generateRecipes, recipeFromId, recipeFromText, methodSteps, personTargets, personScale } from './engine.js';
+import { generateRecipes, recipeFromId, recipeFromText, methodSteps } from './engine.js';
 import { DAILY_REF } from './data.js';
 
 const ICONS = { meat: '🍗', fish: '🐟', egg: '🥚', plant: '🌱' };
 
-function NutritionPanel({ recipe, profile }) {
+function NutritionPanel({ recipe }) {
   const n = recipe.perServing;
   const rows = [
     ['Calories', `${Math.round(n.kcal)} kcal`],
@@ -23,7 +23,7 @@ function NutritionPanel({ recipe, profile }) {
     <div className="detail">
       <div className="detail-cols">
         <div>
-          <h4>Per reference serving</h4>
+          <h4>Per portion</h4>
           <table>{rows.map(([k, v]) => <tbody key={k}><tr><td>{k}</td><td>{v}</td></tr></tbody>)}</table>
           <h4>Micronutrients</h4>
           <table>{micros.map(([k, v, u, ref]) => (
@@ -31,16 +31,6 @@ function NutritionPanel({ recipe, profile }) {
           ))}</table>
         </div>
         <div>
-          <h4>Portions</h4>
-          <ul className="plain">
-            {profile.persons.map((p, i) => {
-              const s = personScale(p);
-              const t = personTargets(p);
-              return <li key={i}>{i === 0 ? 'You' : `Person ${i + 1}`}: ×{s.toFixed(2)} serving
-                ≈ {Math.round(n.kcal * s)} kcal, {Math.round(n.prot * s)}g protein
-                <span className="muted"> (target {t.kcal.toLocaleString()} kcal/day)</span></li>;
-            })}
-          </ul>
           <h4>Method</h4>
           <ol>{methodSteps(recipe).map((s, i) => <li key={i}>{s}</li>)}</ol>
         </div>
@@ -65,8 +55,11 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
 
   useEffect(() => { refresh(true); }, [refresh]);
 
-  const togglePick = id => {
-    setPicked(picked.includes(id) ? picked.filter(x => x !== id) : [...picked, id]);
+  const qtyOf = id => picked.find(p => p.id === id)?.qty || 0;
+  const setQty = (id, qty) => {
+    if (qty <= 0) setPicked(picked.filter(p => p.id !== id));
+    else if (qtyOf(id)) setPicked(picked.map(p => (p.id === id ? { ...p, qty } : p)));
+    else setPicked([...picked, { id, qty }]);
   };
 
   const addIdea = () => {
@@ -79,26 +72,23 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   };
 
   const customRecipes = customPicks
-    .map(c => { const r = recipeFromId(c.id); return r ? { ...r, customLabel: c.label } : null; })
+    .map(c => { const r = recipeFromId(c.id, profile); return r ? { ...r, customLabel: c.label } : null; })
     .filter(Boolean);
 
   // Picked recipes stay pinned at the top so refreshing never loses them.
   const customIds = new Set(customPicks.map(c => c.id));
-  const pinnedPicked = picked.filter(id => !customIds.has(id)).map(recipeFromId).filter(Boolean);
-  const browseable = shown.filter(r => !picked.includes(r.id) && !customIds.has(r.id));
+  const pinnedPicked = picked
+    .filter(p => !customIds.has(p.id))
+    .map(p => recipeFromId(p.id, profile))
+    .filter(Boolean);
+  const browseable = shown.filter(r => !qtyOf(r.id) && !customIds.has(r.id));
 
-  const atCap = picked.length >= profile.ndin;
-  const nightsFor = id => {
-    const i = picked.indexOf(id);
-    if (i < 0) return 0;
-    const base = Math.floor(profile.ndin / picked.length);
-    return base + (i < profile.ndin % picked.length ? 1 : 0);
-  };
+  const totalNights = picked.reduce((s, p) => s + p.qty, 0);
 
   const card = (r, custom) => {
-    const on = picked.includes(r.id);
+    const qty = qtyOf(r.id);
     return (
-      <div key={(custom ? 'c-' : '') + r.id} className={'meal-card' + (on ? ' picked' : '')}>
+      <div key={(custom ? 'c-' : '') + r.id} className={'meal-card' + (qty ? ' picked' : '')}>
         <div className={`tile ${r.icon}`}>
           <span>{ICONS[r.icon]}</span>
           <img src={`/photos/${r.id}.jpg`} alt="" loading="lazy"
@@ -108,28 +98,30 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
           {custom && <p className="your-idea">Your idea: “{r.customLabel}”</p>}
           <p className="meal-name">{r.name}</p>
           <p className="muted small">{r.blurb}</p>
-          <p className="muted small">~{r.mins} min · {Math.round(r.perServing.kcal)} kcal · {Math.round(r.perServing.prot)}g protein</p>
-          {on && <p className="nights">Cook once, eat {nightsFor(r.id)} night{nightsFor(r.id) > 1 ? 's' : ''}</p>}
+          <p className="muted small">~{r.mins} min · {Math.round(r.perServing.kcal)} kcal · {Math.round(r.perServing.prot)}g protein
+            {r.costPerServing > 0 && <> · <strong>≈ £{r.costPerServing.toFixed(2)} a portion</strong></>}</p>
+          {qty > 0 && <p className="nights">Cook once, eat {qty} night{qty > 1 ? 's' : ''}</p>}
           <div className="card-actions">
-            <button disabled={!on && atCap} onClick={() => togglePick(r.id)}>{on ? 'Picked ✓' : 'Pick'}</button>
+            {qty === 0
+              ? <button onClick={() => setQty(r.id, 1)}>Pick</button>
+              : <span className="qty-stepper">
+                  <button onClick={() => setQty(r.id, qty - 1)}>−</button>
+                  <span>{qty} night{qty > 1 ? 's' : ''}</span>
+                  <button onClick={() => setQty(r.id, qty + 1)}>+</button>
+                </span>}
             <button onClick={() => setOpenId(openId === r.id ? null : r.id)}>{openId === r.id ? 'Hide info' : 'Nutrition & method'}</button>
           </div>
         </div>
-        {openId === r.id && <NutritionPanel recipe={r} profile={profile} />}
+        {openId === r.id && <NutritionPanel recipe={r} />}
       </div>
     );
   };
 
   return (
     <div>
-      <div className="row-between">
-        <h2>Meal ideas for your week</h2>
-        <span className="muted small">
-          Daily targets: {profile.persons.map((p, i) => `${i === 0 ? 'You' : 'P' + (i + 1)} ${personTargets(p).kcal.toLocaleString()}`).join(' · ')} kcal
-        </span>
-      </div>
-      <p className="sub">Pick as many or as few recipes as you like; your {profile.ndin} dinners are spread across them
-        and everyone’s portions are scaled. Or describe anything you fancy.</p>
+      <h2>Meal ideas for your week</h2>
+      <p className="sub">Pick your dinners for {profile.people} {profile.people > 1 ? 'people' : 'person'}. Want a meal
+        two nights running? Press + and cook it once. Or describe anything you fancy.</p>
       <div className="idea-row">
         <input type="text" className="text-input" value={idea}
           placeholder="Type anything… e.g. slow-cooked beef with sweet potato"
@@ -146,8 +138,8 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
         <button className="primary" onClick={() => refresh()}>Refresh — {PAGE} fresh ideas</button>
       </div>
       <div className="footer-bar">
-        <span>{picked.length
-          ? `${picked.length} recipe${picked.length > 1 ? 's' : ''} picked · covering ${profile.ndin} dinners`
+        <span>{totalNights
+          ? `${picked.length} recipe${picked.length > 1 ? 's' : ''} picked · ${totalNights} dinner${totalNights > 1 ? 's' : ''} covered`
           : 'No recipes picked yet'}</span>
       </div>
     </div>

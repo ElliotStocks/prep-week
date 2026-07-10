@@ -53,15 +53,16 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
   return (
     <div>
       <h2>Your full weekly stock</h2>
-      <p className="sub">Everything the kitchen needs this week for {profile.persons.length}
-        {profile.persons.length > 1 ? ' people' : ' person'}: {profile.ndin} dinners
+      <p className="sub">Everything the kitchen needs this week for {profile.people}
+        {profile.people > 1 ? ' people' : ' person'}: {plan.reduce((s, r) => s + r.nights, 0)} dinners
         {bfNames.length ? `, breakfasts every morning` : ''}, spices and staples included.
         Tick anything you already have; the app remembers for future weeks.</p>
 
       <div className="stock-section">
         <h3>This week’s plan</h3>
         <ul className="plain">
-          {plan.map(r => <li key={r.id}><strong>{r.name}</strong> — {r.nights} night{r.nights > 1 ? 's' : ''}</li>)}
+          {plan.map(r => <li key={r.id}><strong>{r.name}</strong> — {r.nights} night{r.nights > 1 ? 's' : ''}
+            {r.costPerServing > 0 && <span className="muted"> · ≈ £{r.costPerServing.toFixed(2)} a portion</span>}</li>)}
           {bfNames.map(n => <li key={n}><strong>{n}</strong> — breakfasts</li>)}
         </ul>
       </div>

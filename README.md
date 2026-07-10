@@ -1,10 +1,11 @@
 # Prep Week
 
-A personal meal-prep planner. A detailed onboarding quiz (one question per page, every
-eater gets their own body-stats pages) computes per-person daily calorie and protein
-targets, then a recipe browser serves real, named dishes — curries, traybakes, chillis,
-stir-fries, pies, bowls — each with a photo, batch-cooking method steps and nutrition
-computed from per-100g composition data. Picked meals build a full weekly kitchen stock
+A weekly meal planner anyone can use. A short food-only quiz (supermarket, people,
+allergies, dietary requirements including keto, likes, dislikes, appetite) leads
+straight to a recipe browser of real, named dishes — curries, traybakes, chillis,
+stir-fries, pies, bowls — each with a photo, a price per portion from real supermarket prices, batch-cooking
+method steps and nutrition computed from per-100g composition data. Meals are picked
+with a nights counter ("cook once, eat 2 nights"). Picked meals build a full weekly kitchen stock
 list: fresh food, breakfasts, spices and cupboard staples, with a pantry memory so
 staples aren't re-bought.
 

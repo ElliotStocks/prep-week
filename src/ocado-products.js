@@ -586,6 +586,14 @@ export const OCADO_PRODUCTS = {
     "price": 1.3,
     "packGrams": 300
   },
+  "cauliflower": {
+    "title": "Ocado Cauliflower Florets",
+    "url": "https://www.ocado.com/products/ocado-cauliflower-florets/64235011",
+    "size": "400g",
+    "perUnit": "£4.25 per kg",
+    "price": 1.7,
+    "packGrams": 400
+  },
   "carrots": {
     "title": "M&S British Carrots",
     "url": "https://www.ocado.com/products/m-s-british-carrots/518655011",

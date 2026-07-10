@@ -22,14 +22,16 @@ export const ALLERGY_OPTIONS = [
 ];
 
 export const DIET_OPTIONS = [
-  ['none', 'No restrictions'], ['veggie', 'Vegetarian'], ['vegan', 'Vegan'], ['pesc', 'Pescatarian'], ['gf', 'Gluten free'],
+  ['none', 'No restrictions'], ['veggie', 'Vegetarian'], ['vegan', 'Vegan'], ['pesc', 'Pescatarian'],
+  ['gf', 'Gluten free'], ['keto', 'Keto / low carb'],
 ];
+
+export const SUPERMARKETS = [['ocado', 'Ocado (M&S range)']];
+export const SUPERMARKETS_SOON = ['Tesco', 'Sainsbury’s'];
+
+export const APPETITE_LEVELS = [['Lighter', 0.85], ['Standard', 1], ['Hearty', 1.2]];
 
 export const LIKE_OPTIONS = [
   ['chicken', 'Chicken'], ['beef', 'Beef'], ['turkey', 'Turkey'], ['lamb', 'Lamb'], ['pork', 'Pork'],
   ['fish', 'Fish'], ['shellfish', 'Prawns & shellfish'], ['eggs', 'Eggs'], ['legumes', 'Beans & lentils'], ['tofu', 'Tofu'],
-];
-
-export const ACTIVITY_LEVELS = [
-  ['Mostly sitting', 1.3], ['Lightly active', 1.45], ['Active', 1.6], ['Very active', 1.75],
 ];

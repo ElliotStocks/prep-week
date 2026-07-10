@@ -92,6 +92,7 @@ export const OCADO_ITEMS = {
   'onions':             { search: 'brown onions', must: ['onion'], not: ['red', 'pickled', 'spring', 'rings', 'chutney', 'powder'], unitGrams: 160 },
   'red onions':         { search: 'red onions', must: ['red', 'onion'], not: ['pickled', 'chutney', 'marmalade'], unitGrams: 150 },
   'mushrooms':          { search: 'chestnut mushrooms', must: ['mushroom'], not: ['stuffed', 'garlic', 'breaded', 'soup', 'pate', 'dried'] },
+  'cauliflower':        { search: 'cauliflower florets', must: ['cauliflower', 'floret'], not: ['rice', 'riced', 'cheese', 'bites', 'steak', 'wings', 'sweetstem', 'romanesco', 'broccoli'] },
   'carrots':            { search: 'carrots', must: ['carrot'], not: ['baton', 'cake', 'juice', 'crisps', 'chantenay'] },
   'celery':             { search: 'celery', must: ['celery'], not: ['salt', 'soup'] },
   'cherry tomatoes':    { search: 'cherry tomatoes', must: ['tomato'], not: ['chopped', 'sun', 'juice', 'soup', 'tin', 'passata'] },
