@@ -7,6 +7,7 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { DISHES } from '../src/dishes.js';
+import { BREAKFASTS } from '../src/data.js';
 
 const MODEL = 'gemini-3.1-flash-image-preview';
 const OUT = fileURLToPath(new URL('../public/photos', import.meta.url));
@@ -22,9 +23,11 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // One consistent look across the whole library: overhead, daylight, rustic table.
 const promptFor = d => {
-  const mains = d.ingredients.filter(i => i[2] === 'fresh').slice(0, 5).map(i => i[0]).join(', ');
-  return `Overhead flat-lay photograph of ${d.name.toLowerCase()}, a home-cooked meal ` +
-    `(${d.blurb.toLowerCase()}), featuring ${mains}, served in a simple ceramic bowl on a ` +
+  const items = d.ingredients || d.items;
+  const mains = items.filter(i => i[2] === 'fresh').slice(0, 5).map(i => i[0]).join(', ');
+  const detail = d.blurb ? ` (${d.blurb.toLowerCase()})` : ', a fresh homemade breakfast';
+  return `Overhead flat-lay photograph of ${d.name.toLowerCase()}${detail}, ` +
+    `featuring ${mains}, served in a simple ceramic bowl on a ` +
     `rustic oak table with a linen napkin. Steam gently rising, honest home cooking, ` +
     `slightly imperfect plating. Captured from directly above with a Canon EOS R5, 50mm ` +
     `lens at f/5.6, soft natural window light from the left, gentle shadows. ` +
@@ -56,7 +59,8 @@ async function generate(prompt) {
 
 let done = 0, skipped = 0;
 const failed = [];
-for (const d of DISHES) {
+const ALL = [...DISHES, ...BREAKFASTS];
+for (const d of ALL) {
   const dest = `${OUT}/${d.id}.jpg`;
   if (existsSync(dest)) { skipped++; continue; }
   try {
@@ -68,10 +72,10 @@ for (const d of DISHES) {
       '-s', 'formatOptions', '80', tmp, '--out', dest], { stdio: 'pipe' });
     rmSync(tmp, { force: true });
     done++;
-    console.log(`[${done + skipped}/${DISHES.length}] ${d.id} ✓`);
+    console.log(`[${done + skipped}/${ALL.length}] ${d.id} ✓`);
   } catch (e) {
     failed.push(d.id);
-    console.log(`[${done + skipped + failed.length}/${DISHES.length}] ${d.id} FAILED: ${String(e.message).slice(0, 140)}`);
+    console.log(`[${done + skipped + failed.length}/${ALL.length}] ${d.id} FAILED: ${String(e.message).slice(0, 140)}`);
   }
   await sleep(6500); // stay inside free-tier requests-per-minute
 }

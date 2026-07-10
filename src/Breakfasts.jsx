@@ -1,10 +1,21 @@
 import { BREAKFASTS } from './data.js';
+import { OCADO_PRODUCTS } from './ocado-products.js';
+
+// What one serving costs, pro-rata from real pack prices (same maths as dinners).
+const costPerServing = items => {
+  const cost = items.reduce((sum, [name, grams]) => {
+    const p = OCADO_PRODUCTS[name];
+    return p?.packGrams && p.price ? sum + (grams / p.packGrams) * p.price : sum;
+  }, 0);
+  return Math.round(cost * 100) / 100;
+};
 
 export default function Breakfasts({ profile, breakfasts, setBreakfasts }) {
   const { allergies, diet } = profile;
   let list = BREAKFASTS.filter(b => !b.allergens.some(a => allergies.includes(a)));
   if (diet.includes('vegan')) list = list.filter(b => b.dietLevel === 3);
   if (diet.includes('gf')) list = list.filter(b => !b.allergens.includes('gluten'));
+  if (diet.includes('keto')) list = list.filter(b => b.perServing.carb - b.perServing.fibre <= 15);
   const hidden = BREAKFASTS.length - list.length;
 
   const toggle = id => {
@@ -27,12 +38,18 @@ export default function Breakfasts({ profile, breakfasts, setBreakfasts }) {
       <div className="meal-grid">
         {list.map(b => {
           const on = breakfasts.includes(b.id);
+          const cost = costPerServing(b.items);
           return (
             <div key={b.id} className={'meal-card' + (on ? ' picked' : '')}>
-              <div className="tile bfast"><span>🥣</span></div>
+              <div className="tile bfast">
+                <span>🥣</span>
+                <img src={`${import.meta.env.BASE_URL}photos/${b.id}.jpg`} alt="" loading="lazy"
+                  onError={e => e.currentTarget.remove()} />
+              </div>
               <div className="meal-body">
                 <p className="meal-name">{b.name}</p>
-                <p className="muted small">{b.perServing.kcal} kcal · {b.perServing.prot}g protein · {b.perServing.fibre}g fibre</p>
+                <p className="muted small">{Math.round(b.perServing.kcal)} kcal · {Math.round(b.perServing.prot)}g protein · {Math.round(b.perServing.fibre)}g fibre
+                  {cost > 0 && <> · <strong>≈ £{cost.toFixed(2)} a portion</strong></>}</p>
                 {on && <p className="nights">{mornings(b.id)} morning{mornings(b.id) > 1 ? 's' : ''} this week</p>}
                 <div className="card-actions">
                   <button disabled={!on && breakfasts.length >= 2} onClick={() => toggle(b.id)}>{on ? 'Picked ✓' : 'Pick'}</button>
