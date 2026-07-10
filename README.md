@@ -9,7 +9,12 @@ with a nights counter ("cook once, eat 2 nights"). Picked meals build a full wee
 list: fresh food, breakfasts, spices and cupboard staples, with a pantry memory so
 staples aren't re-bought.
 
-## Run it
+## Use it
+
+Live at **https://elliotstocks.github.io/prep-week/** — on a phone, use "Add to
+Home Screen" to install it like an app. Prices refresh automatically every night.
+
+## Run it locally
 
 ```
 npm install

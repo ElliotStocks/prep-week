@@ -57,9 +57,18 @@ real supermarket products with prices. All data in localStorage, no accounts.
 - "May contain traces" blocking: strict vs standard, per allergy?
 - Hosting/domain for the public web app; second supermarket to add first.
 
+## Live deployment (shipped July 2026)
+
+Public repo `ElliotStocks/prep-week`, hosted on GitHub Pages at
+https://elliotstocks.github.io/prep-week/ — installable web app (manifest + service
+worker). Pushing to main auto-deploys; a GitHub Action also refreshes all Ocado
+prices nightly at 03:30 UTC and republishes. Photos are generated locally only
+(`node scripts/photos.mjs` needs the Gemini key on this Mac), so run it before
+pushing when dishes are added.
+
 ## Roadmap
 
-1. **Ship it:** host the app online as an installable web app (no logins, localStorage).
+1. ~~Ship it~~ — live on GitHub Pages, July 2026. Custom domain still to come.
 2. **Second supermarket** (Tesco or Sainsbury's) to prove the switcher + per-week price
    comparison between supermarkets.
 3. **Ordering:** basket assistant in the user's own browser (extension model — the
