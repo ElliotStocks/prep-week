@@ -133,3 +133,4 @@ li.owned { color: var(--muted); text-decoration: line-through; }
 button.mini { padding: 3px 10px; font-size: 12px; border-radius: 6px; flex-shrink: 0; }
 li.pantry-row.owned span { color: var(--muted); text-decoration: line-through; }
 .rival-price { font-weight: 600; margin: 4px 0 8px; }
+.idea-miss { font-size: 13px; color: var(--danger); margin: -8px 0 12px; }

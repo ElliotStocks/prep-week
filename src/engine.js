@@ -116,7 +116,9 @@ const STOPWORDS = new Set(['the', 'and', 'with', 'something', 'some', 'for', 'pl
 export function recipeFromText(text, profile) {
   const pool = allowedDishes(profile);
   const toks = text.toLowerCase().split(/[^a-z]+/)
-    .filter(w => w.length > 2 && !STOPWORDS.has(w));
+    .filter(w => w.length > 2 && !STOPWORDS.has(w))
+    // try the plural-stripped form too, so "noodles" finds "noodle" and vice versa
+    .flatMap(w => (w.endsWith('s') ? [w, w.slice(0, -1)] : [w]));
   let best = null, bestScore = 0;
   for (const r of pool) {
     const name = r.name.toLowerCase();

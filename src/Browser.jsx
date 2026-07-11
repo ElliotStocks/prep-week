@@ -44,6 +44,7 @@ const PAGE = 24;
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned, onShowList }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
+  const [ideaMiss, setIdeaMiss] = useState(false);
   const [openId, setOpenId] = useState(null);
   const cursorRef = useRef(0);
 
@@ -66,9 +67,11 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     const text = idea.trim();
     if (!text) return;
     const r = recipeFromText(text, profile);
-    if (!r) return;
+    if (!r) { setIdeaMiss(true); return; }
+    setIdeaMiss(false);
     setCustomPicks([{ id: r.id, label: text }, ...customPicks.filter(c => c.id !== r.id)]);
     setIdea('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const customRecipes = customPicks
@@ -134,10 +137,12 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       <div className="idea-row">
         <input type="text" className="text-input" value={idea}
           placeholder="Type anything… e.g. slow-cooked beef with sweet potato"
-          onChange={e => setIdea(e.target.value)}
+          onChange={e => { setIdea(e.target.value); setIdeaMiss(false); }}
           onKeyDown={e => e.key === 'Enter' && addIdea()} />
         <button className="primary" onClick={addIdea}>Create recipe</button>
       </div>
+      {ideaMiss && <p className="idea-miss">Nothing in the library is close to that yet — try naming a
+        protein or a dish style (“prawn stir-fry”, “beef chilli”). Live AI recipe creation is coming.</p>}
       <div className="meal-grid">
         {customRecipes.map(r => card(r, true))}
         {pinnedPicked.map(r => card(r, false))}
