@@ -1,6 +1,6 @@
 import { buildStock } from './engine.js';
 import { BREAKFASTS } from './data.js';
-import { marketFor, SUPERMARKET_DATA, packsFor, linesCost } from './supermarkets.js';
+import { marketFor, SUPERMARKET_DATA, productsOf, packsFor, linesCost } from './supermarkets.js';
 
 // One stock-list line's match at the chosen supermarket: the real product with
 // pack maths and a link, or a pre-filled search link when nothing matched.
@@ -55,8 +55,9 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
   const rivals = Object.entries(SUPERMARKET_DATA)
     .filter(([id, m]) => id !== profile.supermarket && m.fetchedAt)
     .map(([, m]) => {
-      const coverage = shopLines.filter(i => m.products[i.name]).length / (shopLines.length || 1);
-      return { store: m.store, total: linesCost(m.products, shopLines), coverage };
+      const products = productsOf(m, profile);
+      const coverage = shopLines.filter(i => products[i.name]).length / (shopLines.length || 1);
+      return { store: m.store, total: linesCost(products, shopLines), coverage };
     })
     .filter(r => r.coverage >= 0.8);
 

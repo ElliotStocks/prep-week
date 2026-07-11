@@ -691,3 +691,78 @@ export const ALDI_PRODUCTS = {
     "packGrams": null
   }
 };
+// Best organic alternative per ingredient, used by the "prefer organic" setting.
+export const ALDI_ORGANIC = {
+  "firm tofu": {
+    "title": "PLANT MENU Organic Super Firm Tofu",
+    "url": "https://www.aldi.co.uk/product/plant-menu-organic-super-firm-tofu-000000000513086001",
+    "size": "0.2 KG",
+    "perUnit": "£4.75/1 KG",
+    "price": 0.95,
+    "packGrams": 200
+  },
+  "broccoli": {
+    "title": "ORGANIC Broccoli",
+    "url": "https://www.aldi.co.uk/product/organic-broccoli-000000000000339893",
+    "size": "0.3 KG",
+    "perUnit": "£4.17/1 KG",
+    "price": 1.25,
+    "packGrams": 300
+  },
+  "rolled oats": {
+    "title": "KAVANAGH&#39;S Organic Porridge Oats",
+    "url": "https://www.aldi.co.uk/product/kavanagh-s-organic-porridge-oats-000000000000336884",
+    "size": "1,000 G",
+    "perUnit": "£0.23/100 G",
+    "price": 2.25,
+    "packGrams": 1000
+  },
+  "milk": {
+    "title": "COWBELLE Organic Semi Skimmed Milk 1.7% Fat",
+    "url": "https://www.aldi.co.uk/product/cowbelle-organic-semi-skimmed-milk-1-7-fat-000000000000423466",
+    "size": "2.27 L",
+    "perUnit": "£0.92/1 L",
+    "price": 2.09,
+    "packGrams": 2270
+  },
+  "Greek yoghurt": {
+    "title": "MAMIA Organic Berry Greek Style Yogurt Pouch",
+    "url": "https://www.aldi.co.uk/product/mamia-organic-berry-greek-style-yogurt-pouch-000000000347822001",
+    "size": "0.09 KG",
+    "perUnit": "£7.22/1 KG",
+    "price": 0.65,
+    "packGrams": 90
+  },
+  "bananas": {
+    "title": "ORGANIC Organic Fairtrade Bananas 6 Pack",
+    "url": "https://www.aldi.co.uk/product/organic-organic-fairtrade-bananas-6-pack-000000000000674760",
+    "size": "6 Each",
+    "perUnit": "£0.25/1 Each",
+    "price": 1.49,
+    "packGrams": null
+  },
+  "sweetcorn": {
+    "title": "MAMIA Organic Sweetcorn &amp; Carrot Melty Stix",
+    "url": "https://www.aldi.co.uk/product/mamia-organic-sweetcorn-carrot-melty-stix-000000000536057002",
+    "size": "16 G",
+    "perUnit": "£4.94/100 G",
+    "price": 0.79,
+    "packGrams": 13
+  },
+  "carrots": {
+    "title": "MAMIA Organic Apples, Carrots &amp; Parsnips Pouch",
+    "url": "https://www.aldi.co.uk/product/mamia-organic-apples-carrots-parsnips-pouch-000000000346206002",
+    "size": "0.12 KG",
+    "perUnit": "£4.58/1 KG",
+    "price": 0.55,
+    "packGrams": 120
+  },
+  "cucumber": {
+    "title": "ORGANIC Cucumber",
+    "url": "https://www.aldi.co.uk/product/organic-cucumber-000000000000273682",
+    "size": "1 Each",
+    "perUnit": "£1.05/1 Each",
+    "price": 1.05,
+    "packGrams": null
+  }
+};

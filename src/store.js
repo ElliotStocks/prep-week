@@ -11,6 +11,7 @@ export const defaultState = () => ({
     dislikes: '',
     appetite: 1,        // 0 light, 1 standard, 2 hearty
     proteinBoost: false,
+    organicPref: false, // prefer organic products where the supermarket has them
   },
   picked: [],       // dinners for the week: {id, qty} — qty = nights cooked-for
   customPicks: [],  // free-text ideas turned into recipes: {id, label}

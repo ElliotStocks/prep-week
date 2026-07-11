@@ -46,6 +46,14 @@ export default function Quiz({ initial, onDone, onCancel }) {
         <div className="chips">
           {SUPERMARKETS_SOON.map(name => <span key={name} className="chip soon">{name} — coming soon</span>)}
         </div>
+        <div className="chips">
+          <button type="button" className={'chip' + (p.organicPref ? ' on' : '')}
+            onClick={() => setField({ organicPref: !p.organicPref })}>
+            Prefer organic {p.organicPref ? '✓' : ''}
+          </button>
+        </div>
+        {p.organicPref && <p className="muted small">Organic versions are used wherever your supermarket sells
+          one (prices update to match); everything else stays standard.</p>}
       </>,
     },
     {

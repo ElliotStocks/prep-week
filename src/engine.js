@@ -1,6 +1,6 @@
 import { BREAKFASTS, APPETITE_LEVELS } from './data.js';
 import { DISHES, NUTRITION } from './dishes.js';
-import { marketFor, SUPERMARKET_DATA, linesCost } from './supermarkets.js';
+import { marketFor, SUPERMARKET_DATA, productsOf, linesCost } from './supermarkets.js';
 
 // ---- Dishes ----------------------------------------------------------------
 
@@ -203,6 +203,6 @@ export function buildStock(profile, picked, breakfastIds, pantryOwned) {
 export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId) {
   const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
   const lines = [...freshList, ...pantryList.filter(p => !p.owned)];
-  const products = marketId ? SUPERMARKET_DATA[marketId].products : marketFor(profile).products;
+  const products = marketId ? productsOf(SUPERMARKET_DATA[marketId], profile) : marketFor(profile).products;
   return linesCost(products, lines);
 }

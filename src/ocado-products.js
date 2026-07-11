@@ -787,3 +787,606 @@ export const OCADO_PRODUCTS = {
     "packGrams": 224
   }
 };
+// Best organic alternative per ingredient, used by the "prefer organic" setting.
+export const OCADO_ORGANIC = {
+  "chicken thighs": {
+    "title": "M&S Organic 3 British Chicken Thigh Fillets",
+    "url": "https://www.ocado.com/products/m-s-organic-3-british-chicken-thigh-fillets/528240011",
+    "size": "0.35kg - 0.5kg",
+    "perUnit": "£26.00 per kg",
+    "price": 10.4,
+    "packGrams": 350
+  },
+  "chicken breast": {
+    "title": "M&S Organic Free Range Chicken Breast Fillets",
+    "url": "https://www.ocado.com/products/m-s-organic-free-range-chicken-breast-fillets/519691011",
+    "size": "0.19kg - 0.4kg",
+    "perUnit": "£28.00 per kg",
+    "price": 8.96,
+    "packGrams": 190
+  },
+  "salmon fillets": {
+    "title": "M&S Organic 2 Salmon Fillets",
+    "url": "https://www.ocado.com/products/m-s-organic-2-salmon-fillets/519118011",
+    "size": "240g",
+    "perUnit": "£33.33 per kg",
+    "price": 8,
+    "packGrams": 240
+  },
+  "free-range eggs": {
+    "title": "M&S Organic Free Range Medium Eggs",
+    "url": "https://www.ocado.com/products/m-s-organic-free-range-medium-eggs/505186011",
+    "size": "6 per pack",
+    "perUnit": "£50.0",
+    "price": 3,
+    "packGrams": 360
+  },
+  "chickpeas": {
+    "title": "Ocado Organic Chickpeas in Water",
+    "url": "https://www.ocado.com/products/ocado-organic-chickpeas-in-water/427276011",
+    "size": "400g",
+    "perUnit": "£3.25 per kg",
+    "price": 1.3,
+    "packGrams": 240
+  },
+  "lentils": {
+    "title": "M&S Organic Green Lentils",
+    "url": "https://www.ocado.com/products/m-s-organic-green-lentils/528652011",
+    "size": "500g",
+    "perUnit": "£5.40 per kg",
+    "price": 2.7,
+    "packGrams": 1250
+  },
+  "black beans": {
+    "title": "Biona Organic Black Beans in Water",
+    "url": "https://www.ocado.com/products/biona-organic-black-beans-in-water/65977011",
+    "size": "400g",
+    "perUnit": "£4.00 per kg",
+    "price": 1.6,
+    "packGrams": 240
+  },
+  "firm tofu": {
+    "title": "M&S Plant Kitchen Vegan Organic Super Firm Tofu",
+    "url": "https://www.ocado.com/products/m-s-plant-kitchen-vegan-organic-super-firm-tofu/517902011",
+    "size": "300g",
+    "perUnit": "£8.33 per kg",
+    "price": 2.5,
+    "packGrams": 300
+  },
+  "brown rice": {
+    "title": "Biona Organic Long Grain Brown Rice",
+    "url": "https://www.ocado.com/products/biona-organic-long-grain-brown-rice/551422011",
+    "size": "1kg",
+    "perUnit": "£5.75 per kg",
+    "price": 5.75,
+    "packGrams": 1000
+  },
+  "sweet potatoes": {
+    "title": "M&S Organic Sweet Potatoes",
+    "url": "https://www.ocado.com/products/m-s-organic-sweet-potatoes/518470011",
+    "size": "700g",
+    "perUnit": "£3.86 per kg",
+    "price": 2.7,
+    "packGrams": 700
+  },
+  "baby potatoes": {
+    "title": "M&S Organic Salad Potatoes",
+    "url": "https://www.ocado.com/products/m-s-organic-salad-potatoes/517865011",
+    "size": "750g",
+    "perUnit": "£3.00 per kg",
+    "price": 2.25,
+    "packGrams": 750
+  },
+  "couscous": {
+    "title": "M&S Organic Couscous",
+    "url": "https://www.ocado.com/products/m-s-organic-couscous/528675011",
+    "size": "500g",
+    "perUnit": "£4.60 per kg",
+    "price": 2.3,
+    "packGrams": 500
+  },
+  "wholewheat pasta": {
+    "title": "Biona Organic Whole Wheat Fusilli Pasta",
+    "url": "https://www.ocado.com/products/biona-organic-whole-wheat-fusilli-pasta/606941011",
+    "size": "1kg",
+    "perUnit": "£4.70 per kg",
+    "price": 4.7,
+    "packGrams": 1000
+  },
+  "broccoli": {
+    "title": "M&S Organic Broccoli",
+    "url": "https://www.ocado.com/products/m-s-organic-broccoli/517861011",
+    "size": "350g",
+    "perUnit": "£4.71 per kg",
+    "price": 1.65,
+    "packGrams": 350
+  },
+  "spinach": {
+    "title": "M&S Organic Spinach",
+    "url": "https://www.ocado.com/products/m-s-organic-spinach/518359011",
+    "size": "200g",
+    "perUnit": "£11.25 per kg",
+    "price": 2.25,
+    "packGrams": 200
+  },
+  "courgettes": {
+    "title": "M&S Organic Courgettes",
+    "url": "https://www.ocado.com/products/m-s-organic-courgettes/518355011",
+    "size": "300g",
+    "perUnit": "£8.67 per kg",
+    "price": 2.6,
+    "packGrams": 300
+  },
+  "tenderstem broccoli": {
+    "title": "M&S Organic Tenderstem Broccoli",
+    "url": "https://www.ocado.com/products/m-s-organic-tenderstem-broccoli/518512011",
+    "size": "200g",
+    "perUnit": "£13.75 per kg",
+    "price": 2.75,
+    "packGrams": 200
+  },
+  "garlic": {
+    "title": "Ocado Organic Garlic",
+    "url": "https://www.ocado.com/products/ocado-organic-garlic/299133011",
+    "size": "4 per pack",
+    "perUnit": "£33.8",
+    "price": 1.35,
+    "packGrams": null
+  },
+  "lemons": {
+    "title": "M&S Organic Unwaxed Lemons",
+    "url": "https://www.ocado.com/products/m-s-organic-unwaxed-lemons/528793011",
+    "size": "3 per pack",
+    "perUnit": "£75.0",
+    "price": 2.25,
+    "packGrams": null
+  },
+  "fresh ginger": {
+    "title": "Wholegood Organic Ginger",
+    "url": "https://www.ocado.com/products/wholegood-organic-ginger/281540011",
+    "size": "120g",
+    "perUnit": "£15.00 per kg",
+    "price": 1.8,
+    "packGrams": 120
+  },
+  "mixed dried herbs": {
+    "title": "Ocado Organic Herbes De Provence",
+    "url": "https://www.ocado.com/products/ocado-organic-herbes-de-provence/560665011",
+    "size": "16g",
+    "perUnit": "£156.25 per kg",
+    "price": 2.5,
+    "packGrams": 16
+  },
+  "olive oil": {
+    "title": "Clearspring Organic Tunisian Extra Virgin Olive Oil",
+    "url": "https://www.ocado.com/products/clearspring-organic-tunisian-extra-virgin-olive-oil/688709011",
+    "size": "500ml",
+    "perUnit": "£19.90",
+    "price": 9.95,
+    "packGrams": 500
+  },
+  "black pepper": {
+    "title": "Ocado Organic Whole Black Pepper Corns",
+    "url": "https://www.ocado.com/products/ocado-organic-whole-black-pepper-corns/560677011",
+    "size": "40g",
+    "perUnit": "£62.50 per kg",
+    "price": 2.5,
+    "packGrams": 40
+  },
+  "ground cumin": {
+    "title": "Daylesford Organic Cumin Seeds",
+    "url": "https://www.ocado.com/products/daylesford-organic-cumin-seeds/501686011",
+    "size": "45g",
+    "perUnit": "£96.67 per kg",
+    "price": 4.35,
+    "packGrams": 45
+  },
+  "ground coriander": {
+    "title": "Ocado Organic Ground Coriander",
+    "url": "https://www.ocado.com/products/ocado-organic-ground-coriander/560669011",
+    "size": "40g",
+    "perUnit": "£62.50 per kg",
+    "price": 2.5,
+    "packGrams": 40
+  },
+  "ground turmeric": {
+    "title": "Ocado Organic Ground Turmeric",
+    "url": "https://www.ocado.com/products/ocado-organic-ground-turmeric/560664011",
+    "size": "57g",
+    "perUnit": "£42.98 per kg",
+    "price": 2.45,
+    "packGrams": 57
+  },
+  "rolled oats": {
+    "title": "Flahavan's Organic Porridge Oats",
+    "url": "https://www.ocado.com/products/flahavan-s-organic-porridge-oats/31872011",
+    "size": "1kg",
+    "perUnit": "£3.00 per kg",
+    "price": 3,
+    "packGrams": 1000
+  },
+  "milk": {
+    "title": "M&S Organic Semi-Skimmed Milk 4 Pints",
+    "url": "https://www.ocado.com/products/m-s-organic-semi-skimmed-milk-4-pints/505327011",
+    "size": "2.272L",
+    "perUnit": "£1.17",
+    "price": 2.65,
+    "packGrams": 2272
+  },
+  "oat milk": {
+    "title": "Minor Figures Organic Barista Oat Milk",
+    "url": "https://www.ocado.com/products/minor-figures-organic-barista-oat-milk/513093011",
+    "size": "1L",
+    "perUnit": "£2.15",
+    "price": 2.15,
+    "packGrams": 1000
+  },
+  "frozen berries": {
+    "title": "PACK'D Organic Summer Berry Blend",
+    "url": "https://www.ocado.com/products/pack-d-organic-summer-berry-blend/560548011",
+    "size": "300g",
+    "perUnit": "£16.00 per kg",
+    "price": 4.8,
+    "packGrams": 300
+  },
+  "chia seeds": {
+    "title": "Green Origins Organic Raw Chia Seeds",
+    "url": "https://www.ocado.com/products/green-origins-organic-raw-chia-seeds/508151011",
+    "size": "300g",
+    "perUnit": "£18.33 per kg",
+    "price": 5.5,
+    "packGrams": 300
+  },
+  "honey": {
+    "title": "Hilltop Honey Organic Wildflower Squeezy",
+    "url": "https://www.ocado.com/products/hilltop-honey-organic-wildflower-squeezy/548008011",
+    "size": "720g",
+    "perUnit": "£9.03 per kg",
+    "price": 6.5,
+    "packGrams": 720
+  },
+  "walnuts": {
+    "title": "M&S Organic Walnuts",
+    "url": "https://www.ocado.com/products/m-s-organic-walnuts/673023011",
+    "size": "180g",
+    "perUnit": "£20.56 per kg",
+    "price": 3.7,
+    "packGrams": 180
+  },
+  "blueberries": {
+    "title": "M&S Organic Blueberries",
+    "url": "https://www.ocado.com/products/m-s-organic-blueberries/517850011",
+    "size": "150g",
+    "perUnit": "£20.00 per kg",
+    "price": 3,
+    "packGrams": 150
+  },
+  "butter": {
+    "title": "M&S Organic British Salted Butter",
+    "url": "https://www.ocado.com/products/m-s-organic-british-salted-butter/517851011",
+    "size": "250g",
+    "perUnit": "£13.20 per kg",
+    "price": 3.3,
+    "packGrams": 250
+  },
+  "bananas": {
+    "title": "M&S Organic Fairtrade Bananas",
+    "url": "https://www.ocado.com/products/m-s-organic-fairtrade-bananas/514171011",
+    "size": "5 per pack",
+    "perUnit": "£32.0",
+    "price": 1.6,
+    "packGrams": 600
+  },
+  "peanut butter": {
+    "title": "Whole Earth Organic Smooth Peanut Butter",
+    "url": "https://www.ocado.com/products/whole-earth-organic-smooth-peanut-butter/10518011",
+    "size": "340g",
+    "perUnit": "£10.29 per kg",
+    "price": 3.5,
+    "packGrams": 340
+  },
+  "flaked almonds": {
+    "title": "Crazy Jack Organic Flaked Almonds",
+    "url": "https://www.ocado.com/products/crazy-jack-organic-flaked-almonds/551562011",
+    "size": "100g",
+    "perUnit": "£28.00 per kg",
+    "price": 2.8,
+    "packGrams": 100
+  },
+  "lamb mince": {
+    "title": "M&S Organic Lamb Mince 20% Fat",
+    "url": "https://www.ocado.com/products/m-s-organic-lamb-mince-20-fat/520507011",
+    "size": "400g",
+    "perUnit": "£18.75 per kg",
+    "price": 7.5,
+    "packGrams": 400
+  },
+  "halloumi": {
+    "title": "Odysea Organic Halloumi",
+    "url": "https://www.ocado.com/products/odysea-organic-halloumi/674388011",
+    "size": "225g",
+    "perUnit": "£17.56 per kg",
+    "price": 3.95,
+    "packGrams": 225
+  },
+  "feta": {
+    "title": "M&S Organic Greek Feta",
+    "url": "https://www.ocado.com/products/m-s-organic-greek-feta/642393011",
+    "size": "200g",
+    "perUnit": "£15.00 per kg",
+    "price": 3,
+    "packGrams": 200
+  },
+  "parmesan": {
+    "title": "Parmareggio Parmigiano Reggiano Organic",
+    "url": "https://www.ocado.com/products/parmareggio-parmigiano-reggiano-organic/280345011",
+    "size": "150g",
+    "perUnit": "£55.33 per kg",
+    "price": 8.3,
+    "packGrams": 150
+  },
+  "kidney beans": {
+    "title": "M&S Organic Red Kidney Beans",
+    "url": "https://www.ocado.com/products/m-s-organic-red-kidney-beans/693917011",
+    "size": "430g",
+    "perUnit": "£3.14 per kg",
+    "price": 1.35,
+    "packGrams": 258
+  },
+  "cannellini beans": {
+    "title": "Mr Organic Cannellini Beans",
+    "url": "https://www.ocado.com/products/mr-organic-cannellini-beans/73561011",
+    "size": "400g",
+    "perUnit": "£4.13 per kg",
+    "price": 1.65,
+    "packGrams": 240
+  },
+  "red lentils": {
+    "title": "M&S Organic Red Lentils",
+    "url": "https://www.ocado.com/products/m-s-organic-red-lentils/528656011",
+    "size": "500g",
+    "perUnit": "£4.80 per kg",
+    "price": 2.4,
+    "packGrams": 500
+  },
+  "chopped tomatoes": {
+    "title": "Mr Organic Italian Chopped Tomatoes",
+    "url": "https://www.ocado.com/products/mr-organic-italian-chopped-tomatoes/418139011",
+    "size": "4 x 400g",
+    "perUnit": "£3.84 per kg",
+    "price": 6.15,
+    "packGrams": 1600
+  },
+  "passata": {
+    "title": "Mr Organic Italian Passata",
+    "url": "https://www.ocado.com/products/mr-organic-italian-passata/73546011",
+    "size": "690g",
+    "perUnit": "£4.35 per kg",
+    "price": 3,
+    "packGrams": 690
+  },
+  "coconut milk": {
+    "title": "Coconut Merchant Organic Coconut Milk",
+    "url": "https://www.ocado.com/products/coconut-merchant-organic-coconut-milk/372201011",
+    "size": "400ml",
+    "perUnit": "£6.88",
+    "price": 2.75,
+    "packGrams": 400
+  },
+  "sweetcorn": {
+    "title": "Eat Wholesome Organic In Season Sweetcorn",
+    "url": "https://www.ocado.com/products/eat-wholesome-organic-in-season-sweetcorn/504787011",
+    "size": "340g",
+    "perUnit": "£5.00 per kg",
+    "price": 1.7,
+    "packGrams": 272
+  },
+  "frozen peas": {
+    "title": "M&S Organic Garden Peas Frozen",
+    "url": "https://www.ocado.com/products/m-s-organic-garden-peas-frozen/527952011",
+    "size": "500g",
+    "perUnit": "£4.20 per kg",
+    "price": 2.1,
+    "packGrams": 500
+  },
+  "arborio rice": {
+    "title": "Biona Organic Risotto Rice Mix Black Venus & White",
+    "url": "https://www.ocado.com/products/biona-organic-risotto-rice-mix-black-venus-white/513863011",
+    "size": "500g",
+    "perUnit": "£8.00 per kg",
+    "price": 4,
+    "packGrams": 500
+  },
+  "bulgur wheat": {
+    "title": "Minton & Donello Organic Bulgar Wheat",
+    "url": "https://www.ocado.com/products/minton-donello-organic-bulgar-wheat/604124011",
+    "size": "500g",
+    "perUnit": "£4.20 per kg",
+    "price": 2.1,
+    "packGrams": 500
+  },
+  "onions": {
+    "title": "M&S Organic Brown Onions",
+    "url": "https://www.ocado.com/products/m-s-organic-brown-onions/518471011",
+    "size": "750g",
+    "perUnit": "£2.33 per kg",
+    "price": 1.75,
+    "packGrams": 750
+  },
+  "red onions": {
+    "title": "M&S Organic Red Onions",
+    "url": "https://www.ocado.com/products/m-s-organic-red-onions/528156011",
+    "size": "500g",
+    "perUnit": "£3.00 per kg",
+    "price": 1.5,
+    "packGrams": 500
+  },
+  "mushrooms": {
+    "title": "M&S Organic Chestnut Mushrooms",
+    "url": "https://www.ocado.com/products/m-s-organic-chestnut-mushrooms/518481011",
+    "size": "250g",
+    "perUnit": "£10.00 per kg",
+    "price": 2.5,
+    "packGrams": 250
+  },
+  "carrots": {
+    "title": "Ocado Organic Carrots",
+    "url": "https://www.ocado.com/products/ocado-organic-carrots/627742011",
+    "size": "750g",
+    "perUnit": "£1.93 per kg",
+    "price": 1.45,
+    "packGrams": 750
+  },
+  "celery": {
+    "title": "M&S Organic Celery",
+    "url": "https://www.ocado.com/products/m-s-organic-celery/517852011",
+    "size": "350g",
+    "perUnit": "£4.29 per kg",
+    "price": 1.5,
+    "packGrams": 350
+  },
+  "cherry tomatoes": {
+    "title": "Ocado Organic Cherry Tomatoes on the Vine",
+    "url": "https://www.ocado.com/products/ocado-organic-cherry-tomatoes-on-the-vine/629900011",
+    "size": "200g",
+    "perUnit": "£10.00 per kg",
+    "price": 2,
+    "packGrams": 200
+  },
+  "cucumber": {
+    "title": "M&S Organic Cucumber",
+    "url": "https://www.ocado.com/products/m-s-organic-cucumber/520692011",
+    "size": null,
+    "perUnit": "£1.65",
+    "price": 1.65,
+    "packGrams": null
+  },
+  "little gem lettuce": {
+    "title": "M&S Organic Little Gem Lettuce",
+    "url": "https://www.ocado.com/products/m-s-organic-little-gem-lettuce/517853011",
+    "size": "2 per pack",
+    "perUnit": "£95.0",
+    "price": 1.9,
+    "packGrams": 180
+  },
+  "spring onions": {
+    "title": "Natoora British Organic Spring Onions",
+    "url": "https://www.ocado.com/products/natoora-british-organic-spring-onions/582005011",
+    "size": "90g",
+    "perUnit": "£19.44 per kg",
+    "price": 1.75,
+    "packGrams": 90
+  },
+  "avocados": {
+    "title": "M&S Organic Perfectly Ripe Avocados",
+    "url": "https://www.ocado.com/products/m-s-organic-perfectly-ripe-avocados/517838011",
+    "size": "2 per pack",
+    "perUnit": "£1.38",
+    "price": 2.75,
+    "packGrams": 280
+  },
+  "fresh coriander": {
+    "title": "Daylesford Organic Coriander",
+    "url": "https://www.ocado.com/products/daylesford-organic-coriander/688179011",
+    "size": "30g",
+    "perUnit": "£95.00 per kg",
+    "price": 2.85,
+    "packGrams": 30
+  },
+  "flat-leaf parsley": {
+    "title": "Daylesford Organic Flat Leaf Parsley ",
+    "url": "https://www.ocado.com/products/daylesford-organic-flat-leaf-parsley/648332011",
+    "size": "30g",
+    "perUnit": "£96.67 per kg",
+    "price": 2.9,
+    "packGrams": 30
+  },
+  "fresh basil": {
+    "title": "Daylesford Organic Basil",
+    "url": "https://www.ocado.com/products/daylesford-organic-basil/697219011",
+    "size": "30g",
+    "perUnit": "£96.67 per kg",
+    "price": 2.9,
+    "packGrams": 30
+  },
+  "olives": {
+    "title": "Realfoods Organic Green Pitted Olives",
+    "url": "https://www.ocado.com/products/realfoods-organic-green-pitted-olives/609904011",
+    "size": "230g",
+    "perUnit": "£16.52 per kg",
+    "price": 3.8,
+    "packGrams": 230
+  },
+  "dried apricots": {
+    "title": "M&S Organic Soft Apricots",
+    "url": "https://www.ocado.com/products/m-s-organic-soft-apricots/672323011",
+    "size": "250g",
+    "perUnit": "£18.00 per kg",
+    "price": 4.5,
+    "packGrams": 250
+  },
+  "capers": {
+    "title": "Biona Organic Capers in Wine Vinegar",
+    "url": "https://www.ocado.com/products/biona-organic-capers-in-wine-vinegar/668335011",
+    "size": "140g",
+    "perUnit": "£22.86 per kg",
+    "price": 3.2,
+    "packGrams": 140
+  },
+  "sesame oil": {
+    "title": "Clearspring Organic Cold Pressed Sesame Oil",
+    "url": "https://www.ocado.com/products/clearspring-organic-cold-pressed-sesame-oil/506359011",
+    "size": "1L",
+    "perUnit": "£14.50",
+    "price": 14.5,
+    "packGrams": 1000
+  },
+  "tomato puree": {
+    "title": "Mr Organic Italian Tomato Puree",
+    "url": "https://www.ocado.com/products/mr-organic-italian-tomato-puree/73542011",
+    "size": "200g",
+    "perUnit": "£12.00 per kg",
+    "price": 2.4,
+    "packGrams": 200
+  },
+  "garam masala": {
+    "title": "Daylesford Organic Garam Masala",
+    "url": "https://www.ocado.com/products/daylesford-organic-garam-masala/501682011",
+    "size": "40g",
+    "perUnit": "£108.75 per kg",
+    "price": 4.35,
+    "packGrams": 40
+  },
+  "chilli flakes": {
+    "title": "Ocado Organic Chilli Flakes",
+    "url": "https://www.ocado.com/products/ocado-organic-chilli-flakes/560666011",
+    "size": "35g",
+    "perUnit": "£70.00 per kg",
+    "price": 2.45,
+    "packGrams": 35
+  },
+  "dried oregano": {
+    "title": "Ocado Organic Oregano",
+    "url": "https://www.ocado.com/products/ocado-organic-oregano/560673011",
+    "size": "10g",
+    "perUnit": "£245.00 per kg",
+    "price": 2.45,
+    "packGrams": 10
+  },
+  "ground cinnamon": {
+    "title": "Ocado Organic Ground Cinnamon",
+    "url": "https://www.ocado.com/products/ocado-organic-ground-cinnamon/560663011",
+    "size": "36g",
+    "perUnit": "£68.06 per kg",
+    "price": 2.45,
+    "packGrams": 36
+  },
+  "vegetable stock cubes": {
+    "title": "Kallo Organic Vegetable Stock Cubes",
+    "url": "https://www.ocado.com/products/kallo-organic-vegetable-stock-cubes/260115011",
+    "size": "8 x 11g",
+    "perUnit": "£21.59 per kg",
+    "price": 1.9,
+    "packGrams": 88
+  }
+};

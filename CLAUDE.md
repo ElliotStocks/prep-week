@@ -32,10 +32,13 @@ real supermarket products with prices. All data in localStorage, no accounts.
   online range at all and fall back to search links. The app NEVER places an order;
   users always check out themselves.
 - **Quiz (simplified July 2026 — replaced the per-person body-stats version):** one
-  question per page, food questions only: supermarket → people count → allergies →
-  dietary requirements (incl. keto, filtered on net carbs ≤15g) → foods enjoyed →
-  free-text dislikes → appetite (portion size) + optional high-protein boost (+33% on
-  each dish's main protein). No calorie/body-stat questions, no "how many dinners".
+  question per page, food questions only: supermarket (+ optional "prefer organic"
+  toggle) → people count → allergies → dietary requirements (incl. keto, filtered on
+  net carbs ≤15g) → foods enjoyed → free-text dislikes → appetite (portion size) +
+  optional high-protein boost (+33% on each dish's main protein). No calorie/body-stat
+  questions, no "how many dinners". "Prefer organic" overlays each supermarket's
+  organic product map (captured by the fetch scripts from the same searches) wherever
+  one exists — ~75 items at Ocado, ~9 at Aldi; prices update honestly.
 - **Meal quantity lives on the card, not in the quiz:** picking a meal covers 1 night;
   a +/- stepper adds nights ("cook once, eat N nights"). Portions = people × appetite.
 - **Price per portion on everything** — computed from real pack prices pro-rata by
