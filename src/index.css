@@ -128,3 +128,8 @@ li.owned { color: var(--muted); text-decoration: line-through; }
 .checkout-split li { font-size: 13px; padding: 1px 0; }
 .footer-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .picks-bar { position: sticky; top: 8px; z-index: 10; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; margin: 0 0 1rem; font-size: 14px; font-weight: 600; }
+
+.pantry-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+button.mini { padding: 3px 10px; font-size: 12px; border-radius: 6px; flex-shrink: 0; }
+li.pantry-row.owned span { color: var(--muted); text-decoration: line-through; }
+.rival-price { font-weight: 600; margin: 4px 0 8px; }

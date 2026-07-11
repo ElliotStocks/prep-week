@@ -22,10 +22,15 @@ real supermarket products with prices. All data in localStorage, no accounts.
   installable web app first; app stores later. Ordering/basket-filling comes AFTER the
   core product is good — parked, not dropped. Long-term data/ordering path: prove with
   scraped snapshots per supermarket, then supermarket affiliate/API partnerships.
-- **Supermarket choice is a quiz question.** Ocado (M&S range) is live; Tesco and
-  Sainsbury's shown as "coming soon". Each supermarket = a matching dictionary + product
-  snapshot refreshed by script (Ocado: `npm run ocado`, rules in `src/ocado.js`).
-  The app NEVER places an order; users always check out themselves.
+- **Supermarket choice is a quiz question.** Ocado (M&S range) and Aldi are live;
+  Tesco and Sainsbury's shown as "coming soon". Each supermarket = a matching dictionary
+  + product snapshot refreshed by script (`npm run ocado` / `npm run aldi`; rules in
+  `src/ocado.js` / `src/aldi.js`; registry in `src/supermarkets.js`). The shopping list
+  shows the same week priced at the other supermarket ("The same week at Aldi: ≈ £X").
+  Aldi quirk: its search ranking is unstable, so stubborn items use a `pin` (exact
+  product URL, price read from the product page); ~13 pantry items aren't in Aldi's
+  online range at all and fall back to search links. The app NEVER places an order;
+  users always check out themselves.
 - **Quiz (simplified July 2026 — replaced the per-person body-stats version):** one
   question per page, food questions only: supermarket → people count → allergies →
   dietary requirements (incl. keto, filtered on net carbs ≤15g) → foods enjoyed →
@@ -69,8 +74,8 @@ pushing when dishes are added.
 ## Roadmap
 
 1. ~~Ship it~~ — live on GitHub Pages, July 2026. Custom domain still to come.
-2. **Second supermarket** (Tesco or Sainsbury's) to prove the switcher + per-week price
-   comparison between supermarkets.
+2. ~~Second supermarket~~ — Aldi live July 2026, with per-week price comparison on the
+   shopping list. Next: Tesco or Sainsbury's via the same pattern.
 3. **Ordering:** basket assistant in the user's own browser (extension model — the
    Honey pattern), then supermarket affiliate/API partnerships. A first manual run with
    Elliot's Ocado account stalled on Chrome extension site permissions — pick up there.

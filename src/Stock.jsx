@@ -1,14 +1,13 @@
 import { buildStock } from './engine.js';
 import { BREAKFASTS } from './data.js';
-import { searchUrl, packsFor } from './ocado.js';
-import { OCADO_PRODUCTS, OCADO_FETCHED_AT } from './ocado-products.js';
+import { marketFor, SUPERMARKET_DATA, packsFor, linesCost } from './supermarkets.js';
 
-// One stock-list line's Ocado match: the real M&S product with pack maths and a link,
-// or a pre-filled search link when nothing matched.
-function OcadoLine({ name, grams }) {
-  const p = OCADO_PRODUCTS[name];
+// One stock-list line's match at the chosen supermarket: the real product with
+// pack maths and a link, or a pre-filled search link when nothing matched.
+function ProductLine({ market, name, grams }) {
+  const p = market.products[name];
   if (!p) {
-    return <a className="ocado-link" href={searchUrl(name)} target="_blank" rel="noreferrer">find on Ocado ↗</a>;
+    return <a className="ocado-link" href={market.searchUrl(name)} target="_blank" rel="noreferrer">find on {market.store} ↗</a>;
   }
   const packs = packsFor(grams, p);
   return (
@@ -18,11 +17,6 @@ function OcadoLine({ name, grams }) {
     </a>
   );
 }
-
-const linesCost = lines => lines.reduce((sum, i) => {
-  const p = OCADO_PRODUCTS[i.name];
-  return p ? sum + p.price * packsFor(i.grams, p) : sum;
-}, 0);
 
 const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -37,26 +31,37 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
     );
   }
 
+  const market = marketFor(profile);
   const { freshList, pantryList, plan } = buildStock(profile, picked, breakfasts, pantryOwned);
   const toBuy = pantryList.filter(p => !p.owned);
   const owned = pantryList.filter(p => p.owned);
   const bfNames = BREAKFASTS.filter(b => breakfasts.includes(b.id)).map(b => b.name);
 
   const shopLines = [...freshList, ...toBuy];
-  const matched = shopLines.filter(i => OCADO_PRODUCTS[i.name]).length;
-  const freshPacks = linesCost(freshList);
-  const cupboard = linesCost(toBuy);
+  const matched = shopLines.filter(i => market.products[i.name]).length;
+  const freshPacks = linesCost(market.products, freshList);
+  const cupboard = linesCost(market.products, toBuy);
   const total = freshPacks + cupboard;
   // What this week's cooking actually uses, pro-rata by grams — the rest of each
   // pack stays in the kitchen for future weeks.
   const eatenThisWeek = freshList.reduce((sum, i) => {
-    const p = OCADO_PRODUCTS[i.name];
+    const p = market.products[i.name];
     return p?.packGrams && i.grams ? sum + Math.min((i.grams / p.packGrams) * p.price, p.price * packsFor(i.grams, p)) : sum;
   }, 0);
   const carryOver = Math.max(freshPacks - eatenThisWeek, 0);
 
-  const toggleOwned = name => {
-    setPantryOwned(pantryOwned.includes(name) ? pantryOwned.filter(x => x !== name) : [...pantryOwned, name]);
+  // The same week priced at the other supermarkets — only shown when the other
+  // shop's catalogue covers enough of the list to make the comparison fair.
+  const rivals = Object.entries(SUPERMARKET_DATA)
+    .filter(([id, m]) => id !== profile.supermarket && m.fetchedAt)
+    .map(([, m]) => {
+      const coverage = shopLines.filter(i => m.products[i.name]).length / (shopLines.length || 1);
+      return { store: m.store, total: linesCost(m.products, shopLines), coverage };
+    })
+    .filter(r => r.coverage >= 0.8);
+
+  const setOwned = (name, isOwned) => {
+    setPantryOwned(isOwned ? [...pantryOwned, name] : pantryOwned.filter(x => x !== name));
   };
 
   return (
@@ -64,19 +69,22 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
       <h2>Your full weekly stock</h2>
       <p className="sub">Everything the kitchen needs this week for {profile.people}
         {profile.people > 1 ? ' people' : ' person'}: {plan.reduce((s, r) => s + r.nights, 0)} dinners
-        {bfNames.length ? `, breakfasts every morning` : ''}, spices and staples included.
-        Tick anything you already have; the app remembers for future weeks.</p>
+        {bfNames.length ? `, breakfasts every morning` : ''}, spices and staples included.</p>
 
       <div className="ocado-note">
         <div className="ocado-total">Estimated checkout total: £{total.toFixed(2)}</div>
         <ul className="plain checkout-split">
           <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
           {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
-          {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (tick what you own and it disappears)</li>}
+          {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (mark what you own and it disappears)</li>}
         </ul>
-        {matched} of {shopLines.length} lines matched to real M&amp;S products
-        {OCADO_FETCHED_AT ? `, prices checked ${niceDate(OCADO_FETCHED_AT)}` : ''}. Every link opens
-        Ocado in a new tab — the app never orders anything; you always fill and confirm the basket yourself.
+        {rivals.map(r => (
+          <p className="rival-price" key={r.store}>The same week at {r.store}: ≈ £{r.total.toFixed(2)} —
+            switch supermarket in Settings to shop there instead.</p>
+        ))}
+        {matched} of {shopLines.length} lines matched to real {market.range} products
+        {market.fetchedAt ? `, prices checked ${niceDate(market.fetchedAt)}` : ''}. Every link opens
+        {' '}{market.store} in a new tab — the app never orders anything; you always fill and confirm the basket yourself.
       </div>
 
       <div className="stock-section">
@@ -95,31 +103,35 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
             {freshList.map(i => (
               <li key={i.name}>
                 {i.name}{i.qty && <span className="muted"> — {i.qty}</span>}
-                <OcadoLine name={i.name} grams={i.grams} />
+                <ProductLine market={market} name={i.name} grams={i.grams} />
               </li>
             ))}
           </ul>
         </div>
         <div className="stock-section">
-          <h3>Store cupboard & spices — to buy</h3>
+          <h3>Store cupboard & spices</h3>
+          <p className="muted small">Bought once, used for weeks. Already got one? Say so and it drops off the list.</p>
           {toBuy.length === 0 && <p className="muted">Nothing needed — your cupboard covers this week.</p>}
           <ul className="plain">
             {toBuy.map(i => (
               <li key={i.name}>
-                <label>
-                  <input type="checkbox" checked={false} onChange={() => toggleOwned(i.name)} /> {i.name}
-                  <span className="muted small"> · for {i.usedBy.slice(0, 2).join(', ')}{i.usedBy.length > 2 ? '…' : ''}</span>
-                </label>
-                <OcadoLine name={i.name} />
+                <div className="pantry-row">
+                  <span>{i.name}
+                    <span className="muted small"> · for {i.usedBy.slice(0, 2).join(', ')}{i.usedBy.length > 2 ? '…' : ''}</span>
+                  </span>
+                  <button className="mini" onClick={() => setOwned(i.name, true)}>I have this</button>
+                </div>
+                <ProductLine market={market} name={i.name} />
               </li>
             ))}
           </ul>
           {owned.length > 0 && <>
-            <h3 className="spaced">Already in your cupboard</h3>
+            <h3 className="spaced">In your cupboard — not being bought</h3>
             <ul className="plain">
               {owned.map(i => (
-                <li key={i.name} className="owned">
-                  <label><input type="checkbox" checked onChange={() => toggleOwned(i.name)} /> {i.name}</label>
+                <li key={i.name} className="pantry-row owned">
+                  <span>{i.name}</span>
+                  <button className="mini" onClick={() => setOwned(i.name, false)}>Ran out — buy again</button>
                 </li>
               ))}
             </ul>

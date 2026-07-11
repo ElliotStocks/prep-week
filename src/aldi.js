@@ -1,0 +1,126 @@
+// Aldi shopping dictionary. Same shape as the Ocado one (src/ocado.js):
+// search phrase + must/not title tokens, unitGrams for count-packs, netFactor
+// for tinned/dried. Aldi is all own-brand (Ashfields, Everyday Essentials,
+// The Fishmonger, Nature's Pick...) so no brand preference — cheapest per
+// unit wins among qualifying products. The app never places an order.
+
+export const ALDI_ITEMS = {
+  "chicken thighs": { search: "chicken thigh fillets", must: ["chicken","thigh"], not: ["indian","grill","marinated","sticky","bbq","piri","roast in the bag"] },
+  "chicken breast": { search: "chicken breast fillets", must: ["chicken","breast"] },
+  "lean beef mince": { search: "lean beef mince 5%", must: ["beef","mince","lean| 5%"] },
+  "beef steak strips": { search: "beef stir fry strips", must: ["beef","strip"] },
+  "turkey mince": { search: "turkey mince", must: ["turkey","mince"] },
+  "salmon fillets": { search: "salmon fillets", must: ["salmon","fillet"], not: ["smoked"] },
+  "cod fillets": { search: "cod fillets", must: ["cod","fillet"], not: ["battered","breaded","made without","in sauce","fish cake","goujon","dusted","crumb"] },
+  "king prawns": { search: "fishmonger king prawns", must: ["prawn"], not: ["cocktail","battered","marinated","paprika","garlic","chilli","tempura","crispy","katsu","filo","paella","curry","linguine","risotto","wellington","wine","salmon","toast","bhuna","dine in"] },
+  "free-range eggs": { search: "large free range eggs", must: ["free range","egg"], not: ["chocolate","fried","rice","scotch","quail","mayonnaise","noodle"], unitGrams: 60 },
+  "chickpeas": { search: "chickpeas in water tin", must: ["chickpea"], netFactor: 0.6 },
+  "lentils": { search: "four seasons tinned lentils", must: ["lentil"], not: ["soup","crisps","dahl","dal","salad","snack","curl","red"], netFactor: 0.6 },
+  "black beans": { search: "black beans in water tin", must: ["black","bean"], netFactor: 0.6 },
+  "firm tofu": { search: "firm tofu", must: ["tofu"] },
+  "brown rice": { search: "worldwide foods brown rice", must: ["brown|wholegrain","rice"], not: ["microwave","pouch","pudding","cracker","noodle","sushi","egg","cake","quinoa","garlic"] },
+  "quinoa": { search: "quinoa", must: ["quinoa"], not: ["pouch","rice","salad","crisps"] },
+  "sweet potatoes": { search: "sweet potatoes", must: ["sweet","potato"], not: ["fries","mash"] },
+  "baby potatoes": { search: "baby potatoes", must: ["potato","baby|new"], not: ["sweet"] },
+  "couscous": { search: "worldwide foods couscous", must: ["couscous"], not: ["moroccan","fruity","roasted","flavour","giant","salad"] },
+  "wholewheat pasta": { search: "wholewheat pasta", must: ["wholewheat|whole wheat|wholemeal","pasta|fusilli|penne|spaghetti"] },
+  "broccoli": { search: "broccoli", must: ["broccoli"], not: ["tenderstem"] },
+  "peppers": { search: "mixed peppers pack", must: ["pepper"], not: ["black pepper","stuffed","salt","fries","corn","sauce","padron"], unitGrams: 160 },
+  "spinach": { search: "baby spinach", must: ["spinach"] },
+  "green beans": { search: "green beans", must: ["green","bean"] },
+  "courgettes": { search: "courgettes", must: ["courgette"], not: ["baby","spiral","ribbon"] },
+  "rainbow slaw mix": { search: "rainbow slaw mix", must: ["slaw","rainbow|crunch|vegetable"], not: ["pickled","creamy","dressed","potato","coleslaw","remoulade","mayo"] },
+  "tenderstem broccoli": { search: "tenderstem broccoli", must: ["tenderstem"], not: ["bean","corn","medley"] },
+  "garlic": { search: "garlic", must: ["garlic"], pin: "https://www.aldi.co.uk/product/nature-s-pick-garlic-000000000000273810", pinSize: "4 Each" },
+  "lemons": { search: "lemons", must: ["lemon"], pin: "https://www.aldi.co.uk/product/everyday-essentials-wonky-lemons-000000000000268496", pinSize: "4 Each" },
+  "fresh ginger": { search: "root ginger", must: ["ginger"], not: ["beer","ale","biscuit","nut","cake","cordial","tea","wine","kombucha","juice","shot","lemon"] },
+  "mixed dried herbs": { search: "dried mixed herbs", must: ["mixed herbs|herbes"] },
+  "olive oil": { search: "olive oil 500ml", must: ["olive","oil"] },
+  "smoked paprika": { search: "smoked paprika spice", must: ["paprika"], not: ["crisps","snack","stackz","mex","chorizo","cheese","roule","black pepper"] },
+  "black pepper": { search: "ready set cook black peppercorns", must: ["black","pepper"], not: ["mayo","sauce","crisps","cashew","potato","parmentier","coated","butter","cheese","crackers","savoury"] },
+  "harissa paste": { search: "ready set cook harissa", must: ["harissa"], not: ["burger","couscous","chicken","salad","health"] },
+  "ground cumin": { search: "ground cumin", must: ["cumin"] },
+  "ground coriander": { search: "ready set cook ground coriander", must: ["coriander"], not: ["soup","carrot","fresh","seeds","houmous","hummus","topped","lemon","cut","prawn","marinated","chilli"] },
+  "ground turmeric": { search: "ground turmeric", must: ["cook with|ground","turmeric"], not: ["fresh","root","shot","latte"] },
+  "rolled oats": { search: "porridge oats 1kg", must: ["porridge|rolled|scottish","oats"], not: ["pot","sachet","golden syrup","chocolate","protein","instant"] },
+  "milk": { search: "semi skimmed milk 4 pints", must: ["milk"], not: ["oat","almond","coconut","chocolate"] },
+  "oat milk": { search: "oat drink", must: ["oat","milk|drink"], not: ["porridge","chocolate","vanilla","biscuit"] },
+  "frozen berries": { search: "frozen berries", must: ["berr"], not: ["squash","drink","juice","cordial","yogurt","fresh","granola","cereal","protein"] },
+  "chia seeds": { search: "chia seeds", must: ["chia"] },
+  "honey": { search: "squeezy honey", must: ["honey"], not: ["bread","bloomer","loaf","soaked","roast","nut","yogurt","granola","ham","cereal","hoops","loops","mustard"] },
+  "Greek yoghurt": { search: "greek style yogurt", must: ["greek","yogurt|yoghurt"], not: ["honey","fruit","vanilla","coconut","cherry","strawberry","mango","lemon"] },
+  "walnuts": { search: "walnut pieces", must: ["walnut"], not: ["cake","coffee","bread"] },
+  "blueberries": { search: "fresh blueberries", must: ["blueberr"], pin: "https://www.aldi.co.uk/product/nature-s-pick-blueberries-000000000000276890", pinSize: "150 G" },
+  "wholegrain bread": { search: "wholemeal bread loaf", must: ["wholemeal|wholegrain|whole grain|seeded","bread|loaf"] },
+  "butter": { search: "cowbelle salted butter", must: ["butter"], not: ["peanut","almond","cashew","garlic","herb","potato","spread","light","beans","biscuit","chicken","curry","masala","croissant","mintoes","fudge","shortbread"] },
+  "bananas": { search: "natures pick bananas", must: ["banana"], not: ["pouch","snack","milkshake","bread","apple","yogurt","dried","foam","sweets","jelly","chocolate","rusk","biscotti","mamia"], unitGrams: 120 },
+  "peanut butter": { search: "peanut butter smooth", must: ["peanut","butter"] },
+  "flaked almonds": { search: "flaked almonds", must: ["flaked","almond"] },
+  "lamb mince": { search: "lamb mince", must: ["lamb","mince"] },
+  "pork sausages": { search: "British pork sausages", must: ["pork","sausage"], not: ["chipolata","cocktail","vegan","veggie","roll"] },
+  "tinned tuna": { search: "tuna chunks in spring water", must: ["tuna"], not: ["steak","pasta","sandwich","mayo","salad"] },
+  "halloumi": { search: "halloumi cheese", must: ["halloumi"], not: ["kebab","burger","fries","bites","light","chilli"] },
+  "feta": { search: "greek feta cheese", must: ["feta"], not: ["pasta","salad","topped","olives","whipped"] },
+  "cheddar": { search: "mature cheddar", must: ["cheddar"], not: ["slices","spread","light","crisps","sticks"] },
+  "parmesan": { search: "emporium parmesan", must: ["parmesan|parmigiano"], not: ["pasta","salad","crisps","bake","chicken","bites","nuggets"] },
+  "kidney beans": { search: "red kidney beans in water", must: ["kidney","bean"], not: ["chilli"], netFactor: 0.6 },
+  "cannellini beans": { search: "four seasons cannellini beans", must: ["cannellini"], netFactor: 0.6 },
+  "red lentils": { search: "dried red split lentils", must: ["red","lentil"], not: ["soup","snack","crisps"] },
+  "chopped tomatoes": { search: "chopped tomatoes tin", must: ["chopped","tomato"], not: ["basil","garlic","onion","chilli","herb"] },
+  "passata": { search: "passata", must: ["passata"] },
+  "coconut milk": { search: "coconut milk tin", must: ["coconut","milk"], not: ["drink","yoghurt","yogurt","chocolate"] },
+  "sweetcorn": { search: "sweetcorn", must: ["sweetcorn|sweet corn"], not: ["baby","cob","crisp","fritter","rice","tuna"], netFactor: 0.8 },
+  "frozen peas": { search: "frozen garden peas", must: ["peas"], not: ["mushy","marrowfat","snap","sugar","protein"] },
+  "basmati rice": { search: "basmati rice 1kg", must: ["basmati"], not: ["microwave","pouch","brown","pilau","wholegrain"] },
+  "arborio rice": { search: "worldwide foods risotto rice", must: ["risotto|arborio","rice"], not: ["pouch","ready"] },
+  "egg noodles": { search: "medium egg noodles", must: ["noodle"], not: ["rice","instant","pot","singapore","wok"] },
+  "bulgur wheat": { search: "worldwide foods bulgur wheat", must: ["bulgur|bulgar"] },
+  "tortilla wraps": { search: "village bakery tortilla wraps", must: ["tortilla|wrap"], not: ["jalapeno","chip","crisp","flavour","cheese","brie","cranberry","chicken","sandwich","salad","falafel","katsu","eat & go"] },
+  "onions": { search: "brown onions", must: ["onion"], not: ["red","pickled","spring","rings","chutney","powder"], unitGrams: 160 },
+  "red onions": { search: "red onions", must: ["red","onion"], not: ["pickled","chutney","marmalade"], unitGrams: 150 },
+  "mushrooms": { search: "chestnut mushrooms", must: ["mushroom"], not: ["stuffed","garlic","breaded","soup","pate","dried","sauce","cuppa"] },
+  "cauliflower": { search: "cauliflower", must: ["cauliflower"], not: ["cheese","rice","bites","steak","wings","broccoli"] },
+  "carrots": { search: "carrots", must: ["carrot"], not: ["baton","cake","juice","crisps","chantenay"] },
+  "celery": { search: "celery", must: ["celery"], not: ["salt","soup"] },
+  "cherry tomatoes": { search: "cherry tomatoes", must: ["tomato"], not: ["ketchup","sauce","tinned","juice","chopped","sun","pasta"] },
+  "cucumber": { search: "whole cucumber", must: ["cucumber"], not: ["snack","squishy","pickle","gin"] },
+  "little gem lettuce": { search: "little gem lettuce", must: ["little gem"], unitGrams: 90 },
+  "spring onions": { search: "spring onions", must: ["spring onion"], not: ["rice","soup","mash","pickled"] },
+  "avocados": { search: "perfectly ripe avocados", must: ["avocado"], not: ["oil","smash"], unitGrams: 140 },
+  "limes": { search: "limes", must: ["lime"], pin: "https://www.aldi.co.uk/product/nature-s-pick-limes-000000000000285988", pinSize: "5 Pack", unitGrams: 65 },
+  "fresh coriander": { search: "cut coriander", must: ["coriander"], not: ["soup","carrot","ground","seeds","houmous","hummus","topped","lemon","jar"] },
+  "flat-leaf parsley": { search: "fresh parsley", must: ["parsley"], not: ["potato","butter","sauce","dried"] },
+  "fresh basil": { search: "natures pick basil", must: ["basil"], not: ["passata","sauce","pesto","dried","infused","soup","tomato","flatbread","mozzarella"] },
+  "olives": { search: "pitted green olives", must: ["olive"], not: ["spread","oil","bread","tapenade","stuffed"] },
+  "dried apricots": { search: "foodie market dried apricots", must: ["apricot"], not: ["yogurt","jam","conserve","fresh"] },
+  "capers": { search: "the deli capers", must: ["caper"], not: ["fish","pizza"] },
+  "soy sauce": { search: "dark soy sauce", must: ["soy sauce"], not: ["sweet"] },
+  "sesame oil": { search: "asia specialities sesame oil", must: ["sesame","oil"], not: ["seeds","snaps","prawn","bagel"] },
+  "tomato puree": { search: "everyday essentials tomato puree", must: ["puree|purée|paste"], not: ["garlic","sun","pasta sauce","chopped"] },
+  "thai green curry paste": { search: "thai green curry paste", must: ["green","curry","paste"] },
+  "tikka curry paste": { search: "tikka masala curry paste", must: ["tikka","paste"] },
+  "garam masala": { search: "garam masala", must: ["garam"] },
+  "chilli flakes": { search: "crushed chilli flakes", must: ["chilli","flakes|crushed"], not: ["oil","sauce","jam"] },
+  "dried oregano": { search: "ready set cook oregano", must: ["oregano"], not: ["passata","rustica","sauce","basil"] },
+  "ground cinnamon": { search: "ground cinnamon", must: ["cinnamon"], not: ["cereal","chips","swirl","bun","stick","sugar","porridge"] },
+  "vegetable stock cubes": { search: "quixo vegetable stock", must: ["stock"], not: ["gravy","fresh","chicken","beef","lamb","fish"] },
+};
+
+export const searchUrl = name =>
+  `https://www.aldi.co.uk/results?q=${encodeURIComponent(ALDI_ITEMS[name]?.search || name)}`;
+
+// "500g" | "1kg" | "4 x 25g" | "6 pack" | "each" → usable grams (ml treated as
+// grams). Returns null if unreadable.
+export function packGrams(name, sizeText) {
+  if (!sizeText) return null;
+  const item = ALDI_ITEMS[name] || {};
+  const s = sizeText.toLowerCase().replace(/,/g, "");
+  const perPack = s.match(/(\d+)\s*(?:pack|per pack)/);
+  if (perPack && item.unitGrams) return Number(perPack[1]) * item.unitGrams;
+  const m = s.match(/(?:(\d+)\s*x\s*)?(\d+(?:\.\d+)?)\s*(kg|g|ml|l|litre|pint)\b/);
+  if (!m) return null;
+  const mult = m[1] ? Number(m[1]) : 1;
+  const n = Number(m[2]);
+  const unit = { kg: 1000, g: 1, ml: 1, l: 1000, litre: 1000, pint: 568 }[m[3]];
+  return Math.round(mult * n * unit * (item.netFactor || 1));
+}

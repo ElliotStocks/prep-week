@@ -138,9 +138,3 @@ export function packGrams(name, sizeText) {
   const gross = mult * n * unit;
   return Math.round(gross * (item.netFactor || 1));
 }
-
-// How many packs of `product` cover `grams` of the ingredient. 1 pack minimum.
-export function packsFor(grams, product) {
-  if (!grams || !product?.packGrams) return 1;
-  return Math.max(1, Math.ceil(grams / product.packGrams));
-}

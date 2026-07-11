@@ -1,16 +1,17 @@
 import { BREAKFASTS } from './data.js';
-import { OCADO_PRODUCTS } from './ocado-products.js';
+import { marketFor } from './supermarkets.js';
 
 // What one serving costs, pro-rata from real pack prices (same maths as dinners).
-const costPerServing = items => {
+const costPerServing = (items, products) => {
   const cost = items.reduce((sum, [name, grams]) => {
-    const p = OCADO_PRODUCTS[name];
+    const p = products[name];
     return p?.packGrams && p.price ? sum + (grams / p.packGrams) * p.price : sum;
   }, 0);
   return Math.round(cost * 100) / 100;
 };
 
 export default function Breakfasts({ profile, breakfasts, setBreakfasts }) {
+  const market = marketFor(profile);
   const { allergies, diet } = profile;
   let list = BREAKFASTS.filter(b => !b.allergens.some(a => allergies.includes(a)));
   if (diet.includes('vegan')) list = list.filter(b => b.dietLevel === 3);
@@ -38,7 +39,7 @@ export default function Breakfasts({ profile, breakfasts, setBreakfasts }) {
       <div className="meal-grid">
         {list.map(b => {
           const on = breakfasts.includes(b.id);
-          const cost = costPerServing(b.items);
+          const cost = costPerServing(b.items, market.products);
           return (
             <div key={b.id} className={'meal-card' + (on ? ' picked' : '')}>
               <div className="tile bfast">

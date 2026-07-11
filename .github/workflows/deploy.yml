@@ -32,15 +32,16 @@ jobs:
           cache: npm
       - run: npm ci
 
-      - name: Refresh Ocado prices (nightly runs only)
+      - name: Refresh supermarket prices (nightly runs only)
         if: github.event_name != 'push'
         run: |
           npm run ocado
-          if ! git diff --quiet src/ocado-products.js; then
+          npm run aldi
+          if ! git diff --quiet src/ocado-products.js src/aldi-products.js; then
             git config user.name "prep-week bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add src/ocado-products.js
-            git commit -m "Nightly Ocado price refresh"
+            git add src/ocado-products.js src/aldi-products.js
+            git commit -m "Nightly supermarket price refresh"
             git push
           fi
 

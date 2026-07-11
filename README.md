@@ -25,15 +25,16 @@ Then open http://localhost:5173
 
 All data stays in the browser (localStorage). No accounts, no server.
 
-## Ocado product matching
+## Supermarket product matching
 
-Every stock-list line is matched to a real M&S product on Ocado — name, pack size,
-price, and how many packs the week needs — with an estimated basket total. Lines
-without a good match fall back to a pre-filled Ocado search link. The app never
-places an order; every link just opens Ocado in a new tab.
+Every stock-list line is matched to a real product at the chosen supermarket —
+Ocado (M&S range) or Aldi — with name, pack size, price, how many packs the week
+needs, and an estimated basket total. The shopping list also prices the same week
+at the other supermarket ("The same week at Aldi: ≈ £42"). Lines without a good
+match fall back to a pre-filled search link. The app never places an order; every
+link just opens the supermarket in a new tab.
 
-Prices are a snapshot, refreshed with `npm run ocado` (queries Ocado's own product
-search API, one polite request per ingredient, ~1 minute).
+Prices are snapshots, refreshed nightly (`npm run ocado` / `npm run aldi`).
 
 ## Roadmap
 

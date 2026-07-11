@@ -1,7 +1,6 @@
 import { BREAKFASTS, APPETITE_LEVELS } from './data.js';
 import { DISHES, NUTRITION } from './dishes.js';
-import { OCADO_PRODUCTS } from './ocado-products.js';
-import { packsFor } from './ocado.js';
+import { marketFor, SUPERMARKET_DATA, linesCost } from './supermarkets.js';
 
 // ---- Dishes ----------------------------------------------------------------
 
@@ -19,12 +18,13 @@ function boostedIngredients(d, profile) {
     name === anchor ? [name, Math.round(grams * 1.33), kind] : [name, grams, kind]);
 }
 
-// What one reference portion of this dish costs, from real pack prices.
-// Items whose pack size we can't read (a garlic bulb, a lemon) are pennies and skipped.
-function costPerServing(ingredients) {
+// What one reference portion of this dish costs at the chosen supermarket, from
+// real pack prices. Items whose pack size we can't read (a garlic bulb, a lemon)
+// are pennies and skipped.
+function costPerServing(ingredients, products) {
   let cost = 0;
   for (const [name, grams] of ingredients) {
-    const p = OCADO_PRODUCTS[name];
+    const p = products[name];
     if (p?.packGrams && p.price) cost += (grams / p.packGrams) * p.price;
   }
   return Math.round(cost * 100) / 100;
@@ -47,7 +47,7 @@ export function buildDish(d, profile) {
     ingredients,
     allergens: [...allergens],
     perServing: Object.fromEntries(N_KEYS.map(k => [k, Math.round(per[k] * 10) / 10])),
-    costPerServing: costPerServing(ingredients),
+    costPerServing: costPerServing(ingredients, marketFor(profile).products),
   };
 }
 
@@ -197,11 +197,10 @@ export function buildStock(profile, picked, breakfastIds, pantryOwned) {
 
 // The checkout estimate (whole packs, cupboard included) — the same number the
 // shopping list shows, so the running total while picking never disagrees with it.
-export function estimatedTotal(profile, picked, breakfastIds, pantryOwned) {
+// Pass a marketId to price the same week at a different supermarket.
+export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId) {
   const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
   const lines = [...freshList, ...pantryList.filter(p => !p.owned)];
-  return lines.reduce((sum, i) => {
-    const p = OCADO_PRODUCTS[i.name];
-    return p ? sum + p.price * packsFor(i.grams, p) : sum;
-  }, 0);
+  const products = marketId ? SUPERMARKET_DATA[marketId].products : marketFor(profile).products;
+  return linesCost(products, lines);
 }

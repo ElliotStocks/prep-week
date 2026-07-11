@@ -8,6 +8,7 @@
     "build": "vite build",
     "lint": "oxlint",
     "ocado": "node scripts/ocado-fetch.mjs",
+    "aldi": "node scripts/aldi-fetch.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
