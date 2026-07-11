@@ -3,7 +3,10 @@ import Quiz from './Quiz.jsx';
 import Browser from './Browser.jsx';
 import Breakfasts from './Breakfasts.jsx';
 import Stock from './Stock.jsx';
+import Cook from './Cook.jsx';
 import { loadState, saveState } from './store.js';
+import { allowedDishes } from './engine.js';
+import { BREAKFASTS } from './data.js';
 
 export default function App() {
   const [state, setState] = useState(loadState);
@@ -14,6 +17,12 @@ export default function App() {
 
   const patch = p => setState(prev => ({ ...prev, ...p }));
 
+  const clearWeek = () => {
+    if (!window.confirm('Start a new week? This clears your picked meals, breakfasts and list edits. Your profile, favourites and cupboard memory stay.')) return;
+    patch({ picked: [], customPicks: [], breakfasts: [], listTweaks: { skipped: [], packs: {} } });
+    setTab('meals');
+  };
+
   if (!state.onboarded || editing) {
     return (
       <div className="shell">
@@ -22,7 +31,17 @@ export default function App() {
           initial={state.profile}
           onCancel={editing ? () => setEditing(false) : undefined}
           onDone={profile => {
-            patch({ profile, onboarded: true, picked: [], customPicks: [], breakfasts: [] });
+            // keep the week's picks across settings edits — only drop anything the
+            // new answers rule out (allergies, diet)
+            const okIds = new Set(allowedDishes(profile).map(d => d.id));
+            const okBf = new Set(BREAKFASTS.filter(b => !b.allergens.some(a => profile.allergies.includes(a))).map(b => b.id));
+            patch({
+              profile,
+              onboarded: true,
+              picked: state.picked.filter(p => okIds.has(p.id)),
+              customPicks: state.customPicks.filter(c => okIds.has(c.id)),
+              breakfasts: state.breakfasts.filter(id => okBf.has(id)),
+            });
             setEditing(false);
             setTab('meals');
           }}
@@ -36,7 +55,7 @@ export default function App() {
       <header className="app-header">
         <h1>Prep Week</h1>
         <nav>
-          {[['meals', 'Meals'], ['breakfasts', 'Breakfasts'], ['stock', 'Shopping list']].map(([id, label]) => (
+          {[['meals', 'Meals'], ['breakfasts', 'Breakfasts'], ['stock', 'Shopping list'], ['cook', 'Cooking']].map(([id, label]) => (
             <button key={id} className={tab === id ? 'tab on' : 'tab'} onClick={() => setTab(id)}>{label}</button>
           ))}
           <button className="tab" onClick={() => setEditing(true)}>Settings</button>
@@ -51,7 +70,12 @@ export default function App() {
           setCustomPicks={customPicks => patch({ customPicks })}
           breakfasts={state.breakfasts}
           pantryOwned={state.pantryOwned}
+          listTweaks={state.listTweaks}
+          favourites={state.favourites}
+          setFavourites={favourites => patch({ favourites })}
           onShowList={() => setTab('stock')}
+          onChangeShop={() => setEditing(true)}
+          onClearWeek={clearWeek}
         />
       )}
       {tab === 'breakfasts' && (
@@ -61,6 +85,9 @@ export default function App() {
           setBreakfasts={breakfasts => patch({ breakfasts })}
         />
       )}
+      {tab === 'cook' && (
+        <Cook profile={state.profile} picked={state.picked} />
+      )}
       {tab === 'stock' && (
         <Stock
           profile={state.profile}
@@ -68,6 +95,9 @@ export default function App() {
           breakfasts={state.breakfasts}
           pantryOwned={state.pantryOwned}
           setPantryOwned={pantryOwned => patch({ pantryOwned })}
+          listTweaks={state.listTweaks}
+          setListTweaks={listTweaks => patch({ listTweaks })}
+          onClearWeek={clearWeek}
         />
       )}
     </div>

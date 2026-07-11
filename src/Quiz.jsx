@@ -52,8 +52,8 @@ export default function Quiz({ initial, onDone, onCancel }) {
             Prefer organic {p.organicPref ? '✓' : ''}
           </button>
         </div>
-        {p.organicPref && <p className="muted small">Organic versions are used wherever your supermarket sells
-          one (prices update to match); everything else stays standard.</p>}
+        <p className="muted small">Organic usually costs more — your prices update honestly. It applies wherever
+          your supermarket sells an organic version; everything else stays standard.</p>
       </>,
     },
     {

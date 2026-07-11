@@ -785,6 +785,94 @@ export const OCADO_PRODUCTS = {
     "perUnit": "£12.50 per kg",
     "price": 2.8,
     "packGrams": 224
+  },
+  "orzo": {
+    "title": "M&S Risoni Orzo Pasta",
+    "url": "https://www.ocado.com/products/m-s-risoni-orzo-pasta/505047011",
+    "size": "500g",
+    "perUnit": "£4.60 per kg",
+    "price": 2.3,
+    "packGrams": 500
+  },
+  "gnocchi": {
+    "title": "La Famiglia Rana Traditional Potato Gnocchi",
+    "url": "https://www.ocado.com/products/la-famiglia-rana-traditional-potato-gnocchi/69704011",
+    "size": "500g",
+    "perUnit": "£5.00 per kg",
+    "price": 2.5,
+    "packGrams": 500
+  },
+  "rice noodles": {
+    "title": "M&S Rice Noodles",
+    "url": "https://www.ocado.com/products/m-s-rice-noodles/510349011",
+    "size": "180g",
+    "perUnit": "£8.33 per kg",
+    "price": 1.5,
+    "packGrams": 180
+  },
+  "chorizo": {
+    "title": "Ocado Spanish Mild Chorizo Ring",
+    "url": "https://www.ocado.com/products/ocado-spanish-mild-chorizo-ring/57080011",
+    "size": "225g",
+    "perUnit": "£11.56 per kg",
+    "price": 2.6,
+    "packGrams": 225
+  },
+  "leeks": {
+    "title": "M&S British Leeks ",
+    "url": "https://www.ocado.com/products/m-s-british-leeks/519899011",
+    "size": "600g",
+    "perUnit": "£3.08 per kg",
+    "price": 1.85,
+    "packGrams": 600
+  },
+  "aubergine": {
+    "title": "M&S Aubergine Al Forno Serves 1",
+    "url": "https://www.ocado.com/products/m-s-aubergine-al-forno-serves-1/671247011",
+    "size": "400g",
+    "perUnit": "£10.50 per kg",
+    "price": 4.2,
+    "packGrams": 400
+  },
+  "potatoes": {
+    "title": "M&S King Edward Potatoes",
+    "url": "https://www.ocado.com/products/m-s-king-edward-potatoes/518648011",
+    "size": "2.5kg",
+    "perUnit": "£1.10 per kg",
+    "price": 2.75,
+    "packGrams": 2500
+  },
+  "mozzarella": {
+    "title": "M&S Italian Mozzarella",
+    "url": "https://www.ocado.com/products/m-s-italian-mozzarella/528039011",
+    "size": "250g",
+    "perUnit": "£12.40 per kg",
+    "price": 3.1,
+    "packGrams": 250
+  },
+  "kale": {
+    "title": "M&S Curly Kale",
+    "url": "https://www.ocado.com/products/m-s-curly-kale/652667011",
+    "size": "250g",
+    "perUnit": "£10.40 per kg",
+    "price": 2.6,
+    "packGrams": 250
+  },
+  "curry powder": {
+    "title": "M&S Caribbean Curry Powder",
+    "url": "https://www.ocado.com/products/m-s-caribbean-curry-powder/608356011",
+    "size": "78g",
+    "perUnit": "£25.64 per kg",
+    "price": 2,
+    "packGrams": 78
+  },
+  "thai red curry paste": {
+    "title": "M&S Thai Red Curry Paste",
+    "url": "https://www.ocado.com/products/m-s-thai-red-curry-paste/596387011",
+    "size": "190g",
+    "perUnit": "£13.16 per kg",
+    "price": 2.5,
+    "packGrams": 190
   }
 };
 // Best organic alternative per ingredient, used by the "prefer organic" setting.
@@ -1388,5 +1476,61 @@ export const OCADO_ORGANIC = {
     "perUnit": "£21.59 per kg",
     "price": 1.9,
     "packGrams": 88
+  },
+  "orzo": {
+    "title": "Profusion Organic Protein Chickpea Orzo",
+    "url": "https://www.ocado.com/products/profusion-organic-protein-chickpea-orzo/635226011",
+    "size": "250g",
+    "perUnit": "£12.40 per kg",
+    "price": 3.1,
+    "packGrams": 250
+  },
+  "rice noodles": {
+    "title": "Clearspring Organic Japanese Brown Rice Udon Noodles",
+    "url": "https://www.ocado.com/products/clearspring-organic-japanese-brown-rice-udon-noodles/640186011",
+    "size": "200g",
+    "perUnit": "£16.00 per kg",
+    "price": 3.2,
+    "packGrams": 200
+  },
+  "leeks": {
+    "title": "M&S Organic Leeks",
+    "url": "https://www.ocado.com/products/m-s-organic-leeks/518480011",
+    "size": "400g",
+    "perUnit": "£5.50 per kg",
+    "price": 2.2,
+    "packGrams": 400
+  },
+  "aubergine": {
+    "title": "Wholegood Organic Wonky Aubergine",
+    "url": "https://www.ocado.com/products/wholegood-organic-wonky-aubergine/631805011",
+    "size": "350g",
+    "perUnit": "£5.71 per kg",
+    "price": 2,
+    "packGrams": 350
+  },
+  "potatoes": {
+    "title": "M&S Organic Main Crop Potatoes",
+    "url": "https://www.ocado.com/products/m-s-organic-main-crop-potatoes/517862011",
+    "size": "1.5kg",
+    "perUnit": "£1.77 per kg",
+    "price": 2.65,
+    "packGrams": 1500
+  },
+  "curry powder": {
+    "title": "Daylesford Organic Curry Powder",
+    "url": "https://www.ocado.com/products/daylesford-organic-curry-powder/66894011",
+    "size": "44g",
+    "perUnit": "£98.86 per kg",
+    "price": 4.35,
+    "packGrams": 44
+  },
+  "thai red curry paste": {
+    "title": "Biona Organic Thai Red Curry Paste",
+    "url": "https://www.ocado.com/products/biona-organic-thai-red-curry-paste/669108011",
+    "size": "125g",
+    "perUnit": "£28.00 per kg",
+    "price": 3.5,
+    "packGrams": 125
   }
 };

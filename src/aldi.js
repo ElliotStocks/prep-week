@@ -104,6 +104,17 @@ export const ALDI_ITEMS = {
   "dried oregano": { search: "ready set cook oregano", must: ["oregano"], not: ["passata","rustica","sauce","basil"] },
   "ground cinnamon": { search: "ground cinnamon", must: ["cinnamon"], not: ["cereal","chips","swirl","bun","stick","sugar","porridge"] },
   "vegetable stock cubes": { search: "quixo vegetable stock", must: ["stock"], not: ["gravy","fresh","chicken","beef","lamb","fish"] },
+  "orzo": { search: "orzo pasta", must: ["orzo"], not: ["salad","ready"] },
+  "gnocchi": { search: "gnocchi", must: ["gnocchi"], not: ["cauliflower","ready","sweet potato"] },
+  "rice noodles": { search: "rice noodles", must: ["rice","noodle"], not: ["ready","pot","snack"] },
+  "chorizo": { search: "chorizo ring", must: ["chorizo"], not: ["pizza","sandwich","paella","crisps"] },
+  "leeks": { search: "leeks", must: ["leek"], not: ["soup","pie","gratin"] },
+  "aubergine": { search: "aubergine", must: ["aubergine"], not: ["parmigiana","dip","pickle","curry"] },
+  "potatoes": { search: "white potatoes 2.5kg", must: ["potato"], not: ["sweet","baby","new","salad","fries","mash","croquette","waffle","hash","roast"] },
+  "mozzarella": { search: "mozzarella", must: ["mozzarella"], not: ["pizza","stick","garlic","sandwich","grated"] },
+  "kale": { search: "kale", must: ["kale"], not: ["crisps","sea","smoothie"] },
+  "curry powder": { search: "curry powder", must: ["curry","powder"], not: ["sauce"] },
+  "thai red curry paste": { search: "thai red curry paste", must: ["red","curry","paste"], not: ["green","kit"] },
 };
 
 export const searchUrl = name =>

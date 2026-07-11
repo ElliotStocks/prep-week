@@ -49,11 +49,19 @@ real supermarket products with prices. All data in localStorage, no accounts.
 - **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples.
   Pantry memory prevents re-buying spices/staples every week.
 - **Recipes are real, named dishes** (never template permutations — Elliot rejected the
-  v1 combinatorial engine as "all very very similar"): ~58 dishes in `src/dishes.js`
-  (incl. 10 keto) with photos in `public/photos/` (`node scripts/photos.mjs` regenerates
-  missing ones via Gemini). Browser shows 24 at a time, refresh pages through a stable
-  shuffle, picks stay pinned. "Type anything" matches the closest dish; live AI
-  generation is still planned.
+  v1 combinatorial engine as "all very very similar"): ~115 dishes in `src/dishes.js`
+  spanning distinct formats (soups, stews, traybakes, curries, one-pot rice, noodle
+  bowls, bakes, salads; 14 vegan, 13 keto) with photos in `public/photos/`
+  (`node scripts/photos.mjs` regenerates missing ones via Gemini). Browser shows 24 at
+  a time, refresh pages through a stable shuffle, picks stay pinned. "Type anything"
+  matches the closest dish (with a friendly miss message); live AI generation is still
+  planned. A "Cooking" tab shows every picked meal's method with ingredient quantities
+  scaled to the household; the shopping list has a copy-to-clipboard button, per-line
+  remove ("not buying") and buy-fewer-packs controls (state.listTweaks), and a
+  "Start a new week" reset (keeps profile, favourites, pantry memory). Dish cards have
+  a favourites heart (state.favourites, floats favourites to the top). The meals page
+  shows a supermarket badge (no brand logos — trademark caution).
+  Settings edits keep the week's picks (only newly-disallowed dishes are dropped).
 - **Nutrition from real data** (UK CoFID per-100g approximations in `src/dishes.js`),
   macros AND micros with % daily values — never AI-guessed numbers. Old saves migrate
   automatically in `src/store.js` (body-stats profiles → simple profiles).

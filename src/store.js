@@ -17,6 +17,8 @@ export const defaultState = () => ({
   customPicks: [],  // free-text ideas turned into recipes: {id, label}
   breakfasts: [],   // breakfast ids
   pantryOwned: [],  // pantry items the kitchen already has
+  favourites: [],   // dish ids the user hearts — float to the top of the browser
+  listTweaks: { skipped: [], packs: {} }, // per-week shopping list edits: lines removed, pack counts reduced
 });
 
 // Older saves used per-person body stats and a dinners-count; fold them into the
@@ -30,7 +32,8 @@ function migrate(s) {
     delete profile.ndin;
   }
   const picked = (s.picked || []).map(p => (typeof p === 'string' ? { id: p, qty: 1 } : p));
-  return { ...d, ...s, profile, picked };
+  const listTweaks = { ...d.listTweaks, ...s.listTweaks };
+  return { ...d, ...s, profile, picked, listTweaks };
 }
 
 export function loadState() {

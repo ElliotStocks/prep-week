@@ -117,6 +117,17 @@ export const OCADO_ITEMS = {
   'dried oregano':      { search: 'dried oregano', must: ['oregano'] },
   'ground cinnamon':    { search: 'ground cinnamon', must: ['cinnamon'], not: ['stick', 'bun', 'swirl', 'sugar'] },
   'vegetable stock cubes': { search: 'vegetable stock cubes', must: ['vegetable', 'stock'], not: ['gravy', 'fresh'] },
+  'orzo':               { search: 'orzo pasta', must: ['orzo'], not: ['salad', 'ready'] },
+  'gnocchi':            { search: 'fresh gnocchi', must: ['gnocchi'], not: ['cauliflower', 'ready meal', 'sweet potato'] },
+  'rice noodles':       { search: 'rice noodles', must: ['rice', 'noodle'], not: ['ready', 'pot', 'snack'] },
+  'chorizo':            { search: 'chorizo ring', must: ['chorizo'], not: ['pizza', 'sandwich', 'paella', 'crisps'] },
+  'leeks':              { search: 'M&S leeks', must: ['leek'], not: ['soup', 'pie', 'gratin'] },
+  'aubergine':          { search: 'aubergine', must: ['aubergine'], not: ['parmigiana', 'dip', 'pickle', 'curry'] },
+  'potatoes':           { search: 'M&S white potatoes', must: ['potato'], not: ['sweet', 'baby', 'new', 'salad', 'fries', 'mash', 'croquette', 'waffle', 'hash', 'roast'] },
+  'mozzarella':         { search: 'M&S mozzarella', must: ['mozzarella'], not: ['pizza', 'stick', 'garlic', 'sandwich', 'grated'] },
+  'kale':               { search: 'M&S kale', must: ['kale'], not: ['crisps', 'sea', 'smoothie'] },
+  'curry powder':       { search: 'medium curry powder', must: ['curry', 'powder'], not: ['sauce'] },
+  'thai red curry paste': { search: 'thai red curry paste', must: ['red', 'curry', 'paste'], not: ['green', 'kit'] },
 };
 
 export const searchUrl = name =>

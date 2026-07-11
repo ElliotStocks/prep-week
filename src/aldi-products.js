@@ -689,6 +689,70 @@ export const ALDI_PRODUCTS = {
     "perUnit": "£4.99/1 Each",
     "price": 4.99,
     "packGrams": null
+  },
+  "orzo": {
+    "title": "CUCINA Orzo Pasta",
+    "url": "https://www.aldi.co.uk/product/cucina-orzo-pasta-000000000000596280",
+    "size": "0.5 KG",
+    "perUnit": "£1.70/1 KG",
+    "price": 0.85,
+    "packGrams": 500
+  },
+  "chorizo": {
+    "title": "INSPIRED CUISINE Chorizo Hot Honey Mac N Cheese",
+    "url": "https://www.aldi.co.uk/product/inspired-cuisine-chorizo-hot-honey-mac-n-cheese-000000000541036006",
+    "size": "0.3 KG",
+    "perUnit": "£4.63/1 KG",
+    "price": 1.39,
+    "packGrams": 300
+  },
+  "leeks": {
+    "title": "NATURE&#39;S PICK British Leeks",
+    "url": "https://www.aldi.co.uk/product/nature-s-pick-british-leeks-000000000000339864",
+    "size": "0.5 KG",
+    "perUnit": "£2.74/1 KG",
+    "price": 1.37,
+    "packGrams": 500
+  },
+  "potatoes": {
+    "title": "EVERYDAY ESSENTIALS Scottish Wonky Potatoes",
+    "url": "https://www.aldi.co.uk/product/everyday-essentials-scottish-wonky-potatoes-000000000000339832",
+    "size": "2.5 KG",
+    "perUnit": "£0.60/1 KG",
+    "price": 1.49,
+    "packGrams": 2500
+  },
+  "mozzarella": {
+    "title": "EVERYDAY ESSENTIALS Classic Mozzarella",
+    "url": "https://www.aldi.co.uk/product/everyday-essentials-classic-mozzarella-000000000283052001",
+    "size": "0.13 Kg drained",
+    "perUnit": "£5.20/1 Kg drained",
+    "price": 0.65,
+    "packGrams": 130
+  },
+  "kale": {
+    "title": "HEALTH Broccoli, Pea &amp; Kale Soup",
+    "url": "https://www.aldi.co.uk/product/health-broccoli-pea-kale-soup-000000000599878002",
+    "size": "0.6 KG",
+    "perUnit": "£3.32/1 KG",
+    "price": 1.99,
+    "packGrams": 600
+  },
+  "curry powder": {
+    "title": "READY, SET…COOK! Medium Curry Powder",
+    "url": "https://www.aldi.co.uk/product/ready-set-cook-medium-curry-powder-000000000336690001",
+    "size": "0.09 KG",
+    "perUnit": "£9.89/1 KG",
+    "price": 0.89,
+    "packGrams": 90
+  },
+  "thai red curry paste": {
+    "title": "READY, SET…COOK! Thai Red Curry Paste",
+    "url": "https://www.aldi.co.uk/product/ready-set-cook-thai-red-curry-paste-000000000557102001",
+    "size": "0.18 KG",
+    "perUnit": "£7.72/1 KG",
+    "price": 1.39,
+    "packGrams": 180
   }
 };
 // Best organic alternative per ingredient, used by the "prefer organic" setting.

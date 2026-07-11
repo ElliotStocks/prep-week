@@ -197,12 +197,20 @@ export function buildStock(profile, picked, breakfastIds, pantryOwned) {
   return { freshList, pantryList, plan };
 }
 
+// Apply the user's shopping-list edits: drop skipped lines, cap pack counts.
+export function applyTweaks(lines, tweaks) {
+  if (!tweaks) return lines;
+  return lines
+    .filter(i => !tweaks.skipped?.includes(i.name))
+    .map(i => (tweaks.packs?.[i.name] ? { ...i, packCap: tweaks.packs[i.name] } : i));
+}
+
 // The checkout estimate (whole packs, cupboard included) — the same number the
 // shopping list shows, so the running total while picking never disagrees with it.
 // Pass a marketId to price the same week at a different supermarket.
-export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId) {
+export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId, tweaks) {
   const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
-  const lines = [...freshList, ...pantryList.filter(p => !p.owned)];
+  const lines = applyTweaks([...freshList, ...pantryList.filter(p => !p.owned)], tweaks);
   const products = marketId ? productsOf(SUPERMARKET_DATA[marketId], profile) : marketFor(profile).products;
   return linesCost(products, lines);
 }

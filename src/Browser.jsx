@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal } from './engine.js';
 import { DAILY_REF } from './data.js';
+import { marketFor } from './supermarkets.js';
 
 const ICONS = { meat: '🍗', fish: '🐟', egg: '🥚', plant: '🌱' };
 
@@ -41,7 +42,8 @@ function NutritionPanel({ recipe }) {
 
 const PAGE = 24;
 
-export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned, onShowList }) {
+export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
+  listTweaks, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [ideaMiss, setIdeaMiss] = useState(false);
@@ -55,6 +57,9 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   }, [profile]);
 
   useEffect(() => { refresh(true); }, [refresh]);
+
+  const isFav = id => (favourites || []).includes(id);
+  const toggleFav = id => setFavourites(isFav(id) ? favourites.filter(f => f !== id) : [...favourites, id]);
 
   const qtyOf = id => picked.find(p => p.id === id)?.qty || 0;
   const setQty = (id, qty) => {
@@ -84,10 +89,13 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     .filter(p => !customIds.has(p.id))
     .map(p => recipeFromId(p.id, profile))
     .filter(Boolean);
-  const browseable = shown.filter(r => !qtyOf(r.id) && !customIds.has(r.id));
+  // favourites float to the front of the browseable pool
+  const browseable = shown.filter(r => !qtyOf(r.id) && !customIds.has(r.id))
+    .sort((a, b) => (isFav(b.id) ? 1 : 0) - (isFav(a.id) ? 1 : 0));
 
   const totalNights = picked.reduce((s, p) => s + p.qty, 0);
-  const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || []) : 0;
+  const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || [], null, listTweaks) : 0;
+  const market = marketFor(profile);
 
   const card = (r, custom) => {
     const qty = qtyOf(r.id);
@@ -114,6 +122,8 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
                   <button onClick={() => setQty(r.id, qty + 1)}>+</button>
                 </span>}
             <button onClick={() => setOpenId(openId === r.id ? null : r.id)}>{openId === r.id ? 'Hide info' : 'Nutrition & method'}</button>
+            <button className={'fav' + (isFav(r.id) ? ' on' : '')} title={isFav(r.id) ? 'Remove from favourites' : 'Add to favourites'}
+              onClick={() => toggleFav(r.id)}>{isFav(r.id) ? '♥' : '♡'}</button>
           </div>
         </div>
         {openId === r.id && <NutritionPanel recipe={r} />}
@@ -127,8 +137,11 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       <p className="sub">Pick your dinners for {profile.people} {profile.people > 1 ? 'people' : 'person'}. Want a meal
         two nights running? Press + and cook it once. Or describe anything you fancy.</p>
       <div className="picks-bar">
+        <button className="shop-badge" onClick={onChangeShop} title="Change supermarket in Settings">
+          🛒 {market.store}{profile.organicPref ? ' · organic' : ''}
+        </button>
         <span>{totalNights
-          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} dinner{totalNights > 1 ? 's' : ''} · est. £{estimate.toFixed(2)} shop</>
+          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} dinner{totalNights > 1 ? 's' : ''} · est. £{estimate.toFixed(2)}</>
           : 'No recipes picked yet — tap Pick on any meal'}</span>
         {totalNights > 0 && (
           <button className="primary" onClick={onShowList}>Shopping list →</button>
@@ -150,6 +163,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       </div>
       <div className="center">
         <button className="primary" onClick={() => refresh()}>Refresh — {PAGE} fresh ideas</button>
+        {totalNights > 0 && <button className="ghost" onClick={onClearWeek}>Start a new week</button>}
       </div>
     </div>
   );
