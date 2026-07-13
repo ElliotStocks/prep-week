@@ -208,9 +208,10 @@ export function applyTweaks(lines, tweaks) {
 // The checkout estimate (whole packs, cupboard included) — the same number the
 // shopping list shows, so the running total while picking never disagrees with it.
 // Pass a marketId to price the same week at a different supermarket.
-export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId, tweaks) {
+export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId, tweaks, extras) {
   const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
   const lines = applyTweaks([...freshList, ...pantryList.filter(p => !p.owned)], tweaks);
+  const extraLines = (extras || []).map(e => ({ name: e.name, grams: 0, packs: e.packs }));
   const products = marketId ? productsOf(SUPERMARKET_DATA[marketId], profile) : marketFor(profile).products;
-  return linesCost(products, lines);
+  return linesCost(products, [...lines, ...extraLines]);
 }

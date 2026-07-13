@@ -19,8 +19,8 @@ export default function App() {
   const patch = p => setState(prev => ({ ...prev, ...p }));
 
   const clearWeek = () => {
-    if (!window.confirm('Start a new week? This clears your picked meals, breakfasts and list edits. Your profile, favourites and cupboard memory stay.')) return;
-    patch({ picked: [], customPicks: [], breakfasts: [], listTweaks: { skipped: [], packs: {} } });
+    if (!window.confirm('Start a new week? This clears your picked meals, breakfasts, extras and list edits. Your profile, favourites and cupboard memory stay.')) return;
+    patch({ picked: [], customPicks: [], breakfasts: [], listTweaks: { skipped: [], packs: {} }, extras: [] });
     setTab('meals');
   };
 
@@ -80,6 +80,7 @@ export default function App() {
               breakfasts={state.breakfasts}
               pantryOwned={state.pantryOwned}
               listTweaks={state.listTweaks}
+              extras={state.extras}
               favourites={state.favourites}
               setFavourites={favourites => patch({ favourites })}
               onShowList={() => setTab('stock')}
@@ -107,6 +108,11 @@ export default function App() {
           setPantryOwned={pantryOwned => patch({ pantryOwned })}
           listTweaks={state.listTweaks}
           setListTweaks={listTweaks => patch({ listTweaks })}
+          extras={state.extras}
+          setExtras={updater => setState(prev => ({
+            ...prev,
+            extras: typeof updater === 'function' ? updater(prev.extras) : updater,
+          }))}
           onClearWeek={clearWeek}
         />
       )}

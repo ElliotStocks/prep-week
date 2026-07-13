@@ -19,6 +19,7 @@ export const defaultState = () => ({
   pantryOwned: [],  // pantry items the kitchen already has
   favourites: [],   // dish ids the user hearts — float to the top of the browser
   listTweaks: { skipped: [], packs: {} }, // per-week shopping list edits: lines removed, pack counts reduced
+  extras: [],       // snacks & essentials added to this week's list: {name, packs}
 });
 
 // Older saves used per-person body stats and a dinners-count; fold them into the

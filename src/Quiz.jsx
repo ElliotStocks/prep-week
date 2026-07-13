@@ -46,14 +46,6 @@ export default function Quiz({ initial, onDone, onCancel }) {
         <div className="chips">
           {SUPERMARKETS_SOON.map(name => <span key={name} className="chip soon">{name} — coming soon</span>)}
         </div>
-        <div className="chips">
-          <button type="button" className={'chip' + (p.organicPref ? ' on' : '')}
-            onClick={() => setField({ organicPref: !p.organicPref })}>
-            Prefer organic {p.organicPref ? '✓' : ''}
-          </button>
-        </div>
-        <p className="muted small">Organic usually costs more — your prices update honestly. It applies wherever
-          your supermarket sells an organic version; everything else stays standard.</p>
       </>,
     },
     {
@@ -74,7 +66,17 @@ export default function Quiz({ initial, onDone, onCancel }) {
     {
       title: 'Which foods do you enjoy?',
       sub: 'Suggestions lead with these. Leave empty to see everything.',
-      body: <Chips options={LIKE_OPTIONS} value={p.likes} onChange={v => setField({ likes: v })} />,
+      body: <>
+        <Chips options={LIKE_OPTIONS} value={p.likes} onChange={v => setField({ likes: v })} />
+        <div className="chips">
+          <button type="button" className={'chip' + (p.organicPref ? ' on' : '')}
+            onClick={() => setField({ organicPref: !p.organicPref })}>
+            Prefer organic {p.organicPref ? '✓' : ''}
+          </button>
+        </div>
+        <p className="muted small">Organic usually costs more — your prices update honestly. It applies wherever
+          your supermarket sells an organic version; everything else stays standard.</p>
+      </>,
     },
     {
       title: 'Anything you just don’t like?',

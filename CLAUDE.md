@@ -32,10 +32,9 @@ real supermarket products with prices. All data in localStorage, no accounts.
   online range at all and fall back to search links. The app NEVER places an order;
   users always check out themselves.
 - **Quiz (simplified July 2026 — replaced the per-person body-stats version):** one
-  question per page, food questions only: supermarket (+ optional "prefer organic"
-  toggle) → people count → allergies → dietary requirements (incl. keto, filtered on
-  net carbs ≤15g) → foods enjoyed → free-text dislikes → appetite (portion size) +
-  optional high-protein boost (+33% on each dish's main protein). No calorie/body-stat
+  question per page, food questions only: supermarket → people count → allergies → dietary requirements (incl. keto, filtered on
+  net carbs ≤15g) → foods enjoyed → free-text dislikes (organic toggle lives on the
+  foods-enjoyed page) → appetite (portion size) + optional high-protein boost (+33% on each dish's main protein). No calorie/body-stat
   questions, no "how many dinners". "Prefer organic" overlays each supermarket's
   organic product map (captured by the fetch scripts from the same searches) wherever
   one exists — ~75 items at Ocado, ~9 at Aldi; prices update honestly.
@@ -46,8 +45,13 @@ real supermarket products with prices. All data in localStorage, no accounts.
 - **Allergies are hard rules**, checked at recipe level now and at product-label
   level eventually. Open question: per-allergy "strict (block may-contain traces)".
 - **No cuisine genres as preferences** — whole-foods focus; preferences are proteins/foods.
-- **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples.
-  Pantry memory prevents re-buying spices/staples every week.
+- **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples,
+  plus a "Snacks & essentials" picker on the shopping list (src/extras.js — ~43
+  household/snack products, same real-product matching, state.extras with pack
+  steppers). Pantry memory prevents re-buying spices/staples every week.
+  Full-catalogue supermarket mapping was consciously deferred: bundle size, scrape
+  load and ToS risk — the staging is curated extras now, category-on-demand if
+  needed, official data partnerships later.
 - **Recipes are real, named dishes** (never template permutations — Elliot rejected the
   v1 combinatorial engine as "all very very similar"): ~115 dishes in `src/dishes.js`
   spanning distinct formats (soups, stews, traybakes, curries, one-pot rice, noodle

@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { buildStock } from './engine.js';
 import { BREAKFASTS } from './data.js';
+import { EXTRAS } from './extras.js';
 import { marketFor, SUPERMARKET_DATA, productsOf, packsFor, linesCost } from './supermarkets.js';
 
 // One stock-list line's match at the chosen supermarket: the real product with
 // pack maths and a link, or a pre-filled search link when nothing matched.
-function ProductLine({ market, name, grams, packCap }) {
+function ProductLine({ market, name, grams, packCap, fixedPacks }) {
   const p = market.products[name];
   if (!p) {
     return <a className="ocado-link" href={market.searchUrl(name)} target="_blank" rel="noreferrer">find on {market.store} ↗</a>;
   }
   const natural = packsFor(grams, p);
-  const packs = packCap ? Math.min(natural, packCap) : natural;
+  const packs = fixedPacks ?? (packCap ? Math.min(natural, packCap) : natural);
   return (
     <a className="ocado-match" href={p.url} target="_blank" rel="noreferrer">
       {p.title}{p.size ? ` · ${p.size}` : ''} · £{p.price.toFixed(2)}
@@ -23,9 +24,9 @@ function ProductLine({ market, name, grams, packCap }) {
 
 const niceDate = iso => new Date(iso + 'T00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
-export default function Stock({ profile, picked, breakfasts, pantryOwned, setPantryOwned, listTweaks, setListTweaks, onClearWeek }) {
+export default function Stock({ profile, picked, breakfasts, pantryOwned, setPantryOwned, listTweaks, setListTweaks, extras, setExtras, onClearWeek }) {
   const [copied, setCopied] = useState(false);
-  if (!picked.length && !breakfasts.length) {
+  if (!picked.length && !breakfasts.length && !(extras || []).length) {
     return (
       <div>
         <h2>Your full weekly stock</h2>
@@ -57,11 +58,22 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
     setListTweaks({ ...tw, packs });
   };
 
-  const shopLines = [...freshActive, ...toBuyActive];
+  // snacks & essentials the user added by hand
+  const extraItems = extras || [];
+  const extraLines = extraItems.map(e => ({ name: e.name, grams: 0, packs: e.packs, qty: '' }));
+  const addExtra = name => setExtras(prev => [...prev, { name, packs: 1 }]);
+  const setExtraPacks = (name, packs) => {
+    if (packs <= 0) setExtras(prev => prev.filter(e => e.name !== name));
+    else setExtras(prev => prev.map(e => (e.name === name ? { ...e, packs } : e)));
+  };
+  const inExtras = name => extraItems.some(e => e.name === name);
+
+  const shopLines = [...freshActive, ...toBuyActive, ...extraLines];
   const matched = shopLines.filter(i => market.products[i.name]).length;
   const freshPacks = linesCost(market.products, freshActive);
   const cupboard = linesCost(market.products, toBuyActive);
-  const total = freshPacks + cupboard;
+  const extrasCost = linesCost(market.products, extraLines);
+  const total = freshPacks + cupboard + extrasCost;
   // What this week's cooking actually uses, pro-rata by grams — the rest of each
   // pack stays in the kitchen for future weeks.
   const eatenThisWeek = freshActive.reduce((sum, i) => {
@@ -92,7 +104,7 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
       const p = market.products[i.name];
       if (!p) return `• ${i.name}${i.qty ? ` — ${i.qty}` : ''}`;
       const natural = packsFor(i.grams, p);
-      const packs = i.packCap ? Math.min(natural, i.packCap) : natural;
+      const packs = i.packs ?? (i.packCap ? Math.min(natural, i.packCap) : natural);
       return `• ${i.name}${i.qty ? ` — ${i.qty}` : ''}: ${p.title}${p.size ? ` (${p.size})` : ''}${packs > 1 ? ` × ${packs}` : ''} — £${(p.price * packs).toFixed(2)}`;
     };
     const text = [
@@ -102,6 +114,7 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
       'FRESH & WEEKLY',
       ...freshActive.map(line),
       ...(toBuyActive.length ? ['', 'STORE CUPBOARD', ...toBuyActive.map(line)] : []),
+      ...(extraLines.length ? ['', 'SNACKS & ESSENTIALS', ...extraLines.map(line)] : []),
     ].join('\n');
     const done = () => { setCopied(true); setTimeout(() => setCopied(false), 2000); };
     navigator.clipboard.writeText(text).then(done).catch(() => {
@@ -132,6 +145,7 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
           <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
           {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
           {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (mark what you own and it disappears)</li>}
+          {extrasCost > 0 && <li>£{extrasCost.toFixed(2)} — snacks &amp; essentials you added</li>}
         </ul>
         {rivals.map(r => (
           <p className="rival-price" key={r.store}>The same week at {r.store}: ≈ £{r.total.toFixed(2)} —
@@ -215,6 +229,47 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
             </ul>
           </>}
         </div>
+      </div>
+
+      <div className="stock-section">
+        <h3>Snacks & essentials</h3>
+        <p className="muted small">Anything else the house needs this week — it joins the list and the total.</p>
+        {extraItems.length > 0 && (
+          <ul className="plain">
+            {extraItems.map(e => (
+              <li key={e.name}>
+                <div className="pantry-row">
+                  <span>{e.name}</span>
+                  <span className="qty-stepper">
+                    <button onClick={() => setExtraPacks(e.name, e.packs - 1)}>−</button>
+                    <span>{e.packs}</span>
+                    <button onClick={() => setExtraPacks(e.name, e.packs + 1)}>+</button>
+                  </span>
+                </div>
+                <ProductLine market={market} name={e.name} fixedPacks={e.packs} />
+              </li>
+            ))}
+          </ul>
+        )}
+        {Object.entries(EXTRAS).map(([cat, names]) => {
+          const available = names.filter(n => !inExtras(n));
+          if (!available.length) return null;
+          return (
+            <div key={cat}>
+              <h4 className="spaced">{cat === 'snacks' ? 'Treats & snacks' : 'Household & essentials'}</h4>
+              <div className="chips">
+                {available.map(n => {
+                  const p = market.products[n];
+                  return (
+                    <button key={n} type="button" className="chip" onClick={() => addExtra(n)}>
+                      + {n}{p ? ` · £${p.price.toFixed(2)}` : ''}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="center">

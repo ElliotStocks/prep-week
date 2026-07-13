@@ -43,10 +43,11 @@ export const packsFor = (grams, product) =>
   !grams || !product?.packGrams ? 1 : Math.max(1, Math.ceil(grams / product.packGrams));
 
 // Whole-pack checkout cost of a set of stock-list lines at one supermarket.
-// A line's packCap (user chose to buy fewer packs) caps the count.
+// A line's packCap (user chose to buy fewer packs) caps the count; a line's
+// packs (extras — user chose exactly how many) sets it outright.
 export const linesCost = (products, lines) => lines.reduce((sum, i) => {
   const p = products[i.name];
   if (!p) return sum;
-  const packs = i.packCap ? Math.min(packsFor(i.grams, p), i.packCap) : packsFor(i.grams, p);
+  const packs = i.packs ?? (i.packCap ? Math.min(packsFor(i.grams, p), i.packCap) : packsFor(i.grams, p));
   return sum + p.price * packs;
 }, 0);

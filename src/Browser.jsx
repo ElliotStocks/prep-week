@@ -43,7 +43,7 @@ function NutritionPanel({ recipe }) {
 const PAGE = 24;
 
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
-  listTweaks, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
+  listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [ideaMiss, setIdeaMiss] = useState(false);
@@ -94,7 +94,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     .sort((a, b) => (isFav(b.id) ? 1 : 0) - (isFav(a.id) ? 1 : 0));
 
   const totalNights = picked.reduce((s, p) => s + p.qty, 0);
-  const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || [], null, listTweaks) : 0;
+  const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || [], null, listTweaks, extras) : 0;
   const market = marketFor(profile);
 
   const card = (r, custom) => {
