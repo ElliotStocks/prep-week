@@ -149,3 +149,8 @@ button.fav.on { color: var(--danger); }
 .shop-badge { border: none; background: var(--accent-soft); color: var(--accent); font-weight: 600; font-size: 13px; border-radius: 999px; padding: 5px 12px; }
 button.ghost { border: none; background: none; color: var(--muted); text-decoration: underline; font-size: 13px; }
 .line-controls { display: inline-flex; gap: 6px; flex-shrink: 0; }
+
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; overflow: hidden; margin: 0 0 1rem; background: var(--surface); }
+.seg button { border: none; background: none; padding: 8px 20px; font-size: 14px; color: var(--muted); border-radius: 0; }
+.seg button.on { background: var(--accent); color: #fff; font-weight: 600; }
+button.tab.gear { font-size: 17px; padding: 8px 10px; }

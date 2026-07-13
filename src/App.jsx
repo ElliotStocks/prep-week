@@ -11,6 +11,7 @@ import { BREAKFASTS } from './data.js';
 export default function App() {
   const [state, setState] = useState(loadState);
   const [tab, setTab] = useState('meals');
+  const [mealsView, setMealsView] = useState('dinners');
   const [editing, setEditing] = useState(false);
 
   useEffect(() => { saveState(state); }, [state]);
@@ -55,35 +56,44 @@ export default function App() {
       <header className="app-header">
         <h1>Prep Week</h1>
         <nav>
-          {[['meals', 'Meals'], ['breakfasts', 'Breakfasts'], ['stock', 'Shopping list'], ['cook', 'Cooking']].map(([id, label]) => (
+          {[['meals', 'Meals'], ['stock', 'Shopping list'], ['cook', 'Cooking']].map(([id, label]) => (
             <button key={id} className={tab === id ? 'tab on' : 'tab'} onClick={() => setTab(id)}>{label}</button>
           ))}
-          <button className="tab" onClick={() => setEditing(true)}>Settings</button>
+          <button className="tab gear" aria-label="Settings" title="Settings" onClick={() => setEditing(true)}>⚙</button>
         </nav>
       </header>
       {tab === 'meals' && (
-        <Browser
-          profile={state.profile}
-          picked={state.picked}
-          setPicked={picked => patch({ picked })}
-          customPicks={state.customPicks}
-          setCustomPicks={customPicks => patch({ customPicks })}
-          breakfasts={state.breakfasts}
-          pantryOwned={state.pantryOwned}
-          listTweaks={state.listTweaks}
-          favourites={state.favourites}
-          setFavourites={favourites => patch({ favourites })}
-          onShowList={() => setTab('stock')}
-          onChangeShop={() => setEditing(true)}
-          onClearWeek={clearWeek}
-        />
-      )}
-      {tab === 'breakfasts' && (
-        <Breakfasts
-          profile={state.profile}
-          breakfasts={state.breakfasts}
-          setBreakfasts={breakfasts => patch({ breakfasts })}
-        />
+        <>
+          <div className="seg">
+            <button className={mealsView === 'dinners' ? 'on' : ''} onClick={() => setMealsView('dinners')}>Dinners</button>
+            <button className={mealsView === 'breakfasts' ? 'on' : ''} onClick={() => setMealsView('breakfasts')}>
+              Breakfasts{state.breakfasts.length > 0 ? ` · ${state.breakfasts.length}` : ''}
+            </button>
+          </div>
+          {mealsView === 'dinners' ? (
+            <Browser
+              profile={state.profile}
+              picked={state.picked}
+              setPicked={picked => patch({ picked })}
+              customPicks={state.customPicks}
+              setCustomPicks={customPicks => patch({ customPicks })}
+              breakfasts={state.breakfasts}
+              pantryOwned={state.pantryOwned}
+              listTweaks={state.listTweaks}
+              favourites={state.favourites}
+              setFavourites={favourites => patch({ favourites })}
+              onShowList={() => setTab('stock')}
+              onChangeShop={() => setEditing(true)}
+              onClearWeek={clearWeek}
+            />
+          ) : (
+            <Breakfasts
+              profile={state.profile}
+              breakfasts={state.breakfasts}
+              setBreakfasts={breakfasts => patch({ breakfasts })}
+            />
+          )}
+        </>
       )}
       {tab === 'cook' && (
         <Cook profile={state.profile} picked={state.picked} />
