@@ -91,9 +91,15 @@ pushing when dishes are added.
 1. ~~Ship it~~ — live on GitHub Pages, July 2026. Custom domain still to come.
 2. ~~Second supermarket~~ — Aldi live July 2026, with per-week price comparison on the
    shopping list. Next: Tesco or Sainsbury's via the same pattern.
-3. **Ordering:** basket assistant in the user's own browser (extension model — the
-   Honey pattern), then supermarket affiliate/API partnerships. A first manual run with
-   Elliot's Ocado account stalled on Chrome extension site permissions — pick up there.
+3. **Ordering:** two candidate routes researched July 2026 —
+   **Pepesto** (pepesto.com): open-signup checkout API, creates live basket sessions at
+   Tesco/Sainsbury's/Waitrose/Asda/Morrisons (NOT Ocado/Aldi). Credits via Stripe,
+   ~€1.20 per checkout session (€0.60 on Growth). Plan: pilot with a small credit pack
+   when adding Tesco as supermarket #3 — Elliot buys credits, we wire list → /products
+   → /session. Per-click cost needs a business-model answer before public launch.
+   **Whisk/Samsung Food** (docs.whisk.com): transfer-URL basket API, partnership-gated
+   ("contact us"), Samsung-owned — email them, expect slow/no. Fallback remains the
+   browser-extension model for Ocado.
 4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
    outside the library.
 5. **Later:** per-person meal variants, lunches, extras list, product-label allergy checks.
