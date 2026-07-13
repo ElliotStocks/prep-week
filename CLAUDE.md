@@ -91,15 +91,17 @@ pushing when dishes are added.
 1. ~~Ship it~~ — live on GitHub Pages, July 2026. Custom domain still to come.
 2. ~~Second supermarket~~ — Aldi live July 2026, with per-week price comparison on the
    shopping list. Next: Tesco or Sainsbury's via the same pattern.
-3. **Ordering:** two candidate routes researched July 2026 —
-   **Pepesto** (pepesto.com): open-signup checkout API, creates live basket sessions at
-   Tesco/Sainsbury's/Waitrose/Asda/Morrisons (NOT Ocado/Aldi). Credits via Stripe,
-   ~€1.20 per checkout session (€0.60 on Growth). Plan: pilot with a small credit pack
-   when adding Tesco as supermarket #3 — Elliot buys credits, we wire list → /products
-   → /session. Per-click cost needs a business-model answer before public launch.
-   **Whisk/Samsung Food** (docs.whisk.com): transfer-URL basket API, partnership-gated
-   ("contact us"), Samsung-owned — email them, expect slow/no. Fallback remains the
-   browser-extension model for Ocado.
+3. **Ordering — Pepesto piloted July 2026 and REJECTED for launch.** Pilot (~€1.66 of
+   Elliot's €29.90 credit pack; key in ~/.pepesto-key.json, never in repo; script in
+   scripts/pepesto-pilot.mjs) proved: matching too fuzzy (20%-fat mince for lean, lost
+   lines), desktop flow dead-ends into a Pepesto-branded "install our app" QR screen
+   (~90s compose), and the QR loses the session — lands on the App Store with an empty
+   basket. Their app is a direct competitor with (Elliot's words) much worse UX than
+   ours. Credits never expire — keep for /products probing during the Tesco build.
+   REVISED ordering path: (a) affiliate links for new-customer bounties (free money,
+   do soon); (b) our own browser-extension basket assistant, desktop first (fee stays
+   ours); (c) mobile interim = copy list + deep links; (d) retailer partnerships when
+   user numbers justify. Whisk/Samsung (partnership-gated) still worth one email.
 4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
    outside the library.
 5. **Later:** per-person meal variants, lunches, extras list, product-label allergy checks.
