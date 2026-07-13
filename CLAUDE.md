@@ -71,7 +71,8 @@ real supermarket products with prices. All data in localStorage, no accounts.
 - Lunches: leftovers from batch dinners, own picks, or out of scope?
 - Standing extras list (milk, coffee, fruit, snacks) beyond recipe ingredients?
 - "May contain traces" blocking: strict vs standard, per allergy?
-- Hosting/domain for the public web app; second supermarket to add first.
+- Custom domain (app still lives on the free github.io address); which supermarket
+  to add third — Tesco or Sainsbury's.
 
 ## Live deployment (shipped July 2026)
 
