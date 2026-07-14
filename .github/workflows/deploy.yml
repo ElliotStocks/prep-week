@@ -35,8 +35,10 @@ jobs:
       - name: Refresh supermarket prices (nightly runs only)
         if: github.event_name != 'push'
         run: |
-          npm run ocado
-          npm run aldi
+          # Each supermarket refreshes independently; a blocked run warns instead of
+          # aborting the job (the fetch scripts already refuse to save collapsed data).
+          npm run ocado || echo "::warning::Ocado refresh failed (likely bot-blocked) — keeping existing snapshot"
+          npm run aldi || echo "::warning::Aldi refresh failed — keeping existing snapshot"
           if ! git diff --quiet src/ocado-products.js src/aldi-products.js; then
             git config user.name "prep-week bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
