@@ -105,6 +105,15 @@ pushing when dishes are added.
    browser-extension basket assistant, desktop first (fee stays ours); (d) mobile
    interim = copy list + deep links; (e) retailer partnerships when user numbers
    justify. Whisk/Samsung (partnership-gated) still worth one email.
+   Pepesto support (Angel) re-engaged July 2026: session hand-off failure confirmed
+   in their logs (client stopped after first /checkout turn — awaiting Elliot's device
+   info); embed tested with their official dockable.js — works on their demo only
+   because pepesto.com→app.pepesto.com is same-site; from third-party origins the app
+   renders blank (no frame-blocking headers; likely storage partitioning). They advise
+   checkout automation only works reliably on the end user's device (= endorses our
+   extension plan) and suggest running their engine inside one's OWN mobile app —
+   a real future option for a Prep Week app. Branding of hosted flow: not available,
+   open to co-developing. Text-input compose speedup promised in 2-3 weeks.
 4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
    outside the library.
 5. **Later:** per-person meal variants, lunches, extras list, product-label allergy checks.
