@@ -53,7 +53,8 @@ export default function Breakfasts({ profile, breakfasts, setBreakfasts }) {
                   {cost > 0 && <> · <strong>≈ £{cost.toFixed(2)} a portion</strong></>}</p>
                 {on && <p className="nights">{mornings(b.id)} morning{mornings(b.id) > 1 ? 's' : ''} this week</p>}
                 <div className="card-actions">
-                  <button disabled={!on && breakfasts.length >= 2} onClick={() => toggle(b.id)}>{on ? 'Picked ✓' : 'Pick'}</button>
+                  <button className={on ? '' : 'primary add-btn'} disabled={!on && breakfasts.length >= 2}
+                    onClick={() => toggle(b.id)}>{on ? 'Added ✓' : '+ Add'}</button>
                 </div>
               </div>
             </div>

@@ -181,3 +181,5 @@ button.primary.big { font-size: 16px; padding: 12px 32px; }
 .health-stat { font-size: 14px; }
 .health-stat strong { font-size: 17px; }
 .filter-row { margin: 0 0 14px; }
+
+button.add-btn { padding: 8px 22px; font-weight: 600; }

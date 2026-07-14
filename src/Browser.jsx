@@ -132,7 +132,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
           {qty > 0 && <p className="nights">Cook once, eat {qty} night{qty > 1 ? 's' : ''}</p>}
           <div className="card-actions">
             {qty === 0
-              ? <button onClick={() => setQty(r.id, 1)}>Pick</button>
+              ? <button className="primary add-btn" onClick={() => setQty(r.id, 1)}>+ Add</button>
               : <span className="qty-stepper">
                   <button onClick={() => setQty(r.id, qty - 1)}>−</button>
                   <span>{qty} night{qty > 1 ? 's' : ''}</span>
@@ -159,7 +159,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
         </button>
         <span>{totalNights
           ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} dinner{totalNights > 1 ? 's' : ''} · est. £{estimate.toFixed(2)}</>
-          : 'No recipes picked yet — tap Pick on any meal'}</span>
+          : 'No recipes yet — tap + Add on any meal'}</span>
         {totalNights > 0 && (
           <button className="primary" onClick={onShowList}>Shopping list →</button>
         )}
