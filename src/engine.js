@@ -82,8 +82,9 @@ function mulberry32(seed) {
 
 // Pages through a stable shuffle of every allowed dish. Liked proteins float to
 // the front (a preference, not a filter — dislikes and allergies do the excluding).
-export function generateRecipes(profile, cursor, count) {
-  const pool = allowedDishes(profile);
+export function generateRecipes(profile, cursor, count, filterFn) {
+  let pool = allowedDishes(profile);
+  if (filterFn) pool = pool.filter(filterFn);
   if (!pool.length) return { recipes: [], cursor };
   const order = pool.map((_, i) => i);
   const rand = mulberry32(pool.length * 31 + 7);
@@ -140,6 +141,23 @@ export function methodSteps(r) {
 
 export const appetiteFactor = profile => APPETITE_LEVELS[profile.appetite ?? 1][1];
 
+// Age-banded household → adult-equivalent portion count.
+// Children (2-12) eat ~0.6 of an adult portion, infants (<2) ~0.25.
+export const effectiveEaters = profile => {
+  const adults = profile.adults ?? profile.people ?? 2;
+  return adults + 0.6 * (profile.children || 0) + 0.25 * (profile.infants || 0);
+};
+
+// "2 adults, 1 child" — for subtitles and the cooking page
+export const householdLabel = profile => {
+  const parts = [];
+  const adults = profile.adults ?? profile.people ?? 2;
+  parts.push(`${adults} adult${adults !== 1 ? 's' : ''}`);
+  if (profile.children) parts.push(`${profile.children} child${profile.children !== 1 ? 'ren' : ''}`);
+  if (profile.infants) parts.push(`${profile.infants} infant${profile.infants !== 1 ? 's' : ''}`);
+  return parts.join(', ');
+};
+
 // picked: [{id, qty}] — qty is how many nights that meal covers.
 export function weekPlan(profile, picked) {
   return picked
@@ -152,19 +170,25 @@ export function weekPlan(profile, picked) {
 
 export function buildStock(profile, picked, breakfastIds, pantryOwned) {
   const factor = appetiteFactor(profile);
+  const eaters = effectiveEaters(profile);
   const plan = weekPlan(profile, picked);
-  const fresh = new Map(); // name -> grams
+  const fresh = new Map(); // name -> {grams, usedBy}
   const pantry = new Map(); // name -> Set(recipe names)
-  const add = (map, name, grams) => map.set(name, (map.get(name) || 0) + grams);
+  const add = (name, grams, dish) => {
+    const cur = fresh.get(name) || { grams: 0, usedBy: new Set() };
+    cur.grams += grams;
+    cur.usedBy.add(dish);
+    fresh.set(name, cur);
+  };
 
   for (const r of plan) {
-    const servings = profile.people * r.nights * factor;
+    const servings = eaters * r.nights * factor;
     for (const [name, grams, kind] of r.ingredients) {
       if (kind === 'pantry') {
         if (!pantry.has(name)) pantry.set(name, new Set());
         pantry.get(name).add(r.name);
       } else {
-        add(fresh, name, grams * servings);
+        add(name, grams * servings, r.name);
       }
     }
   }
@@ -174,19 +198,20 @@ export function buildStock(profile, picked, breakfastIds, pantryOwned) {
     const mornings = 7;
     bfs.forEach((b, i) => {
       const base = Math.floor(mornings / bfs.length);
-      const n = (base + (i < mornings % bfs.length ? 1 : 0)) * profile.people;
+      const n = (base + (i < mornings % bfs.length ? 1 : 0)) * eaters;
       for (const [name, grams, kind] of b.items) {
         if (kind === 'pantry') {
           if (!pantry.has(name)) pantry.set(name, new Set());
           pantry.get(name).add(b.name);
-        } else add(fresh, name, grams * n);
+        } else add(name, grams * n, b.name);
       }
     });
   }
 
-  const freshList = [...fresh.entries()].map(([name, grams]) => ({
+  const freshList = [...fresh.entries()].map(([name, { grams, usedBy }]) => ({
     name,
     grams,
+    usedBy: [...usedBy],
     qty: grams === 0 ? '' : grams >= 1000 ? `${Math.round(grams / 100) / 10} kg` : `${Math.round(grams / 10) * 10} g`,
   })).sort((a, b) => a.name.localeCompare(b.name));
 
@@ -208,10 +233,22 @@ export function applyTweaks(lines, tweaks) {
 // The checkout estimate (whole packs, cupboard included) — the same number the
 // shopping list shows, so the running total while picking never disagrees with it.
 // Pass a marketId to price the same week at a different supermarket.
+// Overlay the user's product swaps (tweaks.swaps: name -> 1-based alt index).
+export function applySwaps(products, swaps) {
+  if (!swaps || !Object.keys(swaps).length) return products;
+  const out = { ...products };
+  for (const [name, idx] of Object.entries(swaps)) {
+    const alt = out[name]?.alts?.[idx - 1];
+    if (alt) out[name] = { ...out[name], ...alt };
+  }
+  return out;
+}
+
 export function estimatedTotal(profile, picked, breakfastIds, pantryOwned, marketId, tweaks, extras) {
   const { freshList, pantryList } = buildStock(profile, picked, breakfastIds, pantryOwned);
   const lines = applyTweaks([...freshList, ...pantryList.filter(p => !p.owned)], tweaks);
   const extraLines = (extras || []).map(e => ({ name: e.name, grams: 0, packs: e.packs }));
-  const products = marketId ? productsOf(SUPERMARKET_DATA[marketId], profile) : marketFor(profile).products;
+  const base = marketId ? productsOf(SUPERMARKET_DATA[marketId], profile) : marketFor(profile).products;
+  const products = marketId ? base : applySwaps(base, tweaks?.swaps);
   return linesCost(products, [...lines, ...extraLines]);
 }

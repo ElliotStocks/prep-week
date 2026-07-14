@@ -31,11 +31,15 @@ real supermarket products with prices. All data in localStorage, no accounts.
   product URL, price read from the product page); ~13 pantry items aren't in Aldi's
   online range at all and fall back to search links. The app NEVER places an order;
   users always check out themselves.
-- **Quiz (simplified July 2026 — replaced the per-person body-stats version):** one
-  question per page, food questions only: supermarket → people count → allergies → dietary requirements (incl. keto, filtered on
-  net carbs ≤15g) → foods enjoyed → free-text dislikes (organic toggle lives on the
-  foods-enjoyed page) → appetite (portion size) + optional high-protein boost (+33% on each dish's main protein). No calorie/body-stat
-  questions, no "how many dinners". "Prefer organic" overlays each supermarket's
+- **Quiz (simplified July 2026; CherryPick-inspired tile redesign July 2026):** a
+  photo welcome screen, then one question per page, food questions only: supermarket
+  (tile rows with honesty tags: Ocado "full online shop", Aldi "in-store list") →
+  household as adults/children/infants steppers (children 0.6, infants 0.25 of an
+  adult portion — engine.effectiveEaters) → allergies → dietary requirements as icon
+  tiles (incl. keto, net carbs ≤15g) → foods enjoyed as icon tiles (organic toggle
+  here) → free-text dislikes → appetite tiles + high-protein boost (+33% protein).
+  No calorie/body-stat questions, no "how many dinners". Old people-count saves
+  migrate to adults automatically. "Prefer organic" overlays each supermarket's
   organic product map (captured by the fetch scripts from the same searches) wherever
   one exists — ~75 items at Ocado, ~9 at Aldi; prices update honestly.
 - **Meal quantity lives on the card, not in the quiz:** picking a meal covers 1 night;
@@ -65,8 +69,18 @@ real supermarket products with prices. All data in localStorage, no accounts.
   remove ("not buying") and buy-fewer-packs controls (state.listTweaks), and a
   "Start a new week" reset (keeps profile, favourites, pantry memory). Dish cards have
   a favourites heart (state.favourites, floats favourites to the top). The meals page
-  shows a supermarket badge (no brand logos — trademark caution).
+  shows a supermarket badge (no brand logos — trademark caution) and browse filter
+  pills (Under 30 min, Under £2.50, Batch-friendly, High protein, Veggie, Vegan,
+  Fish, Low carb) — picks/custom ideas stay pinned regardless of filters.
   Settings edits keep the week's picks (only newly-disallowed dishes are dropped).
+  CherryPick-inspired additions (July 2026, competitor analysed in ~/Desktop/CherryPick
+  screenshots): "Week Health" card on the shopping list (distinct-plant count via
+  src/health.js PLANT_OF map + UPF% of food spend via UPF_ITEMS; non-food excluded);
+  "used in N meals" on fresh lines; per-line product SWAP cycling through 2 snapshot
+  alternates (fetchers store product.alts; user choice in listTweaks.swaps,
+  engine.applySwaps overlays everywhere). CherryPick intel: retailer partnerships +
+  webview credential login, subscriptions because "commissions insufficient" — our
+  no-login, prices-everywhere, hard-allergy stance stays the differentiator.
 - **Nutrition from real data** (UK CoFID per-100g approximations in `src/dishes.js`),
   macros AND micros with % daily values — never AI-guessed numbers. Old saves migrate
   automatically in `src/store.js` (body-stats profiles → simple profiles).

@@ -1,4 +1,4 @@
-import { weekPlan, appetiteFactor } from './engine.js';
+import { weekPlan, appetiteFactor, effectiveEaters, householdLabel } from './engine.js';
 
 const fmt = grams => (grams >= 1000 ? `${Math.round(grams / 100) / 10} kg` : `${Math.round(grams / 5) * 5} g`);
 
@@ -20,11 +20,11 @@ export default function Cook({ profile, picked }) {
   return (
     <div>
       <h2>Cooking this week</h2>
-      <p className="sub">Every picked meal with quantities scaled for {profile.people}
-        {profile.people > 1 ? ' people' : ' person'} — cook once, portion it out, eat well all week.</p>
+      <p className="sub">Every picked meal with quantities scaled for {householdLabel(profile)} —
+        cook once, portion it out, eat well all week.</p>
 
       {plan.map(r => {
-        const servings = profile.people * r.nights;
+        const servings = effectiveEaters(profile) * r.nights;
         return (
           <div className="cook-card" key={r.id}>
             <div className="cook-photo">
@@ -33,7 +33,7 @@ export default function Cook({ profile, picked }) {
             </div>
             <div className="cook-body">
               <h3>{r.name}</h3>
-              <p className="muted small">Cook once · {r.nights} night{r.nights > 1 ? 's' : ''} · {servings} portions
+              <p className="muted small">Cook once · {r.nights} night{r.nights > 1 ? 's' : ''} · {Math.round(servings * 10) / 10} portions
                 · ~{r.mins} min{r.costPerServing > 0 && <> · ≈ £{r.costPerServing.toFixed(2)} a portion</>}</p>
               <div className="cook-cols">
                 <div>

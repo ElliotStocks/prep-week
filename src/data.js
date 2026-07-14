@@ -33,7 +33,10 @@ export const DIET_OPTIONS = [
   ['gf', 'Gluten free'], ['keto', 'Keto / low carb'],
 ];
 
-export const SUPERMARKETS = [['ocado', 'Ocado (M&S range)'], ['aldi', 'Aldi']];
+export const SUPERMARKETS = [
+  ['ocado', 'Ocado (M&S range)', 'Full online shop with delivery'],
+  ['aldi', 'Aldi', 'Priced in-store list — no delivery'],
+];
 export const SUPERMARKETS_SOON = ['Tesco', 'Sainsbury’s'];
 
 export const APPETITE_LEVELS = [['Lighter', 0.85], ['Standard', 1], ['Hearty', 1.2]];

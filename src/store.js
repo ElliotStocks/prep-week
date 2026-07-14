@@ -4,7 +4,9 @@ export const defaultState = () => ({
   onboarded: false,
   profile: {
     supermarket: 'ocado',
-    people: 2,
+    adults: 2,        // ages 13+
+    children: 0,      // ages 2-12 (0.6 of an adult portion)
+    infants: 0,       // under 2 (0.25 of an adult portion)
     allergies: [],
     diet: ['none'],
     likes: [],
@@ -18,7 +20,8 @@ export const defaultState = () => ({
   breakfasts: [],   // breakfast ids
   pantryOwned: [],  // pantry items the kitchen already has
   favourites: [],   // dish ids the user hearts — float to the top of the browser
-  listTweaks: { skipped: [], packs: {} }, // per-week shopping list edits: lines removed, pack counts reduced
+  // per-week shopping list edits: lines removed, pack counts reduced, products swapped
+  listTweaks: { skipped: [], packs: {}, swaps: {} },
   extras: [],       // snacks & essentials added to this week's list: {name, packs}
 });
 
@@ -28,10 +31,13 @@ function migrate(s) {
   const d = defaultState();
   const profile = { ...d.profile, ...s.profile };
   if (Array.isArray(s.profile?.persons)) {
-    profile.people = s.profile.persons.length || profile.people;
+    profile.people = s.profile.persons.length;
     delete profile.persons;
     delete profile.ndin;
   }
+  // people count (flat) → age-banded household
+  if (profile.people && !s.profile?.adults) profile.adults = profile.people;
+  delete profile.people;
   const picked = (s.picked || []).map(p => (typeof p === 'string' ? { id: p, qty: 1 } : p));
   const listTweaks = { ...d.listTweaks, ...s.listTweaks };
   return { ...d, ...s, profile, picked, listTweaks };

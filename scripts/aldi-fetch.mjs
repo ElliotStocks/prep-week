@@ -50,8 +50,10 @@ function perKg(t) {
   return (Number(m[1]) / (qty * unit)) * 1000;
 }
 
-function pickBest(tiles, item, requireOrganic = false) {
-  let best = null, bestScore = 0;
+// Qualifying tiles ranked best-first (score, then cheaper per kg).
+// [0] is the pick; the next two become swap alternatives in the app.
+function pickRanked(tiles, item, requireOrganic = false) {
+  const scored = [];
   for (const t of tiles) {
     const title = t.title.toLowerCase();
     if (requireOrganic && !title.includes('organic')) continue;
@@ -59,11 +61,23 @@ function pickBest(tiles, item, requireOrganic = false) {
     if (item.not?.some(group => group.split('|').some(tok => title.includes(tok)))) continue;
     let score = 1;
     if (t.size) score += 1;
-    const cheaperTie = score === bestScore && best && perKg(t) < perKg(best);
-    if (score > bestScore || cheaperTie) { best = t; bestScore = score; }
+    scored.push({ t, score, unit: perKg(t) });
   }
-  return best;
+  scored.sort((a, b) => b.score - a.score || a.unit - b.unit);
+  const seen = new Set();
+  return scored.filter(({ t }) => !seen.has(t.href) && seen.add(t.href)).map(s => s.t);
 }
+
+const pickBest = (tiles, item, requireOrganic = false) => pickRanked(tiles, item, requireOrganic)[0] || null;
+
+const toRecord = (name, t) => ({
+  title: t.title,
+  url: `https://www.aldi.co.uk${t.href}`,
+  size: t.size,
+  perUnit: t.perUnit,
+  price: t.price,
+  packGrams: packGrams(name, t.size),
+});
 
 async function fetchSearch(phrase) {
   const url = `https://www.aldi.co.uk/results?q=${encodeURIComponent(phrase)}`;
@@ -113,25 +127,24 @@ for (const [i, name] of names.entries()) {
     if (best && best.title.toLowerCase().includes('organic')) {
       organic[name] = { title: best.title, url: `https://www.aldi.co.uk${best.href}`, size: best.size, perUnit: best.perUnit, price: best.price, packGrams: packGrams(name, best.size) };
     }
+    if (best) products[name] = { title: best.title, url: `https://www.aldi.co.uk${best.href}`, size: best.size, perUnit: best.perUnit, price: best.price, packGrams: packGrams(name, best.size), alts: [] };
   } else {
     const html = await fetchSearch(item.search);
     const tiles = html ? parseTiles(html) : [];
-    best = html && pickBest(tiles, item);
+    const ranked = pickRanked(tiles, item);
+    best = ranked[0];
     // the best organic option in the same results, for the "prefer organic" setting
     const organicBest = pickBest(tiles, item, true);
-    if (organicBest) {
-      organic[name] = { title: organicBest.title, url: `https://www.aldi.co.uk${organicBest.href}`, size: organicBest.size, perUnit: organicBest.perUnit, price: organicBest.price, packGrams: packGrams(name, organicBest.size) };
+    if (organicBest) organic[name] = toRecord(name, organicBest);
+    if (best) {
+      products[name] = {
+        ...toRecord(name, best),
+        // swap alternatives: the next two qualifying tiles
+        alts: ranked.slice(1, 3).map(t => toRecord(name, t)),
+      };
     }
   }
   if (best) {
-    products[name] = {
-      title: best.title,
-      url: `https://www.aldi.co.uk${best.href}`,
-      size: best.size,
-      perUnit: best.perUnit,
-      price: best.price,
-      packGrams: packGrams(name, best.size),
-    };
     console.log(`[${i + 1}/${names.length}] ${name} → ${best.title} (${best.size ?? '?'}) £${best.price.toFixed(2)}`);
   } else {
     missed.push(name);

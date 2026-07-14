@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { buildStock } from './engine.js';
+import { buildStock, applySwaps, householdLabel } from './engine.js';
 import { BREAKFASTS } from './data.js';
+import { weekHealth } from './health.js';
 import { marketFor, SUPERMARKET_DATA, productsOf, packsFor, linesCost } from './supermarkets.js';
 
 // One stock-list line's match at the chosen supermarket: the real product with
@@ -35,14 +36,25 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
     );
   }
 
-  const market = marketFor(profile);
+  const baseMarket = marketFor(profile);
   const { freshList, pantryList, plan } = buildStock(profile, picked, breakfasts, pantryOwned);
   const toBuy = pantryList.filter(p => !p.owned);
   const owned = pantryList.filter(p => p.owned);
   const bfNames = BREAKFASTS.filter(b => breakfasts.includes(b.id)).map(b => b.name);
 
-  // the user's per-week edits: lines they chose not to buy, packs they reduced
-  const tw = listTweaks || { skipped: [], packs: {} };
+  // the user's per-week edits: lines removed, packs reduced, products swapped
+  const tw = { skipped: [], packs: {}, swaps: {}, ...listTweaks };
+  // swapped products overlay the standard picks for every price on this page
+  const market = { ...baseMarket, products: applySwaps(baseMarket.products, tw.swaps) };
+  const swapProduct = name => {
+    const alts = baseMarket.products[name]?.alts || [];
+    if (!alts.length) return;
+    const cur = tw.swaps[name] || 0;
+    const next = (cur + 1) % (alts.length + 1);
+    const swaps = { ...tw.swaps };
+    if (next === 0) delete swaps[name]; else swaps[name] = next;
+    setListTweaks({ ...tw, swaps });
+  };
   const skippedSet = new Set(tw.skipped);
   const withTweaks = list => list.filter(i => !skippedSet.has(i.name))
     .map(i => (tw.packs[i.name] ? { ...i, packCap: tw.packs[i.name] } : i));
@@ -80,6 +92,13 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
     return sum + Math.min((i.grams / p.packGrams) * p.price, p.price * packs);
   }, 0);
   const carryOver = Math.max(freshPacks - eatenThisWeek, 0);
+
+  // Week Health: plant variety + ultra-processed share of the food spend
+  const health = weekHealth(shopLines.map(i => {
+    const p = market.products[i.name];
+    const packs = p ? (i.packs ?? (i.packCap ? Math.min(packsFor(i.grams, p), i.packCap) : packsFor(i.grams, p))) : 0;
+    return { name: i.name, cost: p ? p.price * packs : 0 };
+  }));
 
   // The same week priced at the other supermarkets — only shown when the other
   // shop's catalogue covers enough of the list to make the comparison fair.
@@ -129,9 +148,15 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
   return (
     <div>
       <h2>Your full weekly stock</h2>
-      <p className="sub">Everything the kitchen needs this week for {profile.people}
-        {profile.people > 1 ? ' people' : ' person'}: {plan.reduce((s, r) => s + r.nights, 0)} dinners
+      <p className="sub">Everything the kitchen needs this week for {householdLabel(profile)}:
+        {' '}{plan.reduce((s, r) => s + r.nights, 0)} dinners
         {bfNames.length ? `, breakfasts every morning` : ''}, spices and staples included.</p>
+
+      <div className="health-card">
+        <span className="health-stat">🌱 <strong>{health.plants}</strong> different plants this week</span>
+        <span className="health-stat">{health.upfPct <= 10 ? '✨' : '⚠️'} <strong>{health.upfPct}%</strong> ultra-processed</span>
+        <span className="muted small">Variety of plants feeds a healthy gut — 30 a week is the gold standard.</span>
+      </div>
 
       <div className="ocado-note">
         <div className="note-head">
@@ -170,11 +195,15 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
               const p = market.products[i.name];
               const natural = p ? packsFor(i.grams, p) : 1;
               const eff = i.packCap ? Math.min(natural, i.packCap) : natural;
+              const hasAlts = (baseMarket.products[i.name]?.alts || []).length > 0;
               return (
                 <li key={i.name}>
                   <div className="pantry-row">
-                    <span>{i.name}{i.qty && <span className="muted"> — {i.qty}</span>}</span>
+                    <span>{i.name}{i.qty && <span className="muted"> — {i.qty}</span>}
+                      {i.usedBy?.length > 0 && <span className="muted small"> · for {i.usedBy.slice(0, 2).join(', ')}{i.usedBy.length > 2 ? ` +${i.usedBy.length - 2}` : ''}</span>}
+                    </span>
                     <span className="line-controls">
+                      {hasAlts && <button className="mini" title="Try a different product" onClick={() => swapProduct(i.name)}>swap</button>}
                       {eff > 1 && <button className="mini" title="Buy one pack fewer" onClick={() => setCap(i.name, eff - 1)}>− pack</button>}
                       {i.packCap && i.packCap < natural && <button className="mini" title="Back to the suggested amount" onClick={() => setCap(i.name, null)}>reset</button>}
                       <button className="mini" title="Don’t buy this" onClick={() => skip(i.name)}>✕</button>

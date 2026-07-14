@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal } from './engine.js';
+import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal, householdLabel } from './engine.js';
 import { DAILY_REF } from './data.js';
 import { marketFor } from './supermarkets.js';
 
@@ -42,21 +42,38 @@ function NutritionPanel({ recipe }) {
 
 const PAGE = 24;
 
+// Browse filters — every predicate works off data every dish already carries
+const FILTERS = [
+  ['quick', 'Under 30 min', r => r.mins <= 30],
+  ['budget', 'Under £2.50', r => r.costPerServing > 0 && r.costPerServing <= 2.5],
+  ['batch', 'Batch-friendly', r => /freez|keeps [34]/i.test(r.steps[r.steps.length - 1] || '')],
+  ['protein', 'High protein', r => r.perServing.prot >= 40],
+  ['veggie', 'Veggie', r => r.dietLevel >= 2],
+  ['vegan', 'Vegan', r => r.dietLevel === 3],
+  ['fish', 'Fish & seafood', r => r.dietLevel === 1],
+  ['keto', 'Low carb', r => r.perServing.carb - r.perServing.fibre <= 15],
+];
+
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
   listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
   const [shown, setShown] = useState([]);
   const [idea, setIdea] = useState('');
   const [ideaMiss, setIdeaMiss] = useState(false);
   const [openId, setOpenId] = useState(null);
+  const [activeFilters, setActiveFilters] = useState([]);
   const cursorRef = useRef(0);
 
   const refresh = useCallback((reset = false) => {
-    const { recipes, cursor } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE);
+    const preds = FILTERS.filter(([key]) => activeFilters.includes(key)).map(f => f[2]);
+    const filterFn = preds.length ? r => preds.every(p => p(r)) : null;
+    const { recipes, cursor } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn);
     cursorRef.current = cursor;
     setShown(recipes);
-  }, [profile]);
+  }, [profile, activeFilters]);
 
   useEffect(() => { refresh(true); }, [refresh]);
+
+  const toggleFilter = key => setActiveFilters(f => (f.includes(key) ? f.filter(k => k !== key) : [...f, key]));
 
   const isFav = id => (favourites || []).includes(id);
   const toggleFav = id => setFavourites(isFav(id) ? favourites.filter(f => f !== id) : [...favourites, id]);
@@ -134,7 +151,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   return (
     <div>
       <h2>Meal ideas for your week</h2>
-      <p className="sub">Pick your dinners for {profile.people} {profile.people > 1 ? 'people' : 'person'}. Want a meal
+      <p className="sub">Pick your dinners for {householdLabel(profile)}. Want a meal
         two nights running? Press + and cook it once. Or describe anything you fancy.</p>
       <div className="picks-bar">
         <button className="shop-badge" onClick={onChangeShop} title="Change supermarket in Settings">
@@ -156,6 +173,15 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       </div>
       {ideaMiss && <p className="idea-miss">Nothing in the library is close to that yet — try naming a
         protein or a dish style (“prawn stir-fry”, “beef chilli”). Live AI recipe creation is coming.</p>}
+      <div className="chips filter-row">
+        {FILTERS.map(([key, label]) => (
+          <button key={key} type="button" className={'chip' + (activeFilters.includes(key) ? ' on' : '')}
+            onClick={() => toggleFilter(key)}>{label}</button>
+        ))}
+      </div>
+      {activeFilters.length > 0 && browseable.length === 0 && pinnedPicked.length === 0 && customRecipes.length === 0 && (
+        <p className="muted">Nothing matches that combination — try removing a filter.</p>
+      )}
       <div className="meal-grid">
         {customRecipes.map(r => card(r, true))}
         {pinnedPicked.map(r => card(r, false))}

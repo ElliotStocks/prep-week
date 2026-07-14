@@ -33,10 +33,12 @@ const productUrl = p => {
   return `https://www.ocado.com/products/${slug}/${p.retailerProductId}`;
 };
 
-function pickBest(data, item, requireOrganic = false) {
+// Returns qualifying candidates ranked best-first (score, then cheaper per unit).
+// [0] is the pick; the next two become swap alternatives in the app.
+function pickRanked(data, item, requireOrganic = false) {
   const candidates = (data?.productGroups || []).flatMap(g => g.decoratedProducts || []);
   const unitAmt = p => Number(p.unitPrice?.price?.amount) || Infinity;
-  let best = null, bestScore = 0;
+  const scored = [];
   for (const p of candidates) {
     if (!p.available || !p.price?.amount) continue;
     const name = p.name.toLowerCase();
@@ -46,13 +48,15 @@ function pickBest(data, item, requireOrganic = false) {
     let score = 1;
     if (p.brand === 'M&S') score += 5;
     if (p.packSizeDescription) score += 1;
-    // equal score: cheaper per unit wins (only comparable when units match)
-    const cheaperTie = score === bestScore && best
-      && p.unitPrice?.unitName === best.unitPrice?.unitName && unitAmt(p) < unitAmt(best);
-    if (score > bestScore || cheaperTie) { best = p; bestScore = score; }
+    scored.push({ p, score, unit: unitAmt(p) });
   }
-  return best;
+  scored.sort((a, b) => b.score - a.score || a.unit - b.unit);
+  // dedupe identical product ids
+  const seen = new Set();
+  return scored.filter(({ p }) => !seen.has(p.retailerProductId) && seen.add(p.retailerProductId)).map(s => s.p);
 }
+
+const pickBest = (data, item, requireOrganic = false) => pickRanked(data, item, requireOrganic)[0] || null;
 
 const products = {};
 const organic = {};
@@ -72,21 +76,17 @@ const record = best => ({
 for (const [i, name] of names.entries()) {
   const item = OCADO_ITEMS[name];
   const data = await searchApi(item.search);
-  const best = data && pickBest(data, item);
+  const ranked = data ? pickRanked(data, item) : [];
+  const best = ranked[0];
   // the best organic option in the same results, for the "prefer organic" setting
   const organicBest = data && pickBest(data, item, true);
   if (organicBest) organic[name] = { ...record(organicBest), packGrams: packGrams(name, organicBest.packSizeDescription) };
   if (best) {
-    const perUnit = best.unitPrice?.price?.amount
-      ? `£${best.unitPrice.price.amount} ${{ PER_1KG: 'per kg', PER_1L: 'per litre', PER_ITEM: 'each', PER_100G: 'per 100g' }[best.unitPrice.unitName] || ''}`.trim()
-      : null;
     products[name] = {
-      title: best.name,
-      url: productUrl(best),
-      size: best.packSizeDescription || null,
-      perUnit,
-      price: Number(best.price.amount),
+      ...record(best),
       packGrams: packGrams(name, best.packSizeDescription),
+      // swap alternatives: the next two qualifying products
+      alts: ranked.slice(1, 3).map(p => ({ ...record(p), packGrams: packGrams(name, p.packSizeDescription) })),
     };
     console.log(`[${i + 1}/${names.length}] ${name} → ${best.name} (${best.packSizeDescription ?? '?'}) £${best.price.amount}`);
   } else {

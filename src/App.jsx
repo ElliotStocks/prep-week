@@ -14,6 +14,7 @@ export default function App() {
   const [tab, setTab] = useState('meals');
   const [mealsView, setMealsView] = useState('dinners');
   const [editing, setEditing] = useState(false);
+  const [welcomed, setWelcomed] = useState(false);
 
   useEffect(() => { saveState(state); }, [state]);
 
@@ -24,6 +25,26 @@ export default function App() {
     patch({ picked: [], customPicks: [], breakfasts: [], listTweaks: { skipped: [], packs: {} }, extras: [] });
     setTab('meals');
   };
+
+  if (!state.onboarded && !welcomed) {
+    return (
+      <div className="shell">
+        <header className="app-header"><h1>Prep Week</h1></header>
+        <div className="welcome">
+          <div className="welcome-hero">
+            <img src={`${import.meta.env.BASE_URL}photos/chicken-shawarma-bowls.jpg`} alt="" />
+            <img src={`${import.meta.env.BASE_URL}photos/pesto-salmon-traybake.jpg`} alt="" />
+            <img src={`${import.meta.env.BASE_URL}photos/gnocchi-tomato-traybake.jpg`} alt="" />
+          </div>
+          <h2>Your week’s meals and shopping, sorted.</h2>
+          <p className="sub">Real recipes with real supermarket prices. Pick your dinners, get the whole
+            week’s shopping list — priced to the penny at your supermarket. No account needed.</p>
+          <button className="primary big" onClick={() => setWelcomed(true)}>Get started</button>
+          <p className="muted small">Seven quick questions, then straight to the food.</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!state.onboarded || editing) {
     return (
