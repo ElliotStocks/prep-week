@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { buildStock } from './engine.js';
 import { BREAKFASTS } from './data.js';
-import { EXTRAS } from './extras.js';
 import { marketFor, SUPERMARKET_DATA, productsOf, packsFor, linesCost } from './supermarkets.js';
 
 // One stock-list line's match at the chosen supermarket: the real product with
@@ -61,12 +60,10 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
   // snacks & essentials the user added by hand
   const extraItems = extras || [];
   const extraLines = extraItems.map(e => ({ name: e.name, grams: 0, packs: e.packs, qty: '' }));
-  const addExtra = name => setExtras(prev => [...prev, { name, packs: 1 }]);
   const setExtraPacks = (name, packs) => {
     if (packs <= 0) setExtras(prev => prev.filter(e => e.name !== name));
     else setExtras(prev => prev.map(e => (e.name === name ? { ...e, packs } : e)));
   };
-  const inExtras = name => extraItems.some(e => e.name === name);
 
   const shopLines = [...freshActive, ...toBuyActive, ...extraLines];
   const matched = shopLines.filter(i => market.products[i.name]).length;
@@ -231,10 +228,10 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
         </div>
       </div>
 
-      <div className="stock-section">
-        <h3>Snacks & essentials</h3>
-        <p className="muted small">Anything else the house needs this week — it joins the list and the total.</p>
-        {extraItems.length > 0 && (
+      {extraItems.length > 0 && (
+        <div className="stock-section">
+          <h3>Snacks & essentials</h3>
+          <p className="muted small">Added from the Snacks &amp; essentials section on the Meals page.</p>
           <ul className="plain">
             {extraItems.map(e => (
               <li key={e.name}>
@@ -250,27 +247,8 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
               </li>
             ))}
           </ul>
-        )}
-        {Object.entries(EXTRAS).map(([cat, names]) => {
-          const available = names.filter(n => !inExtras(n));
-          if (!available.length) return null;
-          return (
-            <div key={cat}>
-              <h4 className="spaced">{cat === 'snacks' ? 'Treats & snacks' : 'Household & essentials'}</h4>
-              <div className="chips">
-                {available.map(n => {
-                  const p = market.products[n];
-                  return (
-                    <button key={n} type="button" className="chip" onClick={() => addExtra(n)}>
-                      + {n}{p ? ` · £${p.price.toFixed(2)}` : ''}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+        </div>
+      )}
 
       <div className="center">
         <button className="ghost" onClick={onClearWeek}>Start a new week</button>

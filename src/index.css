@@ -154,3 +154,8 @@ button.ghost { border: none; background: none; color: var(--muted); text-decorat
 .seg button { border: none; background: none; padding: 8px 20px; font-size: 14px; color: var(--muted); border-radius: 0; }
 .seg button.on { background: var(--accent); color: #fff; font-weight: 600; }
 button.tab.gear { font-size: 17px; padding: 8px 10px; }
+
+@media (max-width: 480px) {
+  .seg { display: flex; width: 100%; }
+  .seg button { flex: 1; padding: 8px 6px; font-size: 13px; }
+}

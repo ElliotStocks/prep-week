@@ -46,9 +46,10 @@ real supermarket products with prices. All data in localStorage, no accounts.
   level eventually. Open question: per-allergy "strict (block may-contain traces)".
 - **No cuisine genres as preferences** — whole-foods focus; preferences are proteins/foods.
 - **The shop covers the whole kitchen week:** dinners, breakfasts, spices, staples,
-  plus a "Snacks & essentials" picker on the shopping list (src/extras.js — ~43
-  household/snack products, same real-product matching, state.extras with pack
-  steppers). Pantry memory prevents re-buying spices/staples every week.
+  plus a "Snacks & essentials" picker as a third segment on the Meals page
+  (src/Extras.jsx view, catalogue in src/extras.js — ~43 household/snack products,
+  same real-product matching, state.extras with pack steppers; chosen items appear
+  as a section on the shopping list). Pantry memory prevents re-buying spices/staples every week.
   Full-catalogue supermarket mapping was consciously deferred: bundle size, scrape
   load and ToS risk — the staging is curated extras now, category-on-demand if
   needed, official data partnerships later.
@@ -98,10 +99,12 @@ pushing when dishes are added.
    (~90s compose), and the QR loses the session — lands on the App Store with an empty
    basket. Their app is a direct competitor with (Elliot's words) much worse UX than
    ours. Credits never expire — keep for /products probing during the Tesco build.
-   REVISED ordering path: (a) affiliate links for new-customer bounties (free money,
-   do soon); (b) our own browser-extension basket assistant, desktop first (fee stays
-   ours); (c) mobile interim = copy list + deep links; (d) retailer partnerships when
-   user numbers justify. Whisk/Samsung (partnership-gated) still worth one email.
+   REVISED ordering path (sequencing per Elliot July 2026: finish a clean app with
+   all supermarkets FIRST, then monetise): (a) remaining supermarkets (Tesco,
+   Sainsbury's); (b) affiliate links for new-customer bounties; (c) our own
+   browser-extension basket assistant, desktop first (fee stays ours); (d) mobile
+   interim = copy list + deep links; (e) retailer partnerships when user numbers
+   justify. Whisk/Samsung (partnership-gated) still worth one email.
 4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
    outside the library.
 5. **Later:** per-person meal variants, lunches, extras list, product-label allergy checks.
