@@ -119,6 +119,20 @@ pushing when dishes are added.
    browser-extension basket assistant, desktop first (fee stays ours); (d) mobile
    interim = copy list + deep links; (e) retailer partnerships when user numbers
    justify. Whisk/Samsung (partnership-gated) still worth one email.
+   AFFILIATE RESEARCH (July 2026): best fit is Ocado (~£4.80/new customer, pays
+   commission up to the customer's 5th shop, historically Awin — verify current
+   network from inside); Tesco £6/new customer but invite-only; Waitrose £5
+   (quality-gated); Sainsbury's £1/order (CJ); Aldi £0 (no online shop). Meal kits
+   (HelloFresh/Gousto) pay £7-20 but are quasi-competitors — Elliot to decide.
+   ELLIOT'S TASKS: sign up to Awin (£5 refundable deposit, join as individual) and
+   CJ (free), then apply to programmes; buying the custom domain first improves
+   approval odds. THEN Claude wires the link layer: affiliate-wrap all product links
+   at snapshot time (awin1.com/cread.php template with clickref per dish), visible
+   "Ad" disclosure on the shopping list (legally required — "affiliate" alone was
+   ruled insufficient by the ASA), rel=sponsored, and NO network JavaScript (keeps
+   the app cookie-banner-free). Caveats: iOS installed-PWA storage partitioning can
+   lose attribution; some programmes (e.g. Iceland) ban browser-extension
+   publishers — check each programme's T&Cs before building the basket extension.
    Pepesto support (Angel) re-engaged July 2026: session hand-off failure confirmed
    in their logs (client stopped after first /checkout turn — awaiting Elliot's device
    info); embed tested with their official dockable.js — works on their demo only
