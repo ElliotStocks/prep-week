@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { buildStock, applySwaps, householdLabel } from './engine.js';
 import { BREAKFASTS } from './data.js';
 import { weekHealth } from './health.js';
+import { EXTRAS } from './extras.js';
 import { marketFor, SUPERMARKET_DATA, productsOf, packsFor, linesCost } from './supermarkets.js';
 
 // One stock-list line's match at the chosen supermarket: the real product with
@@ -130,7 +131,13 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
       'FRESH & WEEKLY',
       ...freshActive.map(line),
       ...(toBuyActive.length ? ['', 'STORE CUPBOARD', ...toBuyActive.map(line)] : []),
-      ...(extraLines.length ? ['', 'SNACKS & ESSENTIALS', ...extraLines.map(line)] : []),
+      ...(() => {
+        const cat = c => extraLines.filter(l => EXTRAS[c].includes(l.name));
+        return [
+          ...(cat('snacks').length ? ['', 'SNACKS', ...cat('snacks').map(line)] : []),
+          ...(cat('essentials').length ? ['', 'HOUSE ESSENTIALS', ...cat('essentials').map(line)] : []),
+        ];
+      })(),
     ].join('\n');
     const done = () => { setCopied(true); setTimeout(() => setCopied(false), 2000); };
     navigator.clipboard.writeText(text).then(done).catch(() => {
@@ -167,7 +174,15 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
           <li>≈ £{eatenThisWeek.toFixed(2)} — food this week actually eats (the “a portion” prices)</li>
           {carryOver > 0.5 && <li>≈ £{carryOver.toFixed(2)} — spare pack contents that carry over to future weeks</li>}
           {cupboard > 0 && <li>£{cupboard.toFixed(2)} — cupboard stock bought once (mark what you own and it disappears)</li>}
-          {extrasCost > 0 && <li>£{extrasCost.toFixed(2)} — snacks &amp; essentials you added</li>}
+          {(() => {
+            const catCost = cat => linesCost(market.products, extraLines.filter(l => EXTRAS[cat].includes(l.name)));
+            const snacks = catCost('snacks');
+            const ess = catCost('essentials');
+            return <>
+              {snacks > 0 && <li>£{snacks.toFixed(2)} — snacks you added</li>}
+              {ess > 0 && <li>£{ess.toFixed(2)} — house essentials you added</li>}
+            </>;
+          })()}
         </ul>
         {rivals.map(r => (
           <p className="rival-price" key={r.store}>The same week at {r.store}: ≈ £{r.total.toFixed(2)} —
@@ -257,27 +272,31 @@ export default function Stock({ profile, picked, breakfasts, pantryOwned, setPan
         </div>
       </div>
 
-      {extraItems.length > 0 && (
-        <div className="stock-section">
-          <h3>Snacks & essentials</h3>
-          <p className="muted small">Added from the Snacks &amp; essentials section on the Meals page.</p>
-          <ul className="plain">
-            {extraItems.map(e => (
-              <li key={e.name}>
-                <div className="pantry-row">
-                  <span>{e.name}</span>
-                  <span className="qty-stepper">
-                    <button onClick={() => setExtraPacks(e.name, e.packs - 1)}>−</button>
-                    <span>{e.packs}</span>
-                    <button onClick={() => setExtraPacks(e.name, e.packs + 1)}>+</button>
-                  </span>
-                </div>
-                <ProductLine market={market} name={e.name} fixedPacks={e.packs} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {[['snacks', 'Snacks'], ['essentials', 'House essentials']].map(([cat, label]) => {
+        const items = extraItems.filter(e => EXTRAS[cat].includes(e.name));
+        if (!items.length) return null;
+        return (
+          <div className="stock-section" key={cat}>
+            <h3>{label}</h3>
+            <p className="muted small">Added from the {label} section on the Meals page.</p>
+            <ul className="plain">
+              {items.map(e => (
+                <li key={e.name}>
+                  <div className="pantry-row">
+                    <span>{e.name}</span>
+                    <span className="qty-stepper">
+                      <button onClick={() => setExtraPacks(e.name, e.packs - 1)}>−</button>
+                      <span>{e.packs}</span>
+                      <button onClick={() => setExtraPacks(e.name, e.packs + 1)}>+</button>
+                    </span>
+                  </div>
+                  <ProductLine market={market} name={e.name} fixedPacks={e.packs} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      })}
 
       <div className="center">
         <button className="ghost" onClick={onClearWeek}>Start a new week</button>

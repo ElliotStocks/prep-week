@@ -5,6 +5,7 @@ import Breakfasts from './Breakfasts.jsx';
 import Stock from './Stock.jsx';
 import Cook from './Cook.jsx';
 import Extras from './Extras.jsx';
+import { EXTRAS } from './extras.js';
 import { loadState, saveState } from './store.js';
 import { allowedDishes } from './engine.js';
 import { BREAKFASTS } from './data.js';
@@ -91,12 +92,18 @@ export default function App() {
             <button className={mealsView === 'breakfasts' ? 'on' : ''} onClick={() => setMealsView('breakfasts')}>
               Breakfasts{state.breakfasts.length > 0 ? ` · ${state.breakfasts.length}` : ''}
             </button>
-            <button className={mealsView === 'extras' ? 'on' : ''} onClick={() => setMealsView('extras')}>
-              Snacks & essentials{state.extras.length > 0 ? ` · ${state.extras.length}` : ''}
-            </button>
+            {[['snacks', 'Snacks'], ['essentials', 'Essentials']].map(([cat, label]) => {
+              const count = state.extras.filter(e => EXTRAS[cat].includes(e.name)).length;
+              return (
+                <button key={cat} className={mealsView === cat ? 'on' : ''} onClick={() => setMealsView(cat)}>
+                  {label}{count > 0 ? ` · ${count}` : ''}
+                </button>
+              );
+            })}
           </div>
-          {mealsView === 'extras' && (
+          {(mealsView === 'snacks' || mealsView === 'essentials') && (
             <Extras
+              category={mealsView}
               profile={state.profile}
               extras={state.extras}
               setExtras={updater => setState(prev => ({
