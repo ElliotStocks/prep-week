@@ -85,7 +85,7 @@ function mulberry32(seed) {
 export function generateRecipes(profile, cursor, count, filterFn) {
   let pool = allowedDishes(profile);
   if (filterFn) pool = pool.filter(filterFn);
-  if (!pool.length) return { recipes: [], cursor };
+  if (!pool.length) return { recipes: [], cursor, total: 0 };
   const order = pool.map((_, i) => i);
   const rand = mulberry32(pool.length * 31 + 7);
   for (let i = order.length - 1; i > 0; i--) {
@@ -101,7 +101,7 @@ export function generateRecipes(profile, cursor, count, filterFn) {
   for (let n = 0; n < Math.min(count, pool.length); n++) {
     out.push(pool[order[(cursor + n) % pool.length]]);
   }
-  return { recipes: out, cursor: (cursor + count) % pool.length };
+  return { recipes: out, cursor: (cursor + count) % pool.length, total: pool.length };
 }
 
 export function recipeFromId(id, profile) {

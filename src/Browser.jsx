@@ -57,21 +57,27 @@ const FILTERS = [
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
   listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
   const [shown, setShown] = useState([]);
+  const [poolTotal, setPoolTotal] = useState(0);
   const [idea, setIdea] = useState('');
   const [ideaMiss, setIdeaMiss] = useState(false);
   const [openId, setOpenId] = useState(null);
   const [activeFilters, setActiveFilters] = useState([]);
   const cursorRef = useRef(0);
 
-  const refresh = useCallback((reset = false) => {
+  const showMore = useCallback((reset = false) => {
     const preds = FILTERS.filter(([key]) => activeFilters.includes(key)).map(f => f[2]);
     const filterFn = preds.length ? r => preds.every(p => p(r)) : null;
-    const { recipes, cursor } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn);
+    const { recipes, cursor, total } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn);
     cursorRef.current = cursor;
-    setShown(recipes);
+    setPoolTotal(total);
+    setShown(prev => {
+      if (reset) return recipes;
+      const seen = new Set(prev.map(r => r.id));
+      return [...prev, ...recipes.filter(r => !seen.has(r.id))];
+    });
   }, [profile, activeFilters]);
 
-  useEffect(() => { refresh(true); }, [refresh]);
+  useEffect(() => { showMore(true); }, [showMore]);
 
   const toggleFilter = key => setActiveFilters(f => (f.includes(key) ? f.filter(k => k !== key) : [...f, key]));
 
@@ -100,7 +106,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     .map(c => { const r = recipeFromId(c.id, profile); return r ? { ...r, customLabel: c.label } : null; })
     .filter(Boolean);
 
-  // Picked recipes stay pinned at the top so refreshing never loses them.
+  // Picked recipes stay pinned at the top so browsing never loses them.
   const customIds = new Set(customPicks.map(c => c.id));
   const pinnedPicked = picked
     .filter(p => !customIds.has(p.id))
@@ -188,7 +194,9 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
         {browseable.map(r => card(r, false))}
       </div>
       <div className="center">
-        <button className="primary" onClick={() => refresh()}>Refresh — {PAGE} fresh ideas</button>
+        {shown.length < poolTotal
+          ? <button className="primary" onClick={() => showMore()}>Show more ideas</button>
+          : shown.length > 0 && <p className="muted small">That’s every dish that fits your week.</p>}
         {totalNights > 0 && <button className="ghost" onClick={onClearWeek}>Start a new week</button>}
       </div>
     </div>

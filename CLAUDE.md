@@ -61,8 +61,9 @@ real supermarket products with prices. All data in localStorage, no accounts.
   v1 combinatorial engine as "all very very similar"): ~115 dishes in `src/dishes.js`
   spanning distinct formats (soups, stews, traybakes, curries, one-pot rice, noodle
   bowls, bakes, salads; 14 vegan, 13 keto) with photos in `public/photos/`
-  (`node scripts/photos.mjs` regenerates missing ones via Gemini). Browser shows 24 at
-  a time, refresh pages through a stable shuffle, picks stay pinned. "Type anything"
+  (`node scripts/photos.mjs` regenerates missing ones via Gemini). Browser shows 24 to
+  start; a "Show more ideas" button appends the next 24 from a stable shuffle and
+  disappears once every allowed dish is on screen; picks stay pinned. "Type anything"
   matches the closest dish (with a friendly miss message); live AI generation is still
   planned. A "Cooking" tab shows every picked meal's method with ingredient quantities
   scaled to the household; the shopping list has a copy-to-clipboard button, per-line
@@ -135,9 +136,12 @@ pushing when dishes are added.
    publishers — check each programme's T&Cs before building the basket extension.
    Pepesto support (Angel) re-engaged July 2026: session hand-off failure confirmed
    in their logs (client stopped after first /checkout turn — awaiting Elliot's device
-   info); embed tested with their official dockable.js — works on their demo only
-   because pepesto.com→app.pepesto.com is same-site; from third-party origins the app
-   renders blank (no frame-blocking headers; likely storage partitioning). They advise
+   info); embed CORRECTION (July 2026): dockable.js embedding DOES work from
+   third-party origins in real browsers — the earlier "blank iframe" was an artifact
+   of the preview-pane browser (see memory: browser-testing-quirks); verified working
+   in Elliot's Chrome + incognito with Pepesto's own demo.html. So Pepesto's cart-
+   review UI CAN render inside Prep Week on desktop web; the flow still ends in the
+   phone QR hand-off unless we drive /session + /checkout ourselves. They advise
    checkout automation only works reliably on the end user's device (= endorses our
    extension plan) and suggest running their engine inside one's OWN mobile app —
    a real future option for a Prep Week app. Branding of hosted flow: not available,
