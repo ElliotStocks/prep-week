@@ -43,8 +43,9 @@ state shape in `src/store.js` (add a migration for every new field).
 - [x] **Which days?** Mon–Sun multi-select (after the household question; at least
       one night required). Profile stores `days`; old saves migrate to all seven.
       Picks bar now reads "N of M nights planned" against the chosen days.
-- [ ] **Budget** — tiles (e.g. under £40 / £40–60 / £60–80 / £80+ / no limit).
-      Stored on profile; drives Phase 2's budget engine.
+- [x] **Budget** — tiles (under £40 / £40–60 / £60–80 / £80+ / no limit), after the
+      nights question. profile.budget (band key) with caps in data.js BUDGET_OPTIONS;
+      old saves migrate to no-limit. Engine wiring is Phase 2.
 - [ ] **Quick and easy** — a preference, not just a browse filter. Should bias the
       shown dishes toward short cook times and few steps.
 - [ ] **Cooking equipment** — icon tiles: oven, hob, air fryer, microwave, slow cooker,
@@ -187,6 +188,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 1 budget question live: five bands incl. no-limit, stored as
+  profile.budget with migration; summary line shows the band. Verified end-to-end in
+  the browser (u60 persisted to localStorage). Build green, pushed.
 - 2026-08-26 · Phase 1 "Which nights?" question live: Mon–Sun chips in the quiz,
   profile.days with migration, picks bar shows "N of M nights planned". Walked the
   full quiz in the browser (guard against zero nights verified). Build green, pushed.

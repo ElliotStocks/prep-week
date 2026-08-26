@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS, DAY_OPTIONS } from './data.js';
+import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS, DAY_OPTIONS, BUDGET_OPTIONS } from './data.js';
 
 const DIET_ICONS = { none: '🍽️', veggie: '🥦', vegan: '🌱', pesc: '🐟', gf: '🌾', keto: '🥑' };
 const LIKE_ICONS = { chicken: '🍗', beef: '🥩', turkey: '🦃', fish: '🐟', shellfish: '🦐', eggs: '🥚', legumes: '🫘', tofu: '🌱' };
@@ -106,6 +106,19 @@ export default function Quiz({ initial, onDone, onCancel }) {
       </>,
     },
     {
+      title: 'What’s the weekly budget?',
+      sub: 'For the whole shop — dinners, breakfasts and staples. The list shows honest running totals either way.',
+      body: <div className="tile-grid">
+        {BUDGET_OPTIONS.map(([v, label]) => (
+          <button key={v} type="button" className={'qtile' + ((p.budget ?? 'none') === v ? ' on' : '')}
+            onClick={() => setField({ budget: v })}>
+            <span className="qtile-icon">{{ u40: '🪙', u60: '💷', u80: '💰', p80: '🧺', none: '🤷' }[v]}</span>
+            <span>{label}</span>
+          </button>
+        ))}
+      </div>,
+    },
+    {
       title: 'Any allergies?',
       sub: 'Answer for everyone eating. These are strict: recipes containing them are removed completely.',
       body: <Chips danger options={ALLERGY_OPTIONS} value={p.allergies} onChange={v => setField({ allergies: v })} />,
@@ -168,11 +181,12 @@ export default function Quiz({ initial, onDone, onCancel }) {
       p.children ? `${p.children} child${p.children !== 1 ? 'ren' : ''}` : null,
       p.infants ? `${p.infants} infant${p.infants !== 1 ? 's' : ''}` : null].filter(Boolean).join(', ');
     const nights = (p.days ?? []).length;
+    const budgetLabel = BUDGET_OPTIONS.find(([v]) => v === (p.budget ?? 'none'))?.[1];
     return (
       <div className="panel">
         <p className="kicker">All set</p>
         <h2>Let’s find your week</h2>
-        <p className="sub">Meals for {household} · {nights} night{nights !== 1 ? 's' : ''} a week · {dietLabel}
+        <p className="sub">Meals for {household} · {nights} night{nights !== 1 ? 's' : ''} a week{(p.budget ?? 'none') !== 'none' ? ` · ${budgetLabel} a week` : ''} · {dietLabel}
           {p.allergies.length ? ` · strictly no ${p.allergies.join(', ')}` : ''} · shopping at
           {' '}{SUPERMARKETS.find(([v]) => v === p.supermarket)?.[1]}.
           Every suggestion respects the whole table, and every ingredient is priced.</p>

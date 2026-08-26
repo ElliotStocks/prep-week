@@ -48,6 +48,17 @@ export const DAY_OPTIONS = [
 ];
 export const ALL_DAYS = DAY_OPTIONS.map(([v]) => v);
 
+// Weekly shopping budget bands. cap is the pounds figure the engine compares the
+// basket estimate against; null means "don't watch it" (£80+ and no-limit differ
+// only in intent, so both stay uncapped until Elliot says otherwise).
+export const BUDGET_OPTIONS = [
+  ['u40', 'Under £40', 40],
+  ['u60', '£40–60', 60],
+  ['u80', '£60–80', 80],
+  ['p80', '£80+', null],
+  ['none', 'No limit', null],
+];
+
 export const LIKE_OPTIONS = [
   ['chicken', 'Chicken'], ['beef', 'Beef'], ['turkey', 'Turkey'], ['lamb', 'Lamb'], ['pork', 'Pork'],
   ['fish', 'Fish'], ['shellfish', 'Prawns & shellfish'], ['eggs', 'Eggs'], ['legumes', 'Beans & lentils'], ['tofu', 'Tofu'],

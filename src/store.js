@@ -17,6 +17,7 @@ export const defaultState = () => ({
     likes: [],
     dislikes: '',
     days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], // nights being cooked
+    budget: 'none',     // weekly shop budget band (BUDGET_OPTIONS key)
     appetite: 1,        // 0 light, 1 standard, 2 hearty
     proteinBoost: false,
     organicPref: false, // prefer organic products where the supermarket has them
@@ -41,6 +42,8 @@ function migrate(s) {
     delete profile.persons;
     delete profile.ndin;
   }
+  // profiles from before the budget question shop without a limit
+  if (!profile.budget) profile.budget = 'none';
   // profiles from before the days question cook every night
   if (!Array.isArray(profile.days) || !profile.days.length) profile.days = d.profile.days;
   // people count (flat) → age-banded household
