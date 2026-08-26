@@ -1440,6 +1440,85 @@ export const ALDI_PRODUCTS = {
       }
     ]
   },
+  "smoked mackerel": {
+    "title": "THE FISHMONGER Hot Smoked Mackerel Fillets",
+    "url": "https://www.aldi.co.uk/product/the-fishmonger-hot-smoked-mackerel-fillets-000000000384805003",
+    "size": "0.2 KG",
+    "perUnit": "£16.45/1 KG",
+    "price": 3.29,
+    "packGrams": 200,
+    "alts": [
+      {
+        "title": "THE FISHMONGER Hot Smoked Peppered Mackerel Fillets",
+        "url": "https://www.aldi.co.uk/product/the-fishmonger-hot-smoked-peppered-mackerel-fillets-000000000384805001",
+        "size": "0.2 KG",
+        "perUnit": "£16.45/1 KG",
+        "price": 3.29,
+        "packGrams": 200
+      },
+      {
+        "title": "THE FISHMONGER Hot Smoked Sweetcure Mackerel Fillets",
+        "url": "https://www.aldi.co.uk/product/the-fishmonger-hot-smoked-sweetcure-mackerel-fillets-000000000384805004",
+        "size": "0.2 KG",
+        "perUnit": "£16.45/1 KG",
+        "price": 3.29,
+        "packGrams": 200
+      }
+    ]
+  },
+  "parsnips": {
+    "title": "NATURE&#39;S PICK British Parsnips",
+    "url": "https://www.aldi.co.uk/product/nature-s-pick-british-parsnips-000000000000339898",
+    "size": "0.5 KG",
+    "perUnit": "£1.48/1 KG",
+    "price": 0.74,
+    "packGrams": 500,
+    "alts": [
+      {
+        "title": "MAMIA Organic Apples, Carrots &amp; Parsnips Pouch",
+        "url": "https://www.aldi.co.uk/product/mamia-organic-apples-carrots-parsnips-pouch-000000000346206002",
+        "size": "0.12 KG",
+        "perUnit": "£4.58/1 KG",
+        "price": 0.55,
+        "packGrams": 120
+      }
+    ]
+  },
+  "white cabbage": {
+    "title": "NATURE&#39;S PICK White Cabbage",
+    "url": "https://www.aldi.co.uk/product/nature-s-pick-white-cabbage-000000000340671001",
+    "size": "1 Each",
+    "perUnit": "£0.89/1 Each",
+    "price": 0.89,
+    "packGrams": null,
+    "alts": []
+  },
+  "apples": {
+    "title": "NATURE&#39;S PICK British Royal Gala Apples",
+    "url": "https://www.aldi.co.uk/product/nature-s-pick-british-royal-gala-apples-000000000000339923",
+    "size": "6 Each",
+    "perUnit": "£0.27/1 Each",
+    "price": 1.59,
+    "packGrams": null,
+    "alts": [
+      {
+        "title": "NATURE&#39;S PICK Jazz Apples",
+        "url": "https://www.aldi.co.uk/product/nature-s-pick-jazz-apples-000000000000306530",
+        "size": "6 Each",
+        "perUnit": "£0.37/1 Each",
+        "price": 2.19,
+        "packGrams": null
+      },
+      {
+        "title": "EVERYDAY ESSENTIALS Wonky Apples",
+        "url": "https://www.aldi.co.uk/product/everyday-essentials-wonky-apples-000000000000491850",
+        "size": "6 Each",
+        "perUnit": "£0.17/1 Each",
+        "price": 0.99,
+        "packGrams": null
+      }
+    ]
+  },
   "cauliflower": {
     "title": "NATURE&#39;S PICK British Cauliflower",
     "url": "https://www.aldi.co.uk/product/nature-s-pick-british-cauliflower-000000000000334794",
@@ -2291,32 +2370,6 @@ export const ALDI_PRODUCTS = {
       }
     ]
   },
-  "apples": {
-    "title": "NATURE&#39;S PICK British Royal Gala Apples",
-    "url": "https://www.aldi.co.uk/product/nature-s-pick-british-royal-gala-apples-000000000000339923",
-    "size": "6 Each",
-    "perUnit": "£0.27/1 Each",
-    "price": 1.59,
-    "packGrams": null,
-    "alts": [
-      {
-        "title": "NATURE&#39;S PICK Jazz Apples",
-        "url": "https://www.aldi.co.uk/product/nature-s-pick-jazz-apples-000000000000306530",
-        "size": "6 Each",
-        "perUnit": "£0.37/1 Each",
-        "price": 2.19,
-        "packGrams": null
-      },
-      {
-        "title": "EVERYDAY ESSENTIALS Wonky Apples",
-        "url": "https://www.aldi.co.uk/product/everyday-essentials-wonky-apples-000000000000491850",
-        "size": "6 Each",
-        "perUnit": "£0.17/1 Each",
-        "price": 0.99,
-        "packGrams": null
-      }
-    ]
-  },
   "oranges": {
     "title": "SPECIALLY SELECTED Easy Peelers",
     "url": "https://www.aldi.co.uk/product/specially-selected-easy-peelers-000000000000271780",
@@ -2794,6 +2847,14 @@ export const ALDI_ORGANIC = {
     "perUnit": "£4.94/100 G",
     "price": 0.79,
     "packGrams": 13
+  },
+  "parsnips": {
+    "title": "MAMIA Organic Apples, Carrots &amp; Parsnips Pouch",
+    "url": "https://www.aldi.co.uk/product/mamia-organic-apples-carrots-parsnips-pouch-000000000346206002",
+    "size": "0.12 KG",
+    "perUnit": "£4.58/1 KG",
+    "price": 0.55,
+    "packGrams": 120
   },
   "carrots": {
     "title": "MAMIA Organic Apples, Carrots &amp; Parsnips Pouch",

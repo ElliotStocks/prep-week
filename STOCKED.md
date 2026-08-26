@@ -119,7 +119,7 @@ per-100g values, add those ingredients to **every** live supermarket dictionary,
 equipment and cook time, then generate photos.
 
 - [x] Batch 1 (→140) · [ ] Batch 2 (→165) · [ ] Batch 3 (→190) · [ ] Batch 4 (→215)
-- [ ] Batch 5 (→240) · [ ] Batch 6 (→265) · [ ] Batch 7 (→290) · [ ] Batch 8 (→315)
+- [x] Batch 5 (→240) · [ ] Batch 6 (→265) · [ ] Batch 7 (→290) · [ ] Batch 8 (→315)
 - [ ] Batch 9 (→340) · [ ] Batch 10 (→365) · [ ] Batch 11 (→390) · [ ] Batch 12 (→415)
 - [ ] Batch 13 (→440) · [ ] Batch 14 (→465) · [ ] Batch 15 (→490) · [ ] Batch 16 (→515)
 - [ ] Split `dishes.js` once it gets unwieldy (it's already 115KB at 115 dishes — at
@@ -210,6 +210,10 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 5 done: 215→240. New: smoked mackerel, parsnips, white
+  cabbage, apples (fetcher fixes: Ocado mackerel was matching tinned-in-oil, Aldi
+  cabbage a veg medley — both corrected). Verified Aldi list end-to-end (mackerel
+  £3.29, apples £1.59). 25 photos ≈ $0.97. Build green, pushed.
 - 2026-08-26 · Phase 6 Batch 4 done: 190→215, existing ingredients only. Keto pool
   →22 (verified in browser), vegan total →44. Kid-friendly and low-carb weighted.
   25 photos ≈ $0.97. Build green, pushed.
