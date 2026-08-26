@@ -118,7 +118,7 @@ permutations), add any new ingredients to the `NUTRITION` table with real CoFID-
 per-100g values, add those ingredients to **every** live supermarket dictionary, tag
 equipment and cook time, then generate photos.
 
-- [ ] Batch 1 (→140) · [ ] Batch 2 (→165) · [ ] Batch 3 (→190) · [ ] Batch 4 (→215)
+- [x] Batch 1 (→140) · [ ] Batch 2 (→165) · [ ] Batch 3 (→190) · [ ] Batch 4 (→215)
 - [ ] Batch 5 (→240) · [ ] Batch 6 (→265) · [ ] Batch 7 (→290) · [ ] Batch 8 (→315)
 - [ ] Batch 9 (→340) · [ ] Batch 10 (→365) · [ ] Batch 11 (→390) · [ ] Batch 12 (→415)
 - [ ] Batch 13 (→440) · [ ] Batch 14 (→465) · [ ] Batch 15 (→490) · [ ] Batch 16 (→515)
@@ -210,6 +210,11 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 1 done: 115→140 dishes, all composed from the existing
+  99 priced ingredients (zero new dictionary work, priced at both supermarkets).
+  11 vegan — the vegan+GF+hob-only corner went 8→19 dishes. 25 photos generated,
+  0 failures; cost ≈ $0.97 (~£0.76) at Gemini image rates. Build green, verified
+  in browser as a vegan hob-only Aldi user, pushed.
 - 2026-08-26 · Phase 5 COMPLETE. Weekly thumbs ratings live end-to-end: card,
   storage, ordering feedback (verified both directions in browser). Build green,
   pushed. Phases 0-5 all done in one day; next is the 500-recipe grind.
