@@ -92,6 +92,9 @@ export default function App() {
             <button className={mealsView === 'breakfasts' ? 'on' : ''} onClick={() => setMealsView('breakfasts')}>
               Breakfasts{state.breakfasts.length > 0 ? ` · ${state.breakfasts.length}` : ''}
             </button>
+            <button className={mealsView === 'favourites' ? 'on' : ''} onClick={() => setMealsView('favourites')}>
+              ♥ Favourites{state.favourites.length > 0 ? ` · ${state.favourites.length}` : ''}
+            </button>
             {[['snacks', 'Snacks'], ['essentials', 'Essentials']].map(([cat, label]) => {
               const count = state.extras.filter(e => EXTRAS[cat].includes(e.name)).length;
               return (
@@ -112,7 +115,7 @@ export default function App() {
               }))}
             />
           )}
-          {mealsView === 'dinners' && (
+          {(mealsView === 'dinners' || mealsView === 'favourites') && (
             <Browser
               profile={state.profile}
               picked={state.picked}
@@ -128,6 +131,7 @@ export default function App() {
               onShowList={() => setTab('stock')}
               onChangeShop={() => setEditing(true)}
               onClearWeek={clearWeek}
+              favouritesOnly={mealsView === 'favourites'}
             />
           )}
           {mealsView === 'breakfasts' && (

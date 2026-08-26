@@ -91,9 +91,11 @@ highest-value small fix in the list — do it early.
 
 ## Phase 4 — Favourites section
 
-- [ ] A proper Favourites section/tab, not just hearts floating to the top of the
-      browser. State already exists (`state.favourites`).
-- [ ] Empty state that explains how to add one.
+- [x] A proper Favourites section/tab — new "♥ Favourites · N" segment on the Meals
+      page showing every hearted dish (whether or not this week's shuffle surfaces
+      it) with full cards: Add, nights stepper, nutrition, unheart.
+- [x] Empty state that explains how to add one (verified: unhearting the last
+      favourite shows it live).
 
 ## Phase 5 — Rate your meals
 
@@ -205,6 +207,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 4 COMPLETE. Favourites section live as a Meals segment with
+  count badge and empty state; verified in browser both populated and empty. Build
+  green, pushed.
 - 2026-08-26 · Phase 3 COMPLETE. Weekly rotation live: shuffle seeded on ISO week
   (202635), browser matches predicted order, 18/24 opening dishes change on Monday,
   pinning intact. Heavy-filter corner (vegan+GF+hob) = 8 dishes → Phase 6 priority.

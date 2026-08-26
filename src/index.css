@@ -189,3 +189,7 @@ button.add-btn { padding: 8px 22px; font-weight: 600; }
 .near-budget { color: #9a6b00; font-weight: 600; }
 .budget-note { background: #fdeceb; border: 1px solid #f3c1bd; color: #7a1a14;
   border-radius: 10px; padding: 8px 12px; font-size: 0.9rem; margin: 8px 0 0; }
+
+/* favourites empty state */
+.empty-state { text-align: center; padding: 48px 16px; }
+.empty-state .big-emoji { font-size: 3rem; margin-bottom: 8px; }

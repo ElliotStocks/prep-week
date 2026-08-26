@@ -55,7 +55,7 @@ const FILTERS = [
 ];
 
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
-  listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek }) {
+  listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek, favouritesOnly }) {
   const [shown, setShown] = useState([]);
   const [poolTotal, setPoolTotal] = useState(0);
   const [idea, setIdea] = useState('');
@@ -117,6 +117,12 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   const browseable = shown.filter(r => !qtyOf(r.id) && !customIds.has(r.id))
     .sort((a, b) => (isFav(b.id) ? 1 : 0) - (isFav(a.id) ? 1 : 0));
 
+  // Favourites tab: every hearted dish still allowed by the profile, whether or
+  // not the week's shuffle happens to be showing it.
+  const favRecipes = favouritesOnly
+    ? (favourites || []).map(id => recipeFromId(id, profile)).filter(Boolean)
+    : [];
+
   const totalNights = picked.reduce((s, p) => s + p.qty, 0);
   const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || [], null, listTweaks, extras) : 0;
   const budgetCap = budgetCapOf(profile);
@@ -157,6 +163,34 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       </div>
     );
   };
+
+  if (favouritesOnly) {
+    return (
+      <div>
+        <h2>Your favourites</h2>
+        <p className="sub">Everything you’ve hearted, all in one place. Add straight to the week from here.</p>
+        <div className="picks-bar">
+          <button className="shop-badge" onClick={onChangeShop} title="Change supermarket in Settings">
+            🛒 {market.store}{profile.organicPref ? ' · organic' : ''}
+          </button>
+          <span>{totalNights
+            ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} of {(profile.days ?? []).length || 7} night{((profile.days ?? []).length || 7) !== 1 ? 's' : ''} planned · est. £{estimate.toFixed(2)}</>
+            : 'No recipes yet — tap + Add on any meal'}</span>
+          {totalNights > 0 && (
+            <button className="primary" onClick={onShowList}>Shopping list →</button>
+          )}
+        </div>
+        {favRecipes.length
+          ? <div className="meal-grid">{favRecipes.map(r => card(r))}</div>
+          : <div className="empty-state">
+              <p className="big-emoji">♡</p>
+              <p><strong>No favourites yet.</strong></p>
+              <p className="muted">Tap the ♡ on any meal card and it’ll live here — favourites also jump the
+                queue in the weekly ideas.</p>
+            </div>}
+      </div>
+    );
+  }
 
   return (
     <div>
