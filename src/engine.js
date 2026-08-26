@@ -101,7 +101,7 @@ function mulberry32(seed) {
 
 // Pages through a stable shuffle of every allowed dish. Liked proteins float to
 // the front (a preference, not a filter — dislikes and allergies do the excluding).
-export function generateRecipes(profile, cursor, count, filterFn, preferCheap) {
+export function generateRecipes(profile, cursor, count, filterFn, preferCheap, ratings) {
   let pool = allowedDishes(profile);
   if (filterFn) pool = pool.filter(filterFn);
   if (!pool.length) return { recipes: [], cursor, total: 0 };
@@ -117,8 +117,10 @@ export function generateRecipes(profile, cursor, count, filterFn, preferCheap) {
   const quick = i => (profile.quickEasy && pool[i].mins <= 30 ? 0 : 1);
   // near or over budget, cheaper dishes surface first — same principle
   const cheap = i => (preferCheap && pool[i].costPerServing > 0 && pool[i].costPerServing <= 2.5 ? 0 : 1);
-  if (likes.length || profile.quickEasy || preferCheap) {
-    order.sort((a, b) => (liked(a) - liked(b)) || (quick(a) - quick(b)) || (cheap(a) - cheap(b)));
+  // meals the household rated: loved ones lead, disliked ones sink — never hidden
+  const rated = i => { const s = ratings?.[pool[i].id]?.score; return s === 1 ? 0 : s === -1 ? 2 : 1; };
+  if (likes.length || profile.quickEasy || preferCheap || (ratings && Object.keys(ratings).length)) {
+    order.sort((a, b) => (rated(a) - rated(b)) || (liked(a) - liked(b)) || (quick(a) - quick(b)) || (cheap(a) - cheap(b)));
   }
   const out = [];
   for (let n = 0; n < Math.min(count, pool.length); n++) {

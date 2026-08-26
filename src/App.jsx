@@ -7,8 +7,36 @@ import Cook from './Cook.jsx';
 import Extras from './Extras.jsx';
 import { EXTRAS } from './extras.js';
 import { loadState, saveState } from './store.js';
-import { allowedDishes } from './engine.js';
+import { allowedDishes, recipeFromId } from './engine.js';
 import { BREAKFASTS } from './data.js';
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+// Once a week, ask how the cooked meals were. One tap per meal, always skippable,
+// never nags: the timer arms when a week has picks, fires 7 days later.
+function RatingCard({ picked, profile, ratings, onRate, onDone }) {
+  const meals = picked.map(p => recipeFromId(p.id, profile)).filter(Boolean)
+    .filter(r => !ratings[r.id]);
+  if (!meals.length) return null;
+  return (
+    <div className="rating-card">
+      <div className="rating-head">
+        <strong>How were your meals?</strong>
+        <button className="link" onClick={onDone}>Skip</button>
+      </div>
+      <p className="muted small">A quick thumbs helps next week’s ideas get better. Stays on this device.</p>
+      {meals.map(r => (
+        <div key={r.id} className="rating-row">
+          <span>{r.name}</span>
+          <span>
+            <button className="thumb" aria-label={`Liked ${r.name}`} onClick={() => onRate(r.id, 1)}>👍</button>
+            <button className="thumb" aria-label={`Not for us: ${r.name}`} onClick={() => onRate(r.id, -1)}>👎</button>
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function App() {
   const [state, setState] = useState(loadState);
@@ -20,6 +48,20 @@ export default function App() {
   useEffect(() => { saveState(state); }, [state]);
 
   const patch = p => setState(prev => ({ ...prev, ...p }));
+
+  // arm the weekly rating timer the first time a week has picks
+  useEffect(() => {
+    if (state.picked.length && !state.ratingPromptedAt) patch({ ratingPromptedAt: Date.now() });
+  }, [state.picked.length, state.ratingPromptedAt]);
+
+  const ratingDue = state.picked.length > 0 && state.ratingPromptedAt
+    && Date.now() - state.ratingPromptedAt > WEEK_MS;
+  const rateMeal = (id, score) => {
+    const ratings = { ...state.ratings, [id]: { score, ratedAt: Date.now() } };
+    const allRated = state.picked.every(p => ratings[p.id]);
+    patch({ ratings, ...(allRated ? { ratingPromptedAt: Date.now() } : {}) });
+  };
+  const ratingDone = () => patch({ ratingPromptedAt: Date.now() });
 
   const clearWeek = () => {
     if (!window.confirm('Start a new week? This clears your picked meals, breakfasts, extras and list edits. Your profile, favourites and cupboard memory stay.')) return;
@@ -87,6 +129,10 @@ export default function App() {
       </header>
       {tab === 'meals' && (
         <>
+          {ratingDue && (
+            <RatingCard picked={state.picked} profile={state.profile} ratings={state.ratings}
+              onRate={rateMeal} onDone={ratingDone} />
+          )}
           <div className="seg">
             <button className={mealsView === 'dinners' ? 'on' : ''} onClick={() => setMealsView('dinners')}>Dinners</button>
             <button className={mealsView === 'breakfasts' ? 'on' : ''} onClick={() => setMealsView('breakfasts')}>
@@ -132,6 +178,7 @@ export default function App() {
               onChangeShop={() => setEditing(true)}
               onClearWeek={clearWeek}
               favouritesOnly={mealsView === 'favourites'}
+              ratings={state.ratings}
             />
           )}
           {mealsView === 'breakfasts' && (

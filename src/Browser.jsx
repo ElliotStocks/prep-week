@@ -55,7 +55,7 @@ const FILTERS = [
 ];
 
 export default function Browser({ profile, picked, setPicked, customPicks, setCustomPicks, breakfasts, pantryOwned,
-  listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek, favouritesOnly }) {
+  listTweaks, extras, favourites, setFavourites, onShowList, onChangeShop, onClearWeek, favouritesOnly, ratings }) {
   const [shown, setShown] = useState([]);
   const [poolTotal, setPoolTotal] = useState(0);
   const [idea, setIdea] = useState('');
@@ -68,7 +68,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
     const preds = FILTERS.filter(([key]) => activeFilters.includes(key)).map(f => f[2]);
     const filterFn = preds.length ? r => preds.every(p => p(r)) : null;
     const { recipes, cursor, total } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn,
-      budgetCapOf(profile) != null);
+      budgetCapOf(profile) != null, ratings);
     cursorRef.current = cursor;
     setPoolTotal(total);
     setShown(prev => {
@@ -76,7 +76,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
       const seen = new Set(prev.map(r => r.id));
       return [...prev, ...recipes.filter(r => !seen.has(r.id))];
     });
-  }, [profile, activeFilters]);
+  }, [profile, activeFilters, ratings]);
 
   useEffect(() => { showMore(true); }, [showMore]);
 

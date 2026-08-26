@@ -29,6 +29,8 @@ export const defaultState = () => ({
   breakfasts: [],   // breakfast ids
   pantryOwned: [],  // pantry items the kitchen already has
   favourites: [],   // dish ids the user hearts — float to the top of the browser
+  ratings: {},      // dishId -> {score: 1|-1, ratedAt} from the weekly "how was it?"
+  ratingPromptedAt: null, // when we last showed (or armed) the weekly rating card
   // per-week shopping list edits: lines removed, pack counts reduced, products swapped
   listTweaks: { skipped: [], packs: {}, swaps: {} },
   extras: [],       // snacks & essentials added to this week's list: {name, packs}

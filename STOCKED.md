@@ -99,12 +99,15 @@ highest-value small fix in the list — do it early.
 
 ## Phase 5 — Rate your meals
 
-- [ ] Once a week, prompt for ratings of the meals actually cooked (simple — thumbs or
-      1–5, one tap each, skippable). Do **not** nag: once per week, dismissible.
-- [ ] Store as `state.ratings` — `{dishId: {score, ratedAt}}`, with migration.
-- [ ] Feed ratings into the browser's ordering: highly rated float up, poorly rated
-      sink (never hard-hidden — people change their minds).
-- [ ] Keep it local. No accounts, no upload — same as everything else.
+- [x] Once a week, prompt for ratings of the meals actually cooked — thumbs card on
+      the Meals page, one tap each, Skip link. Timer arms when a week first has
+      picks, fires 7 days later, resets on skip or completion. No nagging.
+- [x] Store as `state.ratings` — `{dishId: {score: 1|-1, ratedAt}}`, with migration
+      (plus state.ratingPromptedAt for the weekly timer).
+- [x] Feed ratings into the browser's ordering — leading soft signal ahead of likes/
+      quick/cheap. Verified: 👍 dish becomes first suggestion, 👎 dish drops out of
+      the opening 24 but stays reachable.
+- [x] Keep it local. All in localStorage, card says "Stays on this device".
 
 ## Phase 6 — 500+ recipes
 
@@ -207,6 +210,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 5 COMPLETE. Weekly thumbs ratings live end-to-end: card,
+  storage, ordering feedback (verified both directions in browser). Build green,
+  pushed. Phases 0-5 all done in one day; next is the 500-recipe grind.
 - 2026-08-26 · Phase 4 COMPLETE. Favourites section live as a Meals segment with
   count badge and empty state; verified in browser both populated and empty. Build
   green, pushed.

@@ -193,3 +193,15 @@ button.add-btn { padding: 8px 22px; font-weight: 600; }
 /* favourites empty state */
 .empty-state { text-align: center; padding: 48px 16px; }
 .empty-state .big-emoji { font-size: 3rem; margin-bottom: 8px; }
+
+/* weekly rating card */
+.rating-card { background: #fff; border: 1px solid #e4e0d5; border-radius: 12px;
+  padding: 14px 16px; margin-bottom: 14px; }
+.rating-head { display: flex; justify-content: space-between; align-items: center; }
+.rating-head .link { background: none; border: none; color: #1d6f5c; cursor: pointer;
+  font-size: 0.9rem; text-decoration: underline; padding: 4px; }
+.rating-row { display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-top: 1px solid #f0ede4; }
+.rating-row .thumb { background: none; border: 1px solid #e4e0d5; border-radius: 8px;
+  font-size: 1.1rem; padding: 4px 10px; margin-left: 6px; cursor: pointer; }
+.rating-row .thumb:hover { background: #f2f7f5; }
