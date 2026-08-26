@@ -19,6 +19,7 @@ export const defaultState = () => ({
     days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], // nights being cooked
     budget: 'none',     // weekly shop budget band (BUDGET_OPTIONS key)
     quickEasy: false,   // bias suggestions toward fast, low-effort dishes
+    equipment: ['oven', 'hob', 'microwave', 'grill', 'blender'], // kitchen kit
     appetite: 1,        // 0 light, 1 standard, 2 hearty
     proteinBoost: false,
     organicPref: false, // prefer organic products where the supermarket has them
@@ -43,6 +44,8 @@ function migrate(s) {
     delete profile.persons;
     delete profile.ndin;
   }
+  // profiles from before the equipment question get the standard kitchen
+  if (!Array.isArray(profile.equipment)) profile.equipment = d.profile.equipment;
   // profiles from before the budget question shop without a limit
   if (!profile.budget) profile.budget = 'none';
   // profiles from before the days question cook every night

@@ -49,9 +49,10 @@ state shape in `src/store.js` (add a migration for every new field).
 - [x] **Quick and easy** — own question ("How much cooking do you fancy?") storing
       profile.quickEasy; engine floats ≤30-min dishes to the front as a bias, never
       a filter. Likes stay the stronger signal.
-- [ ] **Cooking equipment** — icon tiles: oven, hob, air fryer, microwave, slow cooker,
-      grill/griddle, pressure cooker, blender. Default all-on except air fryer / slow
-      cooker / pressure cooker so existing users aren't suddenly shown nothing.
+- [x] **Cooking equipment** — icon tiles: oven, hob, air fryer, microwave, slow cooker,
+      grill/griddle, pressure cooker, blender. Defaults per spec (gadgets unticked);
+      at least one required; profile.equipment with migration. Dish-side filtering
+      is the Phase 2 task.
 - [ ] Update the quiz progress indicator and the "seven quick questions" copy to match
       the real number of questions.
 
@@ -189,6 +190,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 1 equipment question live: 8 tiles, sensible defaults, stored
+  with migration. Verified in browser (toggled air fryer on / microwave off,
+  persisted correctly). Build green, pushed.
 - 2026-08-26 · Phase 1 quick-and-easy live: quiz question + engine bias. Verified in
   browser: preference on → first 12 dishes all ≤30 min; off → natural mix. Build
   green, pushed.

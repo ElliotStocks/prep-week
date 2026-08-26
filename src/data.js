@@ -48,6 +48,21 @@ export const DAY_OPTIONS = [
 ];
 export const ALL_DAYS = DAY_OPTIONS.map(([v]) => v);
 
+// Kitchen kit. Dishes will declare what they need (Phase 2); a dish is only shown
+// when the kitchen has all of it. Defaults assume the common British kitchen —
+// the gadgets people may not own start unticked.
+export const EQUIPMENT_OPTIONS = [
+  ['oven', 'Oven', '🔥'],
+  ['hob', 'Hob', '🍳'],
+  ['microwave', 'Microwave', '📻'],
+  ['grill', 'Grill / griddle', '♨️'],
+  ['blender', 'Blender', '🌀'],
+  ['airfryer', 'Air fryer', '💨'],
+  ['slowcooker', 'Slow cooker', '🍲'],
+  ['pressurecooker', 'Pressure cooker', '⏲️'],
+];
+export const DEFAULT_EQUIPMENT = ['oven', 'hob', 'microwave', 'grill', 'blender'];
+
 // Weekly shopping budget bands. cap is the pounds figure the engine compares the
 // basket estimate against; null means "don't watch it" (£80+ and no-limit differ
 // only in intent, so both stay uncapped until Elliot says otherwise).

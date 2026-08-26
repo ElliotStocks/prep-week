@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS, DAY_OPTIONS, BUDGET_OPTIONS } from './data.js';
+import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS, DAY_OPTIONS, BUDGET_OPTIONS, EQUIPMENT_OPTIONS } from './data.js';
 
 const DIET_ICONS = { none: '🍽️', veggie: '🥦', vegan: '🌱', pesc: '🐟', gf: '🌾', keto: '🥑' };
 const LIKE_ICONS = { chicken: '🍗', beef: '🥩', turkey: '🦃', fish: '🐟', shellfish: '🦐', eggs: '🥚', legumes: '🫘', tofu: '🌱' };
@@ -130,6 +130,26 @@ export default function Quiz({ initial, onDone, onCancel }) {
           </button>
         ))}
       </div>,
+    },
+    {
+      title: 'What’s in the kitchen?',
+      sub: 'Tick everything you’ve got. Recipes that need kit you don’t have will stay out of the way.',
+      valid: (p.equipment ?? []).length > 0,
+      body: <>
+        <div className="tile-grid">
+          {EQUIPMENT_OPTIONS.map(([v, label, icon]) => (
+            <button key={v} type="button" className={'qtile' + ((p.equipment ?? []).includes(v) ? ' on' : '')}
+              onClick={() => {
+                const cur = p.equipment ?? [];
+                setField({ equipment: cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v] });
+              }}>
+              <span className="qtile-icon">{icon}</span>
+              <span>{label}</span>
+            </button>
+          ))}
+        </div>
+        {!(p.equipment ?? []).length && <p className="muted small">Tick at least one — even just a hob opens up plenty.</p>}
+      </>,
     },
     {
       title: 'Any allergies?',
