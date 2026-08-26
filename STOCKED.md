@@ -210,6 +210,10 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 6 done: 240→265. First air-fryer (6) and slow-cooker
+  (5) dishes — the equipment question finally rewards gadget owners. Verified:
+  air-fryer-only kitchen sees them, no oven dishes leak. 25 photos ≈ $0.97. Build
+  green, pushed.
 - 2026-08-26 · Phase 6 Batch 5 done: 215→240. New: smoked mackerel, parsnips, white
   cabbage, apples (fetcher fixes: Ocado mackerel was matching tinned-in-oil, Aldi
   cabbage a veg medley — both corrected). Verified Aldi list end-to-end (mackerel
