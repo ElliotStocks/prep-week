@@ -79,6 +79,17 @@ export function allowedDishes(profile) {
 
 // Small deterministic random generator so the shuffled order is the same every
 // time for the same quiz answers, letting the cursor page through it.
+// Year+week number (e.g. 202635): the browse order reshuffles every Monday,
+// fresh for the week but stable within it, so the page doesn't jump around
+// between visits. Exported for tests.
+export function isoWeek(date = new Date()) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  return d.getUTCFullYear() * 100 + Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+}
+
 function mulberry32(seed) {
   return function () {
     seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
@@ -95,7 +106,7 @@ export function generateRecipes(profile, cursor, count, filterFn, preferCheap) {
   if (filterFn) pool = pool.filter(filterFn);
   if (!pool.length) return { recipes: [], cursor, total: 0 };
   const order = pool.map((_, i) => i);
-  const rand = mulberry32(pool.length * 31 + 7);
+  const rand = mulberry32(isoWeek() * 131 + pool.length * 31 + 7);
   for (let i = order.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [order[i], order[j]] = [order[j], order[i]];

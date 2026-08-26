@@ -79,11 +79,15 @@ state shape in `src/store.js` (add a migration for every new field).
 Elliot's own words: *"I'm picking from the same few options every week."* This is the
 highest-value small fix in the list — do it early.
 
-- [ ] Seed the browser's shuffle on the ISO week number so the opening 24 dishes change
-      every Monday and are stable within a week (`src/Browser.jsx`).
-- [ ] Favourites, current picks and custom ideas stay pinned regardless of rotation.
-- [ ] Sanity-check that a user with heavy filters (vegan + allergies + limited kit)
-      still sees a full set, not four dishes.
+- [x] Seed the browser's shuffle on the ISO week number so the opening 24 dishes change
+      every Monday and are stable within a week (done in engine.js generateRecipes;
+      verified 18/24 of the opening dishes differ next Monday).
+- [x] Favourites, current picks and custom ideas stay pinned regardless of rotation
+      (already structural: pinnedPicked/customRecipes render outside the shuffle,
+      favourites sort on top of whatever is shown).
+- [x] Sanity-check heavy filters: worst realistic corner (vegan + dairy/gluten
+      allergies + hob-only kitchen) sees 8 dishes. Thin but honest — noted as a
+      Phase 6 coverage priority (grow vegan/GF/hob-only dishes first).
 
 ## Phase 4 — Favourites section
 
@@ -120,7 +124,11 @@ equipment and cook time, then generate photos.
 resumable). After each batch, **report the photo cost for that batch to Elliot** —
 he asked to see it accumulate so he can stop any time.
 
-**Coverage to aim for while writing:** keep the spread of formats wide (soups, stews,
+**Coverage to aim for while writing:** PRIORITY FINDING (Aug 2026): vegan +
+gluten-free + hob-only currently yields just 8 dishes — weight early batches
+toward vegan/GF one-pot hob dishes.
+
+**Also:** keep the spread of formats wide (soups, stews,
 traybakes, curries, one-pot rice, noodle bowls, bakes, salads, grills, air-fryer,
 slow-cooker) and keep growing the vegan / keto / low-carb / kid-friendly counts, since
 those are the users most likely to run out of options.
@@ -197,6 +205,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 3 COMPLETE. Weekly rotation live: shuffle seeded on ISO week
+  (202635), browser matches predicted order, 18/24 opening dishes change on Monday,
+  pinning intact. Heavy-filter corner (vegan+GF+hob) = 8 dishes → Phase 6 priority.
 - 2026-08-26 · Phase 2 COMPLETE. Budget engine live: running total vs cap in the
   picks bar, over-budget warning verified in browser (£43.45 of £40, red + note),
   cheap-dish bias when a budget is set. Build green, pushed.
