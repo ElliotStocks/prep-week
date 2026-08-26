@@ -57,8 +57,12 @@ const KETO_MAX_NET_CARB = 15;
 export function allowedDishes(profile) {
   const { diet, allergies, dislikes } = profile;
   const hated = (dislikes || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+  // kitchens without certain kit never see dishes that need it (equipment is a
+  // hard rule like allergies; missing profile.equipment means "assume everything")
+  const kit = Array.isArray(profile.equipment) ? profile.equipment : null;
   return DISHES.map(d => buildDish(d, profile)).filter(r => {
     if (r.allergens.some(a => allergies.includes(a))) return false;
+    if (kit && (r.equipment || []).some(e => !kit.includes(e))) return false;
     if (diet.includes('vegan') && r.dietLevel < 3) return false;
     if (diet.includes('veggie') && r.dietLevel < 2) return false;
     if (diet.includes('pesc') && r.dietLevel < 1) return false;
