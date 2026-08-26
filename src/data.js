@@ -41,6 +41,13 @@ export const SUPERMARKETS_SOON = ['Tesco', 'Sainsbury’s'];
 
 export const APPETITE_LEVELS = [['Lighter', 0.85], ['Standard', 1], ['Hearty', 1.2]];
 
+// The nights someone actually cooks — the week's shape. Keys are stable ids.
+export const DAY_OPTIONS = [
+  ['mon', 'Mon'], ['tue', 'Tue'], ['wed', 'Wed'], ['thu', 'Thu'],
+  ['fri', 'Fri'], ['sat', 'Sat'], ['sun', 'Sun'],
+];
+export const ALL_DAYS = DAY_OPTIONS.map(([v]) => v);
+
 export const LIKE_OPTIONS = [
   ['chicken', 'Chicken'], ['beef', 'Beef'], ['turkey', 'Turkey'], ['lamb', 'Lamb'], ['pork', 'Pork'],
   ['fish', 'Fish'], ['shellfish', 'Prawns & shellfish'], ['eggs', 'Eggs'], ['legumes', 'Beans & lentils'], ['tofu', 'Tofu'],

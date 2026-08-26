@@ -164,7 +164,7 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
           🛒 {market.store}{profile.organicPref ? ' · organic' : ''}
         </button>
         <span>{totalNights
-          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} dinner{totalNights > 1 ? 's' : ''} · est. £{estimate.toFixed(2)}</>
+          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} of {(profile.days ?? []).length || 7} night{((profile.days ?? []).length || 7) !== 1 ? 's' : ''} planned · est. £{estimate.toFixed(2)}</>
           : 'No recipes yet — tap + Add on any meal'}</span>
         {totalNights > 0 && (
           <button className="primary" onClick={onShowList}>Shopping list →</button>

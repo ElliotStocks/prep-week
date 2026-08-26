@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS } from './data.js';
+import { ALLERGY_OPTIONS, DIET_OPTIONS, LIKE_OPTIONS, SUPERMARKETS, SUPERMARKETS_SOON, APPETITE_LEVELS, DAY_OPTIONS } from './data.js';
 
 const DIET_ICONS = { none: '🍽️', veggie: '🥦', vegan: '🌱', pesc: '🐟', gf: '🌾', keto: '🥑' };
 const LIKE_ICONS = { chicken: '🍗', beef: '🥩', turkey: '🦃', fish: '🐟', shellfish: '🦐', eggs: '🥚', legumes: '🫘', tofu: '🌱' };
@@ -89,6 +89,23 @@ export default function Quiz({ initial, onDone, onCancel }) {
       </div>,
     },
     {
+      title: 'Which nights are we cooking?',
+      sub: 'Pick the nights dinner comes from this plan. Batch meals can still cover several of them.',
+      valid: (p.days ?? []).length > 0,
+      body: <>
+        <div className="chips day-row">
+          {DAY_OPTIONS.map(([v, label]) => (
+            <button key={v} type="button" className={'chip' + ((p.days ?? []).includes(v) ? ' on' : '')}
+              onClick={() => {
+                const cur = p.days ?? [];
+                setField({ days: cur.includes(v) ? cur.filter(x => x !== v) : [...cur, v] });
+              }}>{label}</button>
+          ))}
+        </div>
+        {!(p.days ?? []).length && <p className="muted small">Pick at least one night to carry on.</p>}
+      </>,
+    },
+    {
       title: 'Any allergies?',
       sub: 'Answer for everyone eating. These are strict: recipes containing them are removed completely.',
       body: <Chips danger options={ALLERGY_OPTIONS} value={p.allergies} onChange={v => setField({ allergies: v })} />,
@@ -150,11 +167,12 @@ export default function Quiz({ initial, onDone, onCancel }) {
     const household = [`${p.adults ?? 2} adult${(p.adults ?? 2) !== 1 ? 's' : ''}`,
       p.children ? `${p.children} child${p.children !== 1 ? 'ren' : ''}` : null,
       p.infants ? `${p.infants} infant${p.infants !== 1 ? 's' : ''}` : null].filter(Boolean).join(', ');
+    const nights = (p.days ?? []).length;
     return (
       <div className="panel">
         <p className="kicker">All set</p>
         <h2>Let’s find your week</h2>
-        <p className="sub">Meals for {household} · {dietLabel}
+        <p className="sub">Meals for {household} · {nights} night{nights !== 1 ? 's' : ''} a week · {dietLabel}
           {p.allergies.length ? ` · strictly no ${p.allergies.join(', ')}` : ''} · shopping at
           {' '}{SUPERMARKETS.find(([v]) => v === p.supermarket)?.[1]}.
           Every suggestion respects the whole table, and every ingredient is priced.</p>
@@ -178,7 +196,7 @@ export default function Quiz({ initial, onDone, onCancel }) {
         {page === 0 && onCancel
           ? <button onClick={onCancel}>Cancel</button>
           : <button disabled={page === 0} onClick={() => setPage(page - 1)}>Back</button>}
-        <button className="primary" onClick={() => setPage(page + 1)}>
+        <button className="primary" disabled={q.valid === false} onClick={() => setPage(page + 1)}>
           {page === pages.length - 1 ? 'Finish' : 'Next'}
         </button>
       </div>
