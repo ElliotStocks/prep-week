@@ -54,6 +54,9 @@ function Stepper({ label, sub, value, min, onChange }) {
   );
 }
 
+// Keep in step with the pages array below — the welcome screen quotes it.
+export const QUIZ_QUESTION_COUNT = 11;
+
 export default function Quiz({ initial, onDone, onCancel }) {
   const [p, setP] = useState(initial);
   const [page, setPage] = useState(0);

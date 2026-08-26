@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Quiz from './Quiz.jsx';
+import Quiz, { QUIZ_QUESTION_COUNT } from './Quiz.jsx';
 import Browser from './Browser.jsx';
 import Breakfasts from './Breakfasts.jsx';
 import Stock from './Stock.jsx';
@@ -41,7 +41,7 @@ export default function App() {
           <p className="sub">Real recipes with real supermarket prices. Pick your dinners, get the whole
             week’s shopping list — priced to the penny at your supermarket. No account needed.</p>
           <button className="primary big" onClick={() => setWelcomed(true)}>Get started</button>
-          <p className="muted small">Seven quick questions, then straight to the food.</p>
+          <p className="muted small">{['One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'][QUIZ_QUESTION_COUNT - 1] ?? QUIZ_QUESTION_COUNT} quick questions, then straight to the food.</p>
         </div>
       </div>
     );

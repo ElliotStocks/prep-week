@@ -53,8 +53,9 @@ state shape in `src/store.js` (add a migration for every new field).
       grill/griddle, pressure cooker, blender. Defaults per spec (gadgets unticked);
       at least one required; profile.equipment with migration. Dish-side filtering
       is the Phase 2 task.
-- [ ] Update the quiz progress indicator and the "seven quick questions" copy to match
-      the real number of questions.
+- [x] Update the quiz progress indicator and the "seven quick questions" copy to match
+      the real number of questions (progress was already dynamic; welcome copy now
+      reads QUIZ_QUESTION_COUNT, sanity-checked against the pages array).
 
 ## Phase 2 — Engine: equipment + budget
 
@@ -190,6 +191,8 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 1 COMPLETE. Welcome copy counts the real questions (eleven).
+  Build green, pushed.
 - 2026-08-26 · Phase 1 equipment question live: 8 tiles, sensible defaults, stored
   with migration. Verified in browser (toggled air fryer on / microwave off,
   persisted correctly). Build green, pushed.
