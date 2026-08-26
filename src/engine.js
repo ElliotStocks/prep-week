@@ -1,4 +1,4 @@
-import { BREAKFASTS, APPETITE_LEVELS } from './data.js';
+import { BREAKFASTS, APPETITE_LEVELS, BUDGET_OPTIONS } from './data.js';
 import { DISHES, NUTRITION } from './dishes.js';
 import { marketFor, SUPERMARKET_DATA, productsOf, linesCost } from './supermarkets.js';
 
@@ -54,6 +54,10 @@ export function buildDish(d, profile) {
 // keto counts net carbs: total minus fibre
 const KETO_MAX_NET_CARB = 15;
 
+// The pounds cap for the profile's budget band, or null when unlimited/£80+.
+export const budgetCapOf = profile =>
+  BUDGET_OPTIONS.find(([v]) => v === (profile?.budget ?? 'none'))?.[2] ?? null;
+
 export function allowedDishes(profile) {
   const { diet, allergies, dislikes } = profile;
   const hated = (dislikes || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
@@ -86,7 +90,7 @@ function mulberry32(seed) {
 
 // Pages through a stable shuffle of every allowed dish. Liked proteins float to
 // the front (a preference, not a filter — dislikes and allergies do the excluding).
-export function generateRecipes(profile, cursor, count, filterFn) {
+export function generateRecipes(profile, cursor, count, filterFn, preferCheap) {
   let pool = allowedDishes(profile);
   if (filterFn) pool = pool.filter(filterFn);
   if (!pool.length) return { recipes: [], cursor, total: 0 };
@@ -100,8 +104,10 @@ export function generateRecipes(profile, cursor, count, filterFn) {
   const liked = i => (likes.length && pool[i].tags.some(t => likes.includes(t)) ? 0 : 1);
   // "quick & easy" floats short recipes forward — a bias, never a filter
   const quick = i => (profile.quickEasy && pool[i].mins <= 30 ? 0 : 1);
-  if (likes.length || profile.quickEasy) {
-    order.sort((a, b) => (liked(a) - liked(b)) || (quick(a) - quick(b)));
+  // near or over budget, cheaper dishes surface first — same principle
+  const cheap = i => (preferCheap && pool[i].costPerServing > 0 && pool[i].costPerServing <= 2.5 ? 0 : 1);
+  if (likes.length || profile.quickEasy || preferCheap) {
+    order.sort((a, b) => (liked(a) - liked(b)) || (quick(a) - quick(b)) || (cheap(a) - cheap(b)));
   }
   const out = [];
   for (let n = 0; n < Math.min(count, pool.length); n++) {

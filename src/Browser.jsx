@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal, householdLabel } from './engine.js';
+import { generateRecipes, recipeFromId, recipeFromText, methodSteps, estimatedTotal, householdLabel, budgetCapOf } from './engine.js';
 import { DAILY_REF } from './data.js';
 import { marketFor } from './supermarkets.js';
 
@@ -67,7 +67,8 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
   const showMore = useCallback((reset = false) => {
     const preds = FILTERS.filter(([key]) => activeFilters.includes(key)).map(f => f[2]);
     const filterFn = preds.length ? r => preds.every(p => p(r)) : null;
-    const { recipes, cursor, total } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn);
+    const { recipes, cursor, total } = generateRecipes(profile, reset ? 0 : cursorRef.current, PAGE, filterFn,
+      budgetCapOf(profile) != null);
     cursorRef.current = cursor;
     setPoolTotal(total);
     setShown(prev => {
@@ -118,6 +119,9 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
 
   const totalNights = picked.reduce((s, p) => s + p.qty, 0);
   const estimate = totalNights ? estimatedTotal(profile, picked, breakfasts || [], pantryOwned || [], null, listTweaks, extras) : 0;
+  const budgetCap = budgetCapOf(profile);
+  const overBudget = budgetCap != null && estimate > budgetCap;
+  const nearBudget = budgetCap != null && !overBudget && estimate > budgetCap * 0.8;
   const market = marketFor(profile);
 
   const card = (r, custom) => {
@@ -164,12 +168,16 @@ export default function Browser({ profile, picked, setPicked, customPicks, setCu
           🛒 {market.store}{profile.organicPref ? ' · organic' : ''}
         </button>
         <span>{totalNights
-          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} of {(profile.days ?? []).length || 7} night{((profile.days ?? []).length || 7) !== 1 ? 's' : ''} planned · est. £{estimate.toFixed(2)}</>
+          ? <>{picked.length} recipe{picked.length > 1 ? 's' : ''} · {totalNights} of {(profile.days ?? []).length || 7} night{((profile.days ?? []).length || 7) !== 1 ? 's' : ''} planned · <span className={overBudget ? 'over-budget' : nearBudget ? 'near-budget' : ''}>est. £{estimate.toFixed(2)}{budgetCap != null ? ` of £${budgetCap}` : ''}</span></>
           : 'No recipes yet — tap + Add on any meal'}</span>
         {totalNights > 0 && (
           <button className="primary" onClick={onShowList}>Shopping list →</button>
         )}
       </div>
+      {overBudget && (
+        <p className="budget-note">Over your £{budgetCap} budget — swap a dish for a cheaper one, buy fewer
+          packs on the shopping list, or raise the budget in Settings. Your call, nothing is blocked.</p>
+      )}
       <div className="idea-row">
         <input type="text" className="text-input" value={idea}
           placeholder="Type anything… e.g. slow-cooked beef with sweet potato"

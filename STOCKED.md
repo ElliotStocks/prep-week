@@ -69,9 +69,10 @@ state shape in `src/store.js` (add a migration for every new field).
       steps count carries no signal. Cook time (mins) IS the effort measure and the
       quick-easy bias already uses it. Revisit only if future dishes vary widely in
       step count.
-- [ ] Budget in `src/engine.js`: show the running weekly total against the chosen
-      budget, warn when a pick would break it, and bias suggestions to fit. Never
-      hard-block a pick — tell the truth, let the user decide.
+- [x] Budget in `src/engine.js`: picks bar shows "est. £X of £Y" (amber >80%, red
+      over), a friendly note appears when over with the three honest outs (swap /
+      fewer packs / raise it), and with any budget set cheap dishes (≤£2.50/serving)
+      float forward as a third sort key. Nothing is ever blocked.
 
 ## Phase 3 — Weekly rotation of shown dishes
 
@@ -196,6 +197,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 2 COMPLETE. Budget engine live: running total vs cap in the
+  picks bar, over-budget warning verified in browser (£43.45 of £40, red + note),
+  cheap-dish bias when a budget is set. Build green, pushed.
 - 2026-08-26 · Phase 2 effort checkbox resolved by measurement: steps count adds no
   signal over mins (113/115 dishes have 4 steps). No code change needed.
 - 2026-08-26 · Phase 2 equipment filtering live: 115 dishes tagged, engine hides
