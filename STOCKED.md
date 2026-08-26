@@ -210,6 +210,10 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 7 done: 265→290, existing ingredients. Another
+  air-fryer + slow-cooker dish, chilli prawn spaghetti, veggie chilli mac, lamb
+  hotpot, Spanish tortilla, caramelised onion pasta. 25 photos ≈ $0.97. Build
+  green, pushed.
 - 2026-08-26 · Phase 6 Batch 6 done: 240→265. First air-fryer (6) and slow-cooker
   (5) dishes — the equipment question finally rewards gadget owners. Verified:
   air-fryer-only kitchen sees them, no oven dishes leak. 25 photos ≈ $0.97. Build
