@@ -210,6 +210,11 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 3 done: 165→190. New ingredients: pak choi, mangetout,
+  cashews (nuts allergen — verified a nut-allergic user never sees cashew dishes),
+  pearl barley (gluten). Aldi range gaps: mangetout + pearl barley join the honest
+  fallback list (pak choi £1.29, cashews £1.69 priced fine). 25 photos ≈ $0.97.
+  Build green, pushed.
 - 2026-08-26 · Phase 6 Batch 2 done: 140→165. First new ingredients (butternut
   squash, paneer, butter beans, bacon lardons) added to NUTRITION + both
   dictionaries; fetchers re-run with rule fixes (Ocado paneer was matching a ready

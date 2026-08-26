@@ -1019,19 +1019,19 @@ export const OCADO_PRODUCTS = {
     "packGrams": 1000,
     "alts": [
       {
-        "title": "M&S Greek Style Live Yogurt",
-        "url": "https://www.ocado.com/products/m-s-greek-style-live-yogurt/506114011",
-        "size": "500g",
-        "perUnit": "£2.30 per kg",
-        "price": 1.15,
-        "packGrams": 500
-      },
-      {
         "title": "M&S Greek Style Live Yogurts",
         "url": "https://www.ocado.com/products/m-s-greek-style-live-yogurts/519532011",
         "size": "4 x 125g",
         "perUnit": "£3.60 per kg",
         "price": 1.8,
+        "packGrams": 500
+      },
+      {
+        "title": "Ocado Greek Style Natural Yoghurt",
+        "url": "https://www.ocado.com/products/ocado-greek-style-natural-yoghurt/585286011",
+        "size": "500g",
+        "perUnit": "£2.30 per kg",
+        "price": 1.15,
         "packGrams": 500
       }
     ]
@@ -1892,6 +1892,102 @@ export const OCADO_PRODUCTS = {
         "perUnit": "£9.00 per kg",
         "price": 1.8,
         "packGrams": 200
+      }
+    ]
+  },
+  "pak choi": {
+    "title": "M&S Pak Choi",
+    "url": "https://www.ocado.com/products/m-s-pak-choi/530518011",
+    "size": "250g",
+    "perUnit": "£7.20 per kg",
+    "price": 1.8,
+    "packGrams": 250,
+    "alts": [
+      {
+        "title": "M&S Baby Pak Choi",
+        "url": "https://www.ocado.com/products/m-s-baby-pak-choi/518645011",
+        "size": "90g",
+        "perUnit": "£25.56 per kg",
+        "price": 2.3,
+        "packGrams": 90
+      },
+      {
+        "title": "Ocado Pak Choi",
+        "url": "https://www.ocado.com/products/ocado-pak-choi/362001011",
+        "size": "250g",
+        "perUnit": "£6.00 per kg",
+        "price": 1.5,
+        "packGrams": 250
+      }
+    ]
+  },
+  "mangetout": {
+    "title": "M&S Mangetout",
+    "url": "https://www.ocado.com/products/m-s-mangetout/518472011",
+    "size": "260g",
+    "perUnit": "£8.85 per kg",
+    "price": 2.3,
+    "packGrams": 260,
+    "alts": [
+      {
+        "title": "M&S Sweet Duo Mangetout",
+        "url": "https://www.ocado.com/products/m-s-sweet-duo-mangetout/682277011",
+        "size": "180g",
+        "perUnit": "£12.78 per kg",
+        "price": 2.3,
+        "packGrams": 180
+      },
+      {
+        "title": "M&S Butternut Squash, Tenderstem Broccoli & Mangetout",
+        "url": "https://www.ocado.com/products/m-s-butternut-squash-tenderstem-broccoli-mangetout/518569011",
+        "size": "200g",
+        "perUnit": "£13.75 per kg",
+        "price": 2.75,
+        "packGrams": 200
+      }
+    ]
+  },
+  "cashews": {
+    "title": "M&S Cashews",
+    "url": "https://www.ocado.com/products/m-s-cashews/672936011",
+    "size": "750g",
+    "perUnit": "£16.00 per kg",
+    "price": 12,
+    "packGrams": 750,
+    "alts": [
+      {
+        "title": "M&S Cashews",
+        "url": "https://www.ocado.com/products/m-s-cashews/671516011",
+        "size": "400g",
+        "perUnit": "£17.50 per kg",
+        "price": 7,
+        "packGrams": 400
+      },
+      {
+        "title": "M&S Cashew Nuts",
+        "url": "https://www.ocado.com/products/m-s-cashew-nuts/557883011",
+        "size": "100g",
+        "perUnit": "£20.00 per kg",
+        "price": 2,
+        "packGrams": 100
+      }
+    ]
+  },
+  "pearl barley": {
+    "title": "M&S Pearl Barley",
+    "url": "https://www.ocado.com/products/m-s-pearl-barley/528657011",
+    "size": "500g",
+    "perUnit": "£2.50 per kg",
+    "price": 1.25,
+    "packGrams": 1250,
+    "alts": [
+      {
+        "title": "Daylesford Organic Pearl Barley",
+        "url": "https://www.ocado.com/products/daylesford-organic-pearl-barley/315974011",
+        "size": "500g",
+        "perUnit": "£6.00 per kg",
+        "price": 3,
+        "packGrams": 1250
       }
     ]
   },
@@ -4141,6 +4237,22 @@ export const OCADO_ORGANIC = {
     "perUnit": "£2.00",
     "price": 2,
     "packGrams": null
+  },
+  "cashews": {
+    "title": "Crazy Jack Organic Cashew Nuts",
+    "url": "https://www.ocado.com/products/crazy-jack-organic-cashew-nuts/86337011",
+    "size": "100g",
+    "perUnit": "£28.50 per kg",
+    "price": 2.85,
+    "packGrams": 100
+  },
+  "pearl barley": {
+    "title": "Daylesford Organic Pearl Barley",
+    "url": "https://www.ocado.com/products/daylesford-organic-pearl-barley/315974011",
+    "size": "500g",
+    "perUnit": "£6.00 per kg",
+    "price": 3,
+    "packGrams": 1250
   },
   "carrots": {
     "title": "Ocado Organic Carrots",

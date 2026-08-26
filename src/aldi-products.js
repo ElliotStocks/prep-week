@@ -1405,6 +1405,41 @@ export const ALDI_PRODUCTS = {
       }
     ]
   },
+  "pak choi": {
+    "title": "NATURE&#39;S PICK Pak Choi",
+    "url": "https://www.aldi.co.uk/product/nature-s-pick-pak-choi-000000000000509239",
+    "size": "0.25 KG",
+    "perUnit": "£5.16/1 KG",
+    "price": 1.29,
+    "packGrams": 250,
+    "alts": []
+  },
+  "cashews": {
+    "title": "THE FOODIE MARKET Cashew Nuts",
+    "url": "https://www.aldi.co.uk/product/the-foodie-market-cashew-nuts-000000000000384094",
+    "size": "0.2 KG",
+    "perUnit": "£8.45/1 KG",
+    "price": 1.69,
+    "packGrams": 200,
+    "alts": [
+      {
+        "title": "SNACKRITE Smoky BBQ Almonds &amp; Cashews",
+        "url": "https://www.aldi.co.uk/product/snackrite-smoky-bbq-almonds-cashews-000000000545682001",
+        "size": "0.15 KG",
+        "perUnit": "£10.60/1 KG",
+        "price": 1.59,
+        "packGrams": 150
+      },
+      {
+        "title": "SNACKRITE Mighty Yeast Extract Almonds &amp; Cashews",
+        "url": "https://www.aldi.co.uk/product/snackrite-mighty-yeast-extract-almonds-cashews-000000000545682003",
+        "size": "0.15 KG",
+        "perUnit": "£10.60/1 KG",
+        "price": 1.59,
+        "packGrams": 150
+      }
+    ]
+  },
   "cauliflower": {
     "title": "NATURE&#39;S PICK British Cauliflower",
     "url": "https://www.aldi.co.uk/product/nature-s-pick-british-cauliflower-000000000000334794",
