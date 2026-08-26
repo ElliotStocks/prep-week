@@ -64,8 +64,11 @@ state shape in `src/store.js` (add a migration for every new field).
       correctly don't count as requirements). allowedDishes filters on it as a hard
       rule; profiles without the field see everything. Split: 102 hob, 34 oven,
       1 blender.
-- [ ] Add an `effort` signal for "quick and easy" (cook time already exists — check
-      whether steps count is needed too).
+- [x] Add an `effort` signal for "quick and easy" — CHECKED, resolved without code:
+      113/115 dishes have exactly 4 method steps (correlation mins~steps = 0.06), so
+      steps count carries no signal. Cook time (mins) IS the effort measure and the
+      quick-easy bias already uses it. Revisit only if future dishes vary widely in
+      step count.
 - [ ] Budget in `src/engine.js`: show the running weekly total against the chosen
       budget, warn when a pick would break it, and bias suggestions to fit. Never
       hard-block a pick — tell the truth, let the user decide.
@@ -193,6 +196,8 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 2 effort checkbox resolved by measurement: steps count adds no
+  signal over mins (113/115 dishes have 4 steps). No code change needed.
 - 2026-08-26 · Phase 2 equipment filtering live: 115 dishes tagged, engine hides
   dishes needing kit you lack. Verified: no-oven kitchen sees exactly 81 dishes,
   zero traybakes/roasts/pies in the browser. Build green, pushed.
