@@ -93,9 +93,11 @@ export function generateRecipes(profile, cursor, count, filterFn) {
     [order[i], order[j]] = [order[j], order[i]];
   }
   const likes = profile.likes || [];
-  if (likes.length) {
-    const liked = i => (pool[i].tags.some(t => likes.includes(t)) ? 0 : 1);
-    order.sort((a, b) => liked(a) - liked(b));
+  const liked = i => (likes.length && pool[i].tags.some(t => likes.includes(t)) ? 0 : 1);
+  // "quick & easy" floats short recipes forward — a bias, never a filter
+  const quick = i => (profile.quickEasy && pool[i].mins <= 30 ? 0 : 1);
+  if (likes.length || profile.quickEasy) {
+    order.sort((a, b) => (liked(a) - liked(b)) || (quick(a) - quick(b)));
   }
   const out = [];
   for (let n = 0; n < Math.min(count, pool.length); n++) {

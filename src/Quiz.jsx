@@ -119,6 +119,19 @@ export default function Quiz({ initial, onDone, onCancel }) {
       </div>,
     },
     {
+      title: 'How much cooking do you fancy?',
+      sub: 'Quick & easy floats 30-minute meals to the front. Everything stays available either way.',
+      body: <div className="tile-grid">
+        {[[true, '⚡', 'Quick & easy please'], [false, '🧑‍🍳', 'Happy to cook']].map(([v, icon, label]) => (
+          <button key={label} type="button" className={'qtile' + ((p.quickEasy ?? false) === v ? ' on' : '')}
+            onClick={() => setField({ quickEasy: v })}>
+            <span className="qtile-icon">{icon}</span>
+            <span>{label}</span>
+          </button>
+        ))}
+      </div>,
+    },
+    {
       title: 'Any allergies?',
       sub: 'Answer for everyone eating. These are strict: recipes containing them are removed completely.',
       body: <Chips danger options={ALLERGY_OPTIONS} value={p.allergies} onChange={v => setField({ allergies: v })} />,

@@ -46,8 +46,9 @@ state shape in `src/store.js` (add a migration for every new field).
 - [x] **Budget** — tiles (under £40 / £40–60 / £60–80 / £80+ / no limit), after the
       nights question. profile.budget (band key) with caps in data.js BUDGET_OPTIONS;
       old saves migrate to no-limit. Engine wiring is Phase 2.
-- [ ] **Quick and easy** — a preference, not just a browse filter. Should bias the
-      shown dishes toward short cook times and few steps.
+- [x] **Quick and easy** — own question ("How much cooking do you fancy?") storing
+      profile.quickEasy; engine floats ≤30-min dishes to the front as a bias, never
+      a filter. Likes stay the stronger signal.
 - [ ] **Cooking equipment** — icon tiles: oven, hob, air fryer, microwave, slow cooker,
       grill/griddle, pressure cooker, blender. Default all-on except air fryer / slow
       cooker / pressure cooker so existing users aren't suddenly shown nothing.
@@ -188,6 +189,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 1 quick-and-easy live: quiz question + engine bias. Verified in
+  browser: preference on → first 12 dishes all ≤30 min; off → natural mix. Build
+  green, pushed.
 - 2026-08-26 · Phase 1 budget question live: five bands incl. no-limit, stored as
   profile.budget with migration; summary line shows the band. Verified end-to-end in
   the browser (u60 persisted to localStorage). Build green, pushed.

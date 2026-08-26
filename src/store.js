@@ -18,6 +18,7 @@ export const defaultState = () => ({
     dislikes: '',
     days: ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'], // nights being cooked
     budget: 'none',     // weekly shop budget band (BUDGET_OPTIONS key)
+    quickEasy: false,   // bias suggestions toward fast, low-effort dishes
     appetite: 1,        // 0 light, 1 standard, 2 hearty
     proteinBoost: false,
     organicPref: false, // prefer organic products where the supermarket has them
