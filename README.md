@@ -1,4 +1,4 @@
-# Prep Week
+# Stocked
 
 A weekly meal planner anyone can use. A short food-only quiz (supermarket, people,
 allergies, dietary requirements including keto, likes, dislikes, appetite) leads

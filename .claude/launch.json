@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "prep-week",
+      "name": "stocked",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "cwd": "/Users/elliotstocks/Desktop/meal-prep-app",

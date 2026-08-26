@@ -30,7 +30,7 @@ export default function App() {
   if (!state.onboarded && !welcomed) {
     return (
       <div className="shell">
-        <header className="app-header"><h1>Prep Week</h1></header>
+        <header className="app-header"><h1>Stocked</h1></header>
         <div className="welcome">
           <div className="welcome-hero">
             <img src={`${import.meta.env.BASE_URL}photos/chicken-shawarma-bowls.jpg`} alt="" />
@@ -50,7 +50,7 @@ export default function App() {
   if (!state.onboarded || editing) {
     return (
       <div className="shell">
-        <header className="app-header"><h1>Prep Week</h1></header>
+        <header className="app-header"><h1>Stocked</h1></header>
         <Quiz
           initial={state.profile}
           onCancel={editing ? () => setEditing(false) : undefined}
@@ -77,7 +77,7 @@ export default function App() {
   return (
     <div className="shell">
       <header className="app-header">
-        <h1>Prep Week</h1>
+        <h1>Stocked</h1>
         <nav>
           {[['meals', 'Meals'], ['stock', 'Shopping list'], ['cook', 'Cooking']].map(([id, label]) => (
             <button key={id} className={tab === id ? 'tab on' : 'tab'} onClick={() => setTab(id)}>{label}</button>

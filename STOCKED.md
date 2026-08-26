@@ -25,11 +25,12 @@ Rules for every iteration:
 
 The app is called **Stocked** now (was Prep Week).
 
-- [ ] Rename in the UI: `src/App.jsx` header, `index.html` title, welcome copy
-- [ ] `public/manifest.webmanifest` — name, short_name
-- [ ] `public/sw.js` — cache name (bump so old caches clear)
-- [ ] `README.md` and `CLAUDE.md` — title and all "Prep Week" references
-- [ ] `src/store.js` — key `mealprep-state-v1` → `stocked-state-v1`, **reading the old
+- [x] Rename in the UI: `src/App.jsx` header, `index.html` title, welcome copy
+- [x] `public/manifest.webmanifest` — name, short_name
+- [x] `public/sw.js` — cache name (bumped to stocked-v3 so old caches clear)
+- [x] `README.md` and `CLAUDE.md` — title and all "Prep Week" references (live-URL
+      mentions still say prep-week — that IS the address until the repo moves)
+- [x] `src/store.js` — key `mealprep-state-v1` → `stocked-state-v1`, **reading the old
       key once and migrating it** so nobody (including Elliot) loses their saved week
 - [ ] Decide + do the repo/URL move — see "Blocked" below before touching this
 
@@ -185,4 +186,6 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
-- (nothing yet)
+- 2026-08-26 · Phase 0 rename done (UI, manifest, SW cache bump, docs, localStorage
+  migration verified in browser with a seeded old-key save). Repo/URL move still
+  blocked on Elliot. Build green. Pushed live. No photo spend.

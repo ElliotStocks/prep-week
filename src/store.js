@@ -1,4 +1,9 @@
-const KEY = 'mealprep-state-v1';
+const KEY = 'stocked-state-v1';
+
+// Saves written before the app was renamed from Prep Week to Stocked. Read once, so
+// nobody loses the week they had already planned. Left in place rather than deleted:
+// harmless, and it means an older build still finds its data.
+const LEGACY_KEYS = ['mealprep-state-v1'];
 
 export const defaultState = () => ({
   onboarded: false,
@@ -45,7 +50,8 @@ function migrate(s) {
 
 export function loadState() {
   try {
-    const raw = localStorage.getItem(KEY);
+    const raw = localStorage.getItem(KEY)
+      ?? LEGACY_KEYS.map(k => localStorage.getItem(k)).find(Boolean);
     if (!raw) return defaultState();
     return migrate(JSON.parse(raw));
   } catch {

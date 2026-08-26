@@ -1,6 +1,6 @@
-# Prep Week — project instructions
+# Stocked — project instructions
 
-Personal meal-prep and recipe web app for Elliot, now aimed at becoming a consumer
+Stocked (renamed from Prep Week, Aug 2026): personal meal-prep and recipe web app for Elliot, now aimed at becoming a consumer
 product. This is a personal project, completely separate from his Plexus Partners
 recruitment work — never touch `~/Desktop/Plexus-tools` from sessions in this project.
 
@@ -95,7 +95,8 @@ real supermarket products with prices. All data in localStorage, no accounts.
 
 ## Live deployment (shipped July 2026)
 
-Public repo `ElliotStocks/prep-week`, hosted on GitHub Pages at
+Public repo `ElliotStocks/prep-week` (repo name unchanged pending Elliot's call on
+the URL move — see STOCKED.md "Blocked"), hosted on GitHub Pages at
 https://elliotstocks.github.io/prep-week/ — installable web app (manifest + service
 worker). Pushing to main auto-deploys; a GitHub Action also refreshes all Ocado
 prices nightly at 03:30 UTC and republishes. Photos are generated locally only
@@ -140,11 +141,11 @@ pushing when dishes are added.
    third-party origins in real browsers — the earlier "blank iframe" was an artifact
    of the preview-pane browser (see memory: browser-testing-quirks); verified working
    in Elliot's Chrome + incognito with Pepesto's own demo.html. So Pepesto's cart-
-   review UI CAN render inside Prep Week on desktop web; the flow still ends in the
+   review UI CAN render inside Stocked on desktop web; the flow still ends in the
    phone QR hand-off unless we drive /session + /checkout ourselves. They advise
    checkout automation only works reliably on the end user's device (= endorses our
    extension plan) and suggest running their engine inside one's OWN mobile app —
-   a real future option for a Prep Week app. Branding of hosted flow: not available,
+   a real future option for a Stocked app. Branding of hosted flow: not available,
    open to co-developing. Text-input compose speedup promised in 2-3 weeks.
 4. **AI recipes:** wire the type-anything box to live Claude generation for dishes
    outside the library.

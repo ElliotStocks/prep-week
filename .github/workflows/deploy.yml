@@ -40,7 +40,7 @@ jobs:
           npm run ocado || echo "::warning::Ocado refresh failed (likely bot-blocked) — keeping existing snapshot"
           npm run aldi || echo "::warning::Aldi refresh failed — keeping existing snapshot"
           if ! git diff --quiet src/ocado-products.js src/aldi-products.js; then
-            git config user.name "prep-week bot"
+            git config user.name "stocked bot"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add src/ocado-products.js src/aldi-products.js
             git commit -m "Nightly supermarket price refresh"

@@ -1,4 +1,4 @@
-// Pilot: send a real Prep Week shopping list through Pepesto's product matching
+// Pilot: send a real Stocked shopping list through Pepesto's product matching
 // and create a live Tesco basket session. Costs ~€1.24 per run (/products €0.04 +
 // /session €1.20) — run deliberately, not casually. Key lives in ~/.pepesto-key.json.
 // Run with: node scripts/pepesto-pilot.mjs

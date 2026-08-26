@@ -1,7 +1,7 @@
-// Prep Week service worker: cache-first for photos and built assets (fingerprinted
+// Stocked service worker: cache-first for photos and built assets (fingerprinted
 // filenames make stale caches impossible), network-first for the app shell so
 // updates arrive on next load. Bump CACHE to force a clean slate.
-const CACHE = 'prep-week-v2';
+const CACHE = 'stocked-v3';
 
 self.addEventListener('install', () => self.skipWaiting());
 
