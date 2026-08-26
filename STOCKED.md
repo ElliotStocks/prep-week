@@ -210,6 +210,9 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-26 · Phase 6 Batch 4 done: 190→215, existing ingredients only. Keto pool
+  →22 (verified in browser), vegan total →44. Kid-friendly and low-carb weighted.
+  25 photos ≈ $0.97. Build green, pushed.
 - 2026-08-26 · Phase 6 Batch 3 done: 165→190. New ingredients: pak choi, mangetout,
   cashews (nuts allergen — verified a nut-allergic user never sees cashew dishes),
   pearl barley (gluten). Aldi range gaps: mangetout + pearl barley join the honest
