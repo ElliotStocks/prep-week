@@ -118,8 +118,8 @@ permutations), add any new ingredients to the `NUTRITION` table with real CoFID-
 per-100g values, add those ingredients to **every** live supermarket dictionary, tag
 equipment and cook time, then generate photos.
 
-- [x] Batch 1 (→140) · [ ] Batch 2 (→165) · [ ] Batch 3 (→190) · [ ] Batch 4 (→215)
-- [x] Batch 5 (→240) · [ ] Batch 6 (→265) · [ ] Batch 7 (→290) · [ ] Batch 8 (→315)
+- [x] Batch 1 (→140) · [x] Batch 2 (→165) · [x] Batch 3 (→190) · [x] Batch 4 (→215)
+- [x] Batch 5 (→240) · [x] Batch 6 (→265) · [x] Batch 7 (→290) · [ ] Batch 8 (→315)
 - [ ] Batch 9 (→340) · [ ] Batch 10 (→365) · [ ] Batch 11 (→390) · [ ] Batch 12 (→415)
 - [ ] Batch 13 (→440) · [ ] Batch 14 (→465) · [ ] Batch 15 (→490) · [ ] Batch 16 (→515)
 - [ ] Split `dishes.js` once it gets unwieldy (it's already 115KB at 115 dishes — at
