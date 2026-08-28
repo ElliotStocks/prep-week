@@ -184,6 +184,15 @@ the registry entry live so it's selectable in the quiz.
 
 Add to this list rather than guessing. Elliot answers these when he's back.
 
+- **Gemini credits depleted (27 Aug 2026) — recipe batches paused.** The photo API
+  now returns "Your prepayment credits are depleted" (RESOURCE_EXHAUSTED). Batch 8
+  (25 dishes, 290→315) is written, validated and build-green but sits UNCOMMITTED in
+  the working tree because its photos can't be generated. ~£4.55 of photos were
+  generated before the tank ran dry. **Elliot: top up at https://ai.studio/projects
+  (billing), or say "ship batch 8 without photos" and the batch goes live with
+  placeholder tiles until credits return.** Meanwhile the loop continues with
+  Phase 7 (Sainsbury's) which needs no photos — batches 9-16 wait.
+
 - **Repo and URL rename.** Renaming `prep-week` → `stocked` on GitHub changes the live
   address to `elliotstocks.github.io/stocked/`. GitHub redirects the old URL, but the
   installed web app on his phone is scoped to the old path and may need reinstalling,
@@ -210,6 +219,10 @@ Add to this list rather than guessing. Elliot answers these when he's back.
 
 Newest first. One line per iteration: what got done, what it cost, what broke.
 
+- 2026-08-27 · Batch 8 HELD: all 25 photos blocked — Gemini prepaid credits
+  depleted (confirmed via direct API probe, not a rate limit). Blocked entry added;
+  loop reroutes to Phase 7 Sainsbury's. photos.mjs pacing patch (20s polite pause,
+  longer backoffs) kept for when credits return.
 - 2026-08-26 · Phase 6 Batch 7 done: 265→290, existing ingredients. Another
   air-fryer + slow-cooker dish, chilli prawn spaghetti, veggie chilli mac, lamb
   hotpot, Spanish tortilla, caramelised onion pasta. 25 photos ≈ $0.97. Build

@@ -43,18 +43,18 @@ async function generate(prompt) {
       imageConfig: { aspectRatio: '16:9', imageSize: '1K' },
     },
   };
-  for (let attempt = 1; attempt <= 3; attempt++) {
+  for (let attempt = 1; attempt <= 4; attempt++) {
     const res = await fetch(url, {
       method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
     });
-    if (res.status === 429) { console.log(`  rate limited — waiting ${30 * attempt}s`); await sleep(30000 * attempt); continue; }
+    if (res.status === 429) { console.log(`  rate limited — waiting ${60 * attempt}s`); await sleep(60000 * attempt); continue; }
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
     const data = await res.json();
     const part = data.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
     if (!part) throw new Error(`no image: ${data.candidates?.[0]?.finishReason || data.promptFeedback?.blockReason || 'unknown'}`);
     return Buffer.from(part.inlineData.data, 'base64');
   }
-  throw new Error('rate limited after 3 attempts');
+  throw new Error('rate limited after 4 attempts');
 }
 
 let done = 0, skipped = 0;
